@@ -17,7 +17,16 @@ table {
 td {	
 	display: table-cell;
 	border : solid 1px black;
-	margin:50px;
-	width:100px;
-	height:100px;
+	width: 70px;
+	height:70px;
+}
+
+.pawn{
+
+	background-color: darkgrey;
+	border-radius: 10px;
+	color: black;
+	width: 45px;
+	height: 45px;
+	vertical-align: center;
 }
