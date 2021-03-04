@@ -34,6 +34,7 @@ td {
 	width: 50px;
 	height: 50px;
 	vertical-align: center;
+	text-align: center;
 }
 .pawnRed{
 	background-color:#9d0208;
@@ -41,6 +42,7 @@ td {
 	width: 50px;
 	height: 50px;
 	vertical-align: center;
+	text-align: center;
 }
 .lake{
 	background-color:#a8e0ff;
