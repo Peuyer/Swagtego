@@ -46,7 +46,7 @@ class Board {
     }
 
     //place un pion à la coordonée x,y
-    placingPawns(playerId,y,x,pawn)
+    placingPawns(playerId,x,y,pawn)
     {
 
         pawn = pawn *10 + playerId;
@@ -60,12 +60,16 @@ class Board {
             zoneEnd=9;
         }
 
-        if((y>zoneEnd || y<zoneStart) || this.board[x][y] != null){
-            console.log("Placement du pion impossible");
+        if(y>zoneEnd || y<zoneStart){
+            console.log("Placement du pion impossible (hors-zone)");
+            return false;
+        }
+        if(this.board[y][x] != null){
+            console.log("Placement du pion impossible (case occupée)");
             return false;
         }
 
-        this.board[x][y] = new Pawn(x,y,pawn,playerId);
+        this.board[y][x] = new Pawn(x,y,pawn,playerId);
         console.log("Pion ",pawn," placé en : ",x,"/",y," par le joueur",playerId);
     }
 
@@ -174,39 +178,47 @@ class Board {
     }
 
     //retourne le pions sur la case x,y
-    getCaseState(y,x)
+    getCaseState(x,y)
     {
-        return this.board[x][y];
+        return this.board[y][x];
     }
 
     //retourne 0 si mouvement impossible, 1 si mouvement effectué
-    move(pawn,y,x)
+    move(x_avant, y_avant,x,y)
     {
+        let pawn = new Pawn();
+        pawn = this.board[y_avant][x_avant];
+        console.log(game.getCaseState(x_avant,y_avant));
+        console.log(pawn.x);
+        console.log(pawn.y);
         //si le pion n'est pas un éclaireur
         if (pawn.pawn != 20 && pawn.pawn != 21){
-            let ex = abs(pawn1.x - x)
-            let ey = abs(pawn1.y - y)
+            let ex = Math.abs(pawn.x - x)
+            let ey = Math.abs(pawn.y - y)
 
-            if (ex && ey){
-                console.log("Mouvement impossible");
-                return false;
-            }
+            console.log(ex);
+            console.log(ey);
             if (ex == 1 || ey == 1){
-                if (this.board[x][y] != null && this.board[x][y] != 'b'){
-                    let attack = this.attack(pawn,this.board[x][y]);
+                if (this.board[y][x] != null && this.board[y][x] != 'b'){
+                    let attack = this.attack(pawn,this.board[y][x]);
                     if (!attack){
                         console.log("Mouvement Impossible");
                         return false;
                     }
                     else if (attack == 3 || attack == 2){
-                        this.board[pawn.x][pawn.y] = null;
+                        this.board[pawn.y][pawn.x] = null;
                         console.log("Echec de l'attaque ou égalité");
                         return 1;
                     }
                 }
             }
-            this.board[x][y] = pawn;
-            this.board[pawn.x][pawn.y] = null;
+            else {
+                console.log("Mouvement impossible");
+                return false;
+
+            }
+            this.board[y][x] = pawn;
+            this.board[pawn.y][pawn.x] = null;
             pawn.x = x;
             pawn.y = y;
             return 1;
@@ -214,35 +226,56 @@ class Board {
         //sinon
         else{
             if (x != pawn.x && y != pawn.y){
-                console.log("Mouvement impossible");
+                console.log("Mouvement impossiblee");
                 return false;
             }
             else{
                 //cas d'un mouvement selon X
                 if(x != pawn.x){
-                    for(let i = pawn.x; i != x;++i){
-                        if(this.board[i][y] != null){
-                            console.log("Mouvement impossible");
-                            return false;
+                    if (x < pawn.x){
+                        for(let i = pawn.x-1; i != x;--i){
+                            if(this.board[y][i] != null){
+                                console.log("Mouvement impossible");
+                                return false;
+                            }
                         }
                     }
-                    this.board[x][y] = pawn;
-                    this.board[pawn.x][pawn.y] = null;
+                    else{
+                        for(let i = pawn.x; i != x;++i){
+                            if(this.board[y][i] != null){
+                                console.log("Mouvement impossible");
+                                return false;
+                            }
+                        }
+                    }
+                    this.board[y][x] = pawn;
+                    this.board[pawn.y][pawn.x] = null;
                     pawn.x = x;
                     pawn.y = y;
                     return 1;
                 }
 
                 //cas d'un mouvement selon Y
+
                 if(y != pawn.y){
-                    for(let i = pawn.y; i != y;++i){
-                        if(this.board[x][i] != null){
-                            console.log("Mouvement impossible");
-                            return false;
+                    if (y < pawn.y){
+                        for(let i = pawn.y-1; i != y;--i){
+                            if(this.board[i][x] != null){
+                                console.log("Mouvement impossible");
+                                return false;
+                            }
                         }
                     }
-                    this.board[x][y] = pawn;
-                    this.board[pawn.x][pawn.y] = null;
+                    else{
+                        for(let i = pawn.y; i != y;++i){
+                            if(this.board[i][x] != null){
+                                console.log("Mouvement impossible");
+                                return false;
+                            }
+                        }
+                    }
+                    this.board[y][x] = pawn;
+                    this.board[pawn.y][pawn.x] = null;
                     pawn.x = x;
                     pawn.y = y;
                     return 1;
@@ -255,9 +288,10 @@ class Board {
     //retourne 0 si hors d'atteinte, 1 si attaque possible et 2 si éclaireur
     inReach(pawn1,pawn2)
     {       
-        let ex = abs(pawn1.x - pawn2.x)
-        let ey = abs(pawn1.y - pawn2.y)
-        if (ex && ey){
+        let ex = Math.abs(pawn1.x - pawn2.x)
+        let ey = Math.abs(pawn1.y - pawn2.y)
+
+        if (ex != 0 && ey != 0){
             console.log("/!|Coup en diagonale");
             return 0;
         }
@@ -278,7 +312,7 @@ class Board {
             console.log("Tir ami");
             return false;
         }
-        if (this.inReach(pawn1,pawn2) === 1){
+        if (this.inReach(pawn1,pawn2) == 0){
             console.log("Attaque hors d'atteinte");
             return false;
         }
@@ -297,7 +331,7 @@ class Board {
         }
         else if (pawn2.pawn == 110 || pawn2.pawn == 111){
             console.log("Explosion d'une bombe");
-            this.board[pawn2.x][pawn2.y] = pawn2.pawn;
+            this.board[pawn2.y][pawn2.x] = pawn2.pawn;
             return 3;
         }
         else if ((pawn1.pawn-pawn2.pawn) > 2){
@@ -305,16 +339,16 @@ class Board {
         }
         else if ((pawn1.pawn-pawn2.pawn) < 2){
             console.log("Attaque ratée");
-            this.board[pawn2.x][pawn2.y] = pawn2.pawn;
+            this.board[pawn2.y][pawn2.x] = pawn2.pawn;
             return 3;
         }
         else{
             console.log("Egalité")
-            this.board[pawn2.x][pawn2.y] = null;
+            this.board[pawn2.y][pawn2.x] = null;
             return 2;
         }
 
-        this.board[pawn2.x][pawn2.y] = pawn1.pawn;
+        this.board[pawn2.y][pawn2.x] = pawn1.pawn;
         return true;
     }
 }
