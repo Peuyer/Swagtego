@@ -6,6 +6,24 @@ class Board {
         
     }
 
+    affichage(){
+        let aff='';
+        for(let i =0; i< 10; i++){
+            for(let j =0; j< 10; j++){
+                if(this.board[i][j]==null){
+                    aff+=0;
+                }
+                else if(this.board[i][j]=='b'){
+                    aff+=3;
+                }
+                else{
+                    aff+=1;
+                }
+            }
+            aff+= '\n';
+        }
+        return aff;
+    }
     //crée la grille de jeu
     createBoard()
     {
@@ -13,28 +31,41 @@ class Board {
         for (let c = 0;c<10;c++){
             board[c] = new Array(10);
         }
-        for (let i = 0;i<2;i++){
-            for (let j = 0;j<2;j++){
-                board[6*i+j+2][4] = 'b';
-                board[6*i+j+2][5] = 'b';
-            }
-        }
+
+        board[4][2]= 'b';
+        board[4][3]= 'b';
+        board[5][2]= 'b';
+        board[5][3]= 'b';
+        board[4][6]= 'b';
+        board[5][6]= 'b';
+        board[4][7]= 'b';
+        board[5][7]= 'b';
+
         console.log("Grille créée")
         return board;
     }
 
     //place un pion à la coordonée x,y
-    placingPawns(playerId,x,y,pawn)
+    placingPawns(playerId,y,x,pawn)
     {
-        if (playerId){let zoneStart = 0, zoneEnd=3;}
-        else{let zoneStart = 6, zoneEnd=9;}
 
-        if((x>zoneEnd && x<zoneStart) || this.board[x][y].pawn != null){
+        pawn = pawn *10 + playerId;
+        let zoneStart, zoneEnd;
+        if (playerId == 0){
+            zoneStart = 0;
+            zoneEnd=3;
+        }
+        else{
+            zoneStart = 6;
+            zoneEnd=9;
+        }
+
+        if((y>zoneEnd || y<zoneStart) || this.board[x][y] != null){
             console.log("Placement du pion impossible");
             return false;
         }
 
-        this.board[x][y] = new pawn(x,y,pawn,playerId);
+        this.board[x][y] = new Pawn(x,y,pawn,playerId);
         console.log("Pion ",pawn," placé en : ",x,"/",y," par le joueur",playerId);
     }
 
@@ -43,7 +74,7 @@ class Board {
     {
         console.log("Verification pions du joueur",playerId,"...");
         let mar=0,gen=0,col=0,com=0,cap=0,lie=0,ser=0,dem=0,ecl=0,esp=0,dra=0,bom=0;
-        for(let i = !playerID ? 0:6 ; i < !playerId ? 4:9 ; i++){
+        for(let i = 0 ; i<4 ; i++){
             for (let j = 0 ; j<10 ; j++){
 
                 switch (this.board[x][y].pawn){
@@ -143,13 +174,13 @@ class Board {
     }
 
     //retourne le pions sur la case x,y
-    getCaseState(x,y)
+    getCaseState(y,x)
     {
         return this.board[x][y];
     }
 
     //retourne 0 si mouvement impossible, 1 si mouvement effectué
-    move(pawn,x,y)
+    move(pawn,y,x)
     {
         //si le pion n'est pas un éclaireur
         if (pawn.pawn != 20 && pawn.pawn != 21){
@@ -287,3 +318,5 @@ class Board {
         return true;
     }
 }
+
+
