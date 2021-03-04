@@ -34,7 +34,7 @@ class Board {
             return false;
         }
 
-        this.board[x][y] = pawn(x,y,pawn,playerId);
+        this.board[x][y] = new pawn(x,y,pawn,playerId);
         console.log("Pion ",pawn," placé en : ",x,"/",y," par le joueur",playerId);
     }
 
@@ -43,7 +43,7 @@ class Board {
     {
         console.log("Verification pions du joueur",playerId,"...");
         let mar=0,gen=0,col=0,com=0,cap=0,lie=0,ser=0,dem=0,ecl=0,esp=0,dra=0,bom=0;
-        for(let i = 0 ; i<4 ; i++){
+        for(let i = !playerID ? 0:6 ; i < !playerId ? 4:9 ; i++){
             for (let j = 0 ; j<10 ; j++){
 
                 switch (this.board[x][y].pawn){

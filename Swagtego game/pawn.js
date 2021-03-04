@@ -5,5 +5,4 @@ class Pawn{
         this.pawn = pawn;
         this.player = player;
     }
-    
 }
