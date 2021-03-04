@@ -21,12 +21,33 @@ td {
 	height:70px;
 }
 
-.pawn{
-
-	background-color: darkgrey;
-	border-radius: 10px;
+.grass{
+	background-color:#55a630;
 	color: black;
-	width: 45px;
-	height: 45px;
+	width: 50px;
+	height: 50px;
+	vertical-align: center;
+}
+.pawnBlue{
+	background-color:#00296b;
+	color: black;
+	width: 50px;
+	height: 50px;
+	vertical-align: center;
+	text-align: center;
+}
+.pawnRed{
+	background-color:#9d0208;
+	color: black;
+	width: 50px;
+	height: 50px;
+	vertical-align: center;
+	text-align: center;
+}
+.lake{
+	background-color:#a8e0ff;
+	color: black;
+	width: 50px;
+	height: 50px;
 	vertical-align: center;
 }

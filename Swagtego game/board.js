@@ -2,8 +2,7 @@ class Board {
 
     constructor(){
         this.currentPlayer = Math.random < 0.5;
-        this.board = this.createBoard();
-        
+        this.board = this.createBoard();   
     }
 
     affichage(){
@@ -31,6 +30,13 @@ class Board {
         for (let c = 0;c<10;c++){
             board[c] = new Array(10);
         }
+
+        for(let x=0;x<10;x++){
+            for(let y=0;y<10;y++){
+                board[x][y]= 0;
+            }
+        }
+
 
         board[4][2]= 'b';
         board[4][3]= 'b';
