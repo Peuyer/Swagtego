@@ -26,6 +26,14 @@ class Board {
     //place un pion à la coordonée x,y
     placingPawns(playerId,x,y,pawn)
     {
+        if (playerId){let zoneStart = 0, zoneEnd=3;}
+        else{let zoneStart = 6, zoneEnd=9;}
+
+        if((x>zoneEnd && x<zoneStart) || this.board[x][y].pawn != null){
+            console.log("Placement du pion impossible");
+            return false;
+        }
+
         this.board[x][y] = pawn(x,y,pawn,playerId);
         console.log("Pion ",pawn," placé en : ",x,"/",y," par le joueur",playerId);
     }
@@ -38,7 +46,7 @@ class Board {
         for(let i = 0 ; i<4 ; i++){
             for (let j = 0 ; j<10 ; j++){
 
-                switch (this.board[x][y]){
+                switch (this.board[x][y].pawn){
                     case 110 + playerId :
                         if(bom<6)bom++;
                         else{
@@ -179,10 +187,39 @@ class Board {
                 return false;
             }
             else{
+                //cas d'un mouvement selon X
+                if(x != pawn.x){
+                    for(let i = pawn.x; i != x;++i){
+                        if(this.board[i][y] != null){
+                            console.log("Mouvement impossible");
+                            return false;
+                        }
+                    }
+                    this.board[x][y] = pawn;
+                    this.board[pawn.x][pawn.y] = null;
+                    pawn.x = x;
+                    pawn.y = y;
+                    return 1;
+                }
 
+                //cas d'un mouvement selon Y
+                if(y != pawn.y){
+                    for(let i = pawn.y; i != y;++i){
+                        if(this.board[x][i] != null){
+                            console.log("Mouvement impossible");
+                            return false;
+                        }
+                    }
+                    this.board[x][y] = pawn;
+                    this.board[pawn.x][pawn.y] = null;
+                    pawn.x = x;
+                    pawn.y = y;
+                    return 1;
+                }
             }
         }
     }
+
 
     //retourne 0 si hors d'atteinte, 1 si attaque possible et 2 si éclaireur
     inReach(pawn1,pawn2)
