@@ -1,7 +1,7 @@
 let game = new Board();
 let pawn = new Pawn();
 
-
+console.log(game.getCaseState(0,0));
 
 game.placingPawns(0,9,3,4);
 game.placingPawns(1,9,9,2);

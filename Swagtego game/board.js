@@ -31,11 +31,7 @@ class Board {
             board[c] = new Array(10);
         }
 
-        for(let x=0;x<10;x++){
-            for(let y=0;y<10;y++){
-                board[x][y]= 0;
-            }
-        }
+
 
 
         board[4][2]= 'b';
