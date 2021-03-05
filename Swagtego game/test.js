@@ -1,10 +1,10 @@
 let game = new Board();
-let pawn = new Pawn();
 
-game.placingPawns(1,9,9,2);
-game.placingPawns(1,8,9,3);
-game.placingPawns(1,7,9,4);
-game.placingPawns(1,6,9,10);
-game.placingPawns(1,5,8,10);
+game.placingPawns(0,2,2,0);
+game.placingPawns(1,8,8,0);
+game.placingPawns(0,3,3,3);
+game.placingPawns(1,7,7,3);
 
-game.isCompleted(1);
+console.log(game.affichage());
+
+game.hasWinner();
