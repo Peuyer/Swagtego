@@ -1,46 +1,10 @@
 let game = new Board();
 let pawn = new Pawn();
 
-console.log(game.getCaseState(0,0));
-
-game.placingPawns(0,9,3,4);
 game.placingPawns(1,9,9,2);
+game.placingPawns(1,8,9,3);
+game.placingPawns(1,7,9,4);
+game.placingPawns(1,6,9,10);
+game.placingPawns(1,5,8,10);
 
-console.log(game.affichage());
-
-console.log(game.getCaseState(9,6));
-
-game.move(9,9,9,6);
-console.log(game.affichage());
-
-
-game.move(9,6,0,6);
-console.log(game.affichage());
-
-
-/*
-console.log("move2");
-game.move(9,5,9,4);
-console.log(game.affichage());
-
-console.log("move3");
-game.move(9,4,9,3);
-console.log(game.affichage());
-
-console.log(game.getCaseState(9,3));
-
-
-console.log("move");
-game.move(9,6,9,5);
-console.log(game.affichage());
-
-console.log("move2");
-game.move(9,5,9,4);
-console.log(game.affichage());
-
-
-
-console.log("move3");
-game.move(9,4,9,3);
-console.log(game.affichage());
-*/
+game.isCompleted(1);

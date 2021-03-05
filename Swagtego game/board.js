@@ -80,81 +80,86 @@ class Board {
     {
         console.log("Verification pions du joueur",playerId,"...");
         let mar=0,gen=0,col=0,com=0,cap=0,lie=0,ser=0,dem=0,ecl=0,esp=0,dra=0,bom=0;
-        for(let i = 0 ; i<4 ; i++){
+        for(let i = (!playerId ? 0:6) ; i<(!playerId?4:10) ; i++){
             for (let j = 0 ; j<10 ; j++){
 
-                switch (this.board[x][y].pawn){
-                    case 110 + playerId :
-                        if(bom<6)bom++;
-                        else{
-                            console.log("Trop de bombes");
-                            return false;}
+                if (this.board[j][i] != null){
 
-                    case 100 + playerId :
-                        if(mar<1)mar++;
-                        else{
-                            console.log("Trop de maréchal");
-                            return false;}
+                    switch (this.board[j][i].pawn){
+                        default :
 
-                    case 90 + playerId :
-                        if(gen<1)gen++;
-                        else{
-                            console.log("Trop de général");
-                            return false;}
+                        case 110 + playerId :
+                            if(bom<6)bom++;
+                            else{
+                                console.log("Trop de bombes");
+                                return false;}
 
-                    case 80 + playerId :
-                        if(col<2)col++;
-                        else{
-                            console.log("Trop de colonel");
-                            return false;}
+                        case 100 + playerId :
+                            if(mar<1)mar++;
+                            else{
+                                console.log("Trop de maréchal");
+                                return false;}
 
-                    case 70 + playerId :
-                        if(com<3)com++;
-                        else{
-                            console.log("Trop de commandant");
-                            return false;}
+                        case 90 + playerId :
+                            if(gen<1)gen++;
+                            else{
+                                console.log("Trop de général");
+                                return false;}
 
-                    case 60 + playerId :
-                        if(cap<4)cap++;
-                        else{
-                            console.log("Trop de capitaine");
-                            return false;}
+                        case 80 + playerId :
+                            if(col<2)col++;
+                            else{
+                                console.log("Trop de colonel");
+                                return false;}
 
-                    case 50 + playerId :
-                        if(lie<4)lie++;
-                        else{
-                            console.log("Trop de lieutenant");
-                            return false;}
+                        case 70 + playerId :
+                            if(com<3)com++;
+                            else{
+                                console.log("Trop de commandant");
+                                return false;}
 
-                    case 40 + playerId :
-                        if(ser<4)ser++;
-                        else{
-                            console.log("Trop de sergeant");
-                            return false;}
+                        case 60 + playerId :
+                            if(cap<4)cap++;
+                            else{
+                                console.log("Trop de capitaine");
+                                return false;}
 
-                    case 30 + playerId :
-                        if(dem<5)dem++;
-                        else{
-                            console.log("Trop de démineur");
-                            return false;}
+                        case 50 + playerId :
+                            if(lie<4)lie++;
+                            else{
+                                console.log("Trop de lieutenant");
+                                return false;}
 
-                    case 20 + playerId :
-                        if(ecl<8)ecl++;
-                        else{
-                            console.log("Trop de éclaireur");
-                            return false;}
+                        case 40 + playerId :
+                            if(ser<4)ser++;
+                            else{
+                                console.log("Trop de sergeant");
+                                return false;}
 
-                    case 10 + playerId :
-                        if(esp<1)esp++;
-                        else{
-                            console.log("Trop de éspion");
-                            return false;}
+                        case 30 + playerId :
+                            if(dem<5)dem++;
+                            else{
+                                console.log("Trop de démineur");
+                                return false;}
 
-                    case 0 + playerId :
-                        if(dra<1)dra++;
-                        else{
-                            console.log("Trop de drapeau");
-                            return false;}
+                        case 20 + playerId :
+                            if(ecl<8)ecl++;
+                            else{
+                                console.log("Trop de éclaireur");
+                                return false;}
+
+                        case 10 + playerId :
+                            if(esp<1)esp++;
+                            else{
+                                console.log("Trop de éspion");
+                                return false;}
+
+                        case 0 + playerId :
+                            if(dra<1)dra++;
+                            else{
+                                console.log("Trop de drapeau");
+                                return false;}
+                    }
                 }
             }
         }
@@ -162,7 +167,7 @@ class Board {
             console.log("OK");
             return true;
         }
-        console.log("Pions manquants possible");
+        console.log("Pions manquants");
         return false;
     }
 
@@ -188,11 +193,18 @@ class Board {
     //retourne 0 si mouvement impossible, 1 si mouvement effectué
     move(x_avant, y_avant,x,y)
     {
+        console.log("Move : ",x_avant,"/",y_avant, " vers ",x,"/",y,".");
+        if(x>9 || y>9  || x<0 || y<0){
+            console.log("Mouvement hors grille de jeu");
+            return false;
+        }
+        if (this.board[y][x] == 'b'){
+            console.log("🌊💦 PLOUF 💦🌊");
+            return false;
+        }
         let pawn = new Pawn();
         pawn = this.board[y_avant][x_avant];
-        console.log(game.getCaseState(x_avant,y_avant));
-        console.log(pawn.x);
-        console.log(pawn.y);
+        console.log(game.getCaseState(x_avant,y_avant)," vers ",x,"/",y);
         //si le pion n'est pas un éclaireur
         if (pawn.pawn != 20 && pawn.pawn != 21){
             let ex = Math.abs(pawn.x - x)
@@ -201,10 +213,10 @@ class Board {
             console.log(ex);
             console.log(ey);
             if (ex == 1 || ey == 1){
-                if (this.board[y][x] != null && this.board[y][x] != 'b'){
+                if (this.board[y][x] != null){
                     let attack = this.attack(pawn,this.board[y][x]);
                     if (!attack){
-                        console.log("Mouvement Impossible");
+                        console.log("Mouvement Impossible (attaque impossible)");
                         return false;
                     }
                     else if (attack == 3 || attack == 2){
@@ -215,10 +227,10 @@ class Board {
                 }
             }
             else {
-                console.log("Mouvement impossible");
+                console.log("Mouvement impossible (trop grande distance ou diagonale)");
                 return false;
-
             }
+            
             this.board[y][x] = pawn;
             this.board[pawn.y][pawn.x] = null;
             pawn.x = x;
@@ -228,7 +240,7 @@ class Board {
         //sinon
         else{
             if (x != pawn.x && y != pawn.y){
-                console.log("Mouvement impossiblee");
+                console.log("Mouvement impossible (diag)");
                 return false;
             }
             else{
@@ -237,24 +249,19 @@ class Board {
                     if (x < pawn.x){
                         for(let i = pawn.x-1; i != x;--i){
                             if(this.board[y][i] != null){
-                                console.log("Mouvement impossible");
+                                console.log("Mouvement impossible gauche");
                                 return false;
                             }
                         }
                     }
                     else{
-                        for(let i = pawn.x; i != x;++i){
+                        for(let i = pawn.x+1; i != x;++i){
                             if(this.board[y][i] != null){
-                                console.log("Mouvement impossible");
+                                console.log("Mouvement impossible droite");
                                 return false;
                             }
                         }
                     }
-                    this.board[y][x] = pawn;
-                    this.board[pawn.y][pawn.x] = null;
-                    pawn.x = x;
-                    pawn.y = y;
-                    return 1;
                 }
 
                 //cas d'un mouvement selon Y
@@ -263,26 +270,41 @@ class Board {
                     if (y < pawn.y){
                         for(let i = pawn.y-1; i != y;--i){
                             if(this.board[i][x] != null){
-                                console.log("Mouvement impossible");
+                                console.log("Mouvement impossible haut");
                                 return false;
                             }
                         }
                     }
                     else{
-                        for(let i = pawn.y; i != y;++i){
+                        for(let i = pawn.y+1; i != y;++i){
                             if(this.board[i][x] != null){
-                                console.log("Mouvement impossible");
+                                console.log("Mouvement impossible bas");
                                 return false;
                             }
                         }
                     }
-                    this.board[y][x] = pawn;
+
+                }
+            }
+            //attaque
+            if (this.board[y][x] != null){
+                console.log("Move d'attaque : ");
+                let attack = this.attack(pawn,this.board[y][x]);
+                if (!attack){
+                    console.log("Mouvement Impossible (attaque impossible)");
+                    return false;
+                }
+                else if (attack == 3 || attack == 2){
                     this.board[pawn.y][pawn.x] = null;
-                    pawn.x = x;
-                    pawn.y = y;
                     return 1;
                 }
             }
+            //mise à jour coordonnées
+            this.board[y][x] = pawn;
+            this.board[pawn.y][pawn.x] = null;
+            pawn.x = x;
+            pawn.y = y;
+            return 1;
         }
     }
 
@@ -333,26 +355,25 @@ class Board {
         }
         else if (pawn2.pawn == 110 || pawn2.pawn == 111){
             console.log("Explosion d'une bombe");
-            this.board[pawn2.y][pawn2.x] = pawn2.pawn;
+            this.board[pawn2.y][pawn2.x] = pawn2;
             return 3;
         }
         else if ((pawn1.pawn-pawn2.pawn) > 2){
             console.log("Attaque réussie");
         }
-        else if ((pawn1.pawn-pawn2.pawn) < 2){
+        else if ((pawn1.pawn-pawn2.pawn) < -2){
             console.log("Attaque ratée");
-            this.board[pawn2.y][pawn2.x] = pawn2.pawn;
+            this.board[pawn2.y][pawn2.x] = pawn2;
             return 3;
         }
         else{
             console.log("Egalité")
             this.board[pawn2.y][pawn2.x] = null;
+            this.board[pawn1.y][pawn1.x] = null;
             return 2;
         }
 
-        this.board[pawn2.y][pawn2.x] = pawn1.pawn;
+        this.board[pawn2.y][pawn2.x] = pawn1;
         return true;
     }
 }
-
-
