@@ -44,6 +44,23 @@ td {
 	vertical-align: center;
 	text-align: center;
 }
+
+.pawnBlueRecto{
+	background-color:#00296b;
+	color: tansparent;
+	width: 50px;
+	height: 50px;
+	vertical-align: center;
+	text-align: center;
+}
+.pawnRedRecto{
+	background-color:#9d0208;
+	color: tansparent;
+	width: 50px;
+	height: 50px;
+	vertical-align: center;
+	text-align: center;
+}
 .lake{
 	background-color:#a8e0ff;
 	color: black;

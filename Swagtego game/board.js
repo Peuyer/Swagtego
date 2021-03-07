@@ -13,7 +13,7 @@ max[10] = 1;
 max[11] = 6;
 
 
-class Board {
+class Board{
 
     constructor(){
         this.currentPlayer = Math.random < 0.5;
@@ -45,7 +45,6 @@ class Board {
         for (let c = 0;c<10;c++){
             board[c] = new Array(10);
         }
-
 
 
 
@@ -351,7 +350,7 @@ class Board {
         }
         let pawn = new Pawn();
         pawn = this.board[y_avant][x_avant];
-        console.log(game.getCaseState(x_avant,y_avant)," vers ",x,"/",y);
+        console.log(this.getCaseState(x_avant,y_avant)," vers ",x,"/",y);
         //si le pion n'est pas un éclaireur
         if (pawn.pawn != 20 && pawn.pawn != 21){
             let ex = Math.abs(pawn.x - x)
@@ -491,7 +490,7 @@ class Board {
             return false;
         }
         if ((pawn1.pawn == 10 || pawn1.pawn == 11) && (pawn2.pawn == 100 || pawn2.pawn == 101)){
-            console.log("Espion tue maréchal");         
+            console.log("Espion tue maréchal");        
         }
         else if ((pawn1.pawn == 30 || pawn1.pawn == 31) && (pawn2.pawn == 110 || pawn2.pawn == 111)){
             console.log("Bombe déminé");
@@ -502,6 +501,8 @@ class Board {
         else if (pawn2.pawn == 110 || pawn2.pawn == 111){
             console.log("Explosion d'une bombe");
             this.board[pawn2.y][pawn2.x] = pawn2;
+            pawn1.isReturned = true;
+            pawn2.isReturned = true;
             return 3;
         }
         else if ((pawn1.pawn-pawn2.pawn) > 2){
@@ -510,16 +511,22 @@ class Board {
         else if ((pawn1.pawn-pawn2.pawn) < -2){
             console.log("Attaque ratée");
             this.board[pawn2.y][pawn2.x] = pawn2;
+            pawn1.isReturned = true;
+            pawn2.isReturned = true;
             return 3;
         }
         else{
             console.log("Egalité")
             this.board[pawn2.y][pawn2.x] = null;
             this.board[pawn1.y][pawn1.x] = null;
+            pawn1.isReturned = true;
+            pawn2.isReturned = true;
             return 2;
         }
 
         this.board[pawn2.y][pawn2.x] = pawn1;
+        pawn1.isReturned = true;
+        pawn2.isReturned = true;
         return true;
     }
 
@@ -624,5 +631,11 @@ class Board {
             return -1;
         }
 
+    }
+
+
+    getPawn(x,y){
+
+        return this.board[x][y].pawn;
     }
 }
