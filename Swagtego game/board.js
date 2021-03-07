@@ -634,13 +634,13 @@ class Board{
 
     }
 
-<<<<<<< Updated upstream
 
     getPawn(x,y){
 
         return this.board[x][y].pawn;
     }
-=======
+
+    
     //retourne un 'tableau de 4 éléments' avec tous les move possibles classés par direction (nord sud etc..), 'false' si pas de move dispo
     
     //a.n : si list['n'] == null alors pas de déplacement possible vers le nord ('n')
@@ -723,8 +723,4 @@ class Board{
 
         
     }
-
-
-
->>>>>>> Stashed changes
 }
