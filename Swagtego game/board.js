@@ -90,7 +90,7 @@ class Board{
     }
 
     //génère une composition de pions aléatoire pour le joueurs playerId
-    //retourne 1 si succès, 0 si erreur.
+    //retourne '1' si succès, '0' si erreur.
     randomComposition(playerId){
         if (this.isCompleted(playerId)){
             console.log("Composition déja placé");
@@ -113,7 +113,7 @@ class Board{
         return 1;
     }
 
-    //retourne un tableau avec le nombre de chaque pions posé
+    //retourne un 'tableau' avec le nombre de chaque pions posé
     pawnCounter(playerId){
         let mar=0,gen=0,col=0,com=0,cap=0,lie=0,ser=0,dem=0,ecl=0,esp=0,dra=0,bom=0;
         let array = new Array(12);
@@ -201,7 +201,7 @@ class Board{
         return array;
     }
 
-    //retourne 0 si tout les pions sont correctement placé, 0 sinon
+    //retourne 'true' si tout les pions sont correctement placé, 'false' sinon
     isCompleted(playerId)
     {
         console.log("Verification pions du joueur",playerId,"...");
@@ -316,7 +316,7 @@ class Board{
         this.currentPlayer = Math.random < 0.5;
     }
 
-    //retourne l'id du joueur actuel
+    //retourne 'id' du joueur actuel
     getCurrentPlayer()
     {
         return this.currentPlayer;
@@ -328,7 +328,7 @@ class Board{
         return this.board[y][x];
     }
 
-    //retourne 0 si mouvement impossible, 1 si mouvement effectué
+    //retourne '0' si mouvement impossible, '1' si mouvement effectué
     move(x_avant, y_avant,x,y)
     {
         console.log("Move : ",x_avant,"/",y_avant, " vers ",x,"/",y,".");
@@ -454,7 +454,7 @@ class Board{
         }
     }
 
-    //retourne 0 si hors d'atteinte, 1 si attaque possible et 2 si éclaireur
+    //retourne '0' si hors d'atteinte, '1' si attaque possible et '2' si éclaireur
     inReach(pawn1,pawn2)
     {       
         let ex = Math.abs(pawn1.x - pawn2.x)
@@ -473,7 +473,7 @@ class Board{
         }
     }
 
-    //retourne 1 si succès, 0 si erreur, 2 si égalité, 3 si échec
+    //retourne '1' si succès, '0' si erreur, '2' si égalité, 3 si échec
     attack(pawn1,pawn2)
     {
         console.log("Attaque : ",pawn1.pawn," vs ",pawn2.pawn);
@@ -530,7 +530,7 @@ class Board{
         return true;
     }
 
-
+    //retourne un 'tableau' contenant le nombre de chaque pions par joueur
     counter(playerId){
         let mar=0,gen=0,col=0,com=0,cap=0,lie=0,ser=0,dem=0,ecl=0,esp=0,dra=0,bom=0;
         let array = new Array(12);
@@ -606,6 +606,7 @@ class Board{
         return array;
     }
 
+    //retourne 'id du joueur gagnant' (0 ou 1), '-1' si aucun vainqueur.
     hasWinner(){
         let count0 = this.counter(0);
         let count1 = this.counter(1);
@@ -633,9 +634,97 @@ class Board{
 
     }
 
+<<<<<<< Updated upstream
 
     getPawn(x,y){
 
         return this.board[x][y].pawn;
     }
+=======
+    //retourne un 'tableau de 4 éléments' avec tous les move possibles classés par direction (nord sud etc..), 'false' si pas de move dispo
+    
+    //a.n : si list['n'] == null alors pas de déplacement possible vers le nord ('n')
+    //a.n : list['n']['action'] renvois l'action possible vers le nord ('none','attack' ou 'move');
+    //a.n : list['n']['coordx (ou coordy)'] renvois la coordonnée du move disponible (case vide si list['n'] == null)
+    moveList(x,y){
+        let list = new Array(4);
+        if (this.board[y][x] == null || this.board[x][y] == 'b'){
+            console.log("Aucune action disponible depuis cette case");
+            return false;
+        }
+        let pawn = this.board[y][x];
+        if (pawn.pawn != 20 && pawn.pawn != 21){
+            this.nesw(pawn,n,list);
+            this.nesw(pawn,s,list);
+            this.nesw(pawn,w,list);
+            this.nesw(pawn,e,list);
+            return list;
+        }
+        else{
+            this.neswEcl(pawn,n,list);
+            this.neswEcl(pawn,s,list);
+            this.neswEcl(pawn,w,list);
+            this.neswEcl(pawn,e,list);
+            return list;
+        }
+    
+    }
+
+    nesw(pawn, dir, list){
+        let x = pawn.x, y = pawn.y, dx, dy;
+        if (dir == 'n')dx=0,y=-1;
+        else if (dir == 'e')dx=1,y=0;
+        else if (dir == 's')dx=0,y=1;
+        else if (dir == 'w')dx=-1,y=0;
+        else{return -1;}
+        
+        if(x+dx > 9 || x+dx < 0 || y+dy > 9 || y+dy < 0 || this.board[y+dy][x+dx] == 'b'){
+            list[dir] = null;
+            return false;
+        }
+        else if (this.board[y+dy][x+dx].player == pawn.player){
+            list[dir] = null;
+            return false;
+        }
+        else if (this.board[y+dy][x+dx] == null){
+            list[dir] = new Array(3);
+            list[dir]['action'] = 'move';      //déplacement
+            list[dir]['coordx'] = y+dy;
+            list[dir]['coordy'] = x+dx;
+            console.log("Déplacement possible en ",x+dx," / ",y+dy);
+            return true;
+        }
+        else {
+            list[dir] = new Array(3);
+            list[dir]['action'] = 'attack';      //attaque
+            list[dir]['coordx'] = y+dy;
+            list[dir]['coordy'] = x+dx;
+            console.log("Attaque possible en ",x+dx," / ",y+dy);
+            return true;
+        }
+    }
+
+    neswEcl(pawn, dir, list){
+        let x = pawn.x, y = pawn.y, dx, dy;
+        if (dir == 'n')dx=0,y=-1;
+        else if (dir == 'e')dx=1,y=0;
+        else if (dir == 's')dx=0,y=1;
+        else if (dir == 'w')dx=-1,y=0;
+        else{return -1;}
+        
+        if(x+dx > 9 || x+dx < 0 || y+dy > 9 || y+dy < 0 || this.board[y+dy][x+dx] == 'b'){
+            list[dir] = null;
+            return false;
+        }
+        else if (this.board[y+dy][x+dx].player == pawn.player){
+            list[dir] = null;
+            return false;
+        }
+
+        
+    }
+
+
+
+>>>>>>> Stashed changes
 }
