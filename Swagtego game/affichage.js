@@ -2,11 +2,10 @@
 
 let board = new Board();
 
-board.placingPawns(0,0,0,3);
-board.placingPawns(1,0,8,2);
-board.move(0,8,0,0);
-board.move(0,0,1,0);
-
+board.placingPawns(0,1,1,2);
+board.placingPawns(1,1,8,4);
+board.moveList(1,1);
+board.move(1,1,1,8);
 
 
 function DisplayBoard(board){

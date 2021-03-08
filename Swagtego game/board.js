@@ -652,75 +652,128 @@ class Board{
             console.log("Aucune action disponible depuis cette case");
             return false;
         }
-        let pawn = this.board[y][x];
+        let pawn = this.getCaseState(x,y);
         if (pawn.pawn != 20 && pawn.pawn != 21){
-            this.nesw(pawn,n,list);
-            this.nesw(pawn,s,list);
-            this.nesw(pawn,w,list);
-            this.nesw(pawn,e,list);
+            this.nesw(pawn,'n',list);
+            this.nesw(pawn,'s',list);
+            this.nesw(pawn,'w',list);
+            this.nesw(pawn,'e',list);
             return list;
         }
         else{
-            this.neswEcl(pawn,n,list);
-            this.neswEcl(pawn,s,list);
-            this.neswEcl(pawn,w,list);
-            this.neswEcl(pawn,e,list);
+            this.neswEcl(pawn,'n',list);
+            this.neswEcl(pawn,'s',list);
+            this.neswEcl(pawn,'w',list);
+            this.neswEcl(pawn,'e',list);
             return list;
         }
-    
     }
 
     nesw(pawn, dir, list){
-        let x = pawn.x, y = pawn.y, dx, dy;
-        if (dir == 'n')dx=0,y=-1;
-        else if (dir == 'e')dx=1,y=0;
-        else if (dir == 's')dx=0,y=1;
-        else if (dir == 'w')dx=-1,y=0;
+        let x = pawn.x, y = pawn.y, dx =0, dy=0;
+        if (dir == 'n'){
+            dx=0;
+            dy=-1;
+        }
+        else if (dir == 'e'){
+            dx=1;
+            dy=0;
+        }
+        else if (dir == 's'){
+            dx=0;
+            dy=1;
+        }
+        else if (dir == 'w'){
+            dx=-1;
+            dy=0;
+        }
         else{return -1;}
-        
-        if(x+dx > 9 || x+dx < 0 || y+dy > 9 || y+dy < 0 || this.board[y+dy][x+dx] == 'b'){
+        let depX = x+dx;
+        let depY  = y+dy;
+
+        if(depX > 9 || depX < 0 || depY > 9 || depY < 0 || this.board[depY][depX] == 'b'){
             list[dir] = null;
             return false;
         }
-        else if (this.board[y+dy][x+dx].player == pawn.player){
-            list[dir] = null;
-            return false;
-        }
-        else if (this.board[y+dy][x+dx] == null){
+
+        else if (this.board[depY][depX] == null){
             list[dir] = new Array(3);
             list[dir]['action'] = 'move';      //déplacement
-            list[dir]['coordx'] = y+dy;
-            list[dir]['coordy'] = x+dx;
-            console.log("Déplacement possible en ",x+dx," / ",y+dy);
+            list[dir]['coordx'] = depX;
+            list[dir]['coordy'] = depY;
+            console.log("Déplacement possible en ",depX," / ",depY);
             return true;
+        }
+        else if(this.board[depY][depX].player == pawn.player){
+            list[dir] = null;
+            return false;
         }
         else {
             list[dir] = new Array(3);
             list[dir]['action'] = 'attack';      //attaque
-            list[dir]['coordx'] = y+dy;
-            list[dir]['coordy'] = x+dx;
-            console.log("Attaque possible en ",x+dx," / ",y+dy);
+            list[dir]['coordx'] = depX;
+            list[dir]['coordy'] = depY;
+            console.log("Attaque possible en ",depX," / ",depY);
             return true;
         }
     }
 
     neswEcl(pawn, dir, list){
-        let x = pawn.x, y = pawn.y, dx, dy;
-        if (dir == 'n')dx=0,y=-1;
-        else if (dir == 'e')dx=1,y=0;
-        else if (dir == 's')dx=0,y=1;
-        else if (dir == 'w')dx=-1,y=0;
+        let x = pawn.x, y = pawn.y, dx =0, dy=0;
+        if (dir == 'n'){
+            dx=0;
+            dy=-1;
+        }
+        else if (dir == 'e'){
+            dx=1;
+            dy=0;
+        }
+        else if (dir == 's'){
+            dx=0;
+            dy=1;
+        }
+        else if (dir == 'w'){
+            dx=-1;
+            dy=0;
+        }
         else{return -1;}
+        let depX = x+dx;
+        let depY  = y+dy;
         
-        if(x+dx > 9 || x+dx < 0 || y+dy > 9 || y+dy < 0 || this.board[y+dy][x+dx] == 'b'){
-            list[dir] = null;
-            return false;
-        }
-        else if (this.board[y+dy][x+dx].player == pawn.player){
-            list[dir] = null;
-            return false;
-        }
 
-        
+        if(depX > 9 || depX < 0 || depY > 9 || depY < 0 || this.board[depY][depX] == 'b'){
+            list[dir] = null;
+            return false;
+        }
+        else if (this.board[depY][depX] == null){
+            list[dir] = new Array(3);
+            
+
+            while( depY< 10 && depX < 10 && depY >= 0 && depX>=0 && this.board[depY][depX] == null){
+                if(depY+dy< 10 && depX+dx < 10 && depY+dy >= 0 && depX+dx>=0 && this.board[depY+dy][depX + dx] != null && this.board[depY+dy][depX + dx] != 'b' && pawn.player != this.board[depY+dy][depX+dx].player){
+                    list[dir]['action'] = 'attack';      //déplacement
+                }
+                else {
+                    list[dir]['action'] = 'move';      //déplacement
+                }
+                list[dir]['coordx'] = depX;
+                list[dir]['coordy'] = depY;
+                depX += dx 
+                depY += dy
+            }
+            depX -= dx 
+            depY -= dy
+            if(list[dir]['action'] == 'move'){
+                            console.log("Déplacement possible en ",depX," / ",depY);
+            }
+            if(list[dir]['action'] == 'attack'){
+                console.log("Attaque possible en ",depX+dx," / ",depY+dy);
+            }
+            return true;
+        }
+        else if (this.board[depY][depX].player == pawn.player){
+            list[dir] = null;
+            return false;
+        }
     }
 }
