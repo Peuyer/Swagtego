@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Morpion - Tests unitaires</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/morpion.css" />
+    <script type="text/javascript" src="../js/functions.js"></script>
+    <script type="text/javascript" src="../js/board.js"></script>
+    <script type="text/javascript" src="../js/pawn.js"></script>
+
+  </head>
+  <body> 
+    
+    <div class="player p1">
+      Player 1
+      <div class="connected">Connected <span></span></div>
+      <div class="ready">Ready <span></span></div>
+    </div>
+    <div class="player p2">
+      Player 2
+      <div class="connected">Connected <span></span></div>
+      <div class="ready">Ready <span></span></div>
+    </div>
+    <div class="hidden-info">
+      <button id="start">Start Game</button>
+      <h3 id="whose-go">Your Go</h3>
+      <h3 id="info"></h3>
+    </div>
+
+
+  	<ul id="pseudo"></ul>
+  	<table id="table" style="margin-top : 50px;">
+  		
+  	</table>
+
+	
+	
+  </body>
+  <script src="../js/main.js"></script>
+  <script type="text/javascript" src="../js/affichage.js"></script>
+
+
+</html>
