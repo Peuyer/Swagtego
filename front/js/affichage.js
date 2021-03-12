@@ -3,9 +3,9 @@
 let board = new Board();
 
 //board.placingPawns(0,0,3,2);
-board.randomComposition(0);
-/*board.placingPawns(1,1,8,4);
-board.placingPawns(1,0,8,3);
+//board.randomComposition(0);
+//board.randomComposition(1);
+/*board.placingPawns(1,0,8,3);
 board.moveList(0,3);
 board.move(0,3,0,8);
 board.moveList(9,3);

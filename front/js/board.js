@@ -608,6 +608,7 @@ class Board{
 
     //retourne 'id du joueur gagnant' (0 ou 1), '-1' si aucun vainqueur.
     hasWinner(){
+    
         let count0 = this.counter(0);
         let count1 = this.counter(1);
 

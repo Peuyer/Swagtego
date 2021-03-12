@@ -47,24 +47,43 @@ io.on('connection', (socket) => {
         }
     }
     // Tell the connecting client what player number they are
-    socket.emit('player-number', playerIndex)
+    socket.emit('player-number', playerIndex);
     
-    console.log(`Player ${playerIndex} has connected`)
+    console.log(`Player ${playerIndex} has connected`);
     
     // Ignore player 3
-    if (playerIndex === -1) return
+    if (playerIndex === -1) return;
 
-    connections[playerIndex] = false
+    connections[playerIndex] = false;
 
     // Tell eveyone what player number just connected
-    socket.broadcast.emit('player-connection', playerIndex)
+    socket.broadcast.emit('player-connection', playerIndex);
 
-    // Handle Diconnect
+    // Handle Disconnect
     socket.on('disconnect', () => {
-    console.log(`Player ${playerIndex} disconnected`)
-    connections[playerIndex] = null
+    console.log(`Player ${playerIndex} disconnected`);
+    connections[playerIndex] = null;
     //Tell everyone what player numbe just disconnected
-    socket.broadcast.emit('player-connection', playerIndex)
-  })
+    socket.broadcast.emit('player-connection', playerIndex);
+  });
+    // On Ready
+    socket.on('player-ready', () => {
+      socket.broadcast.emit('enemy-ready', playerIndex);
+      connections[playerIndex] = true;
+    });
+
+  //Check player connections
+  socket.on('check-players', () => {
+    const players = [];
+    for (const i in connections) {
+      connections[i] === null ? players.push({connected: false, ready: false}) : players.push({connected: true, ready: connections[i]});
+    }
+    socket.emit('check-players', players);
+  });
+
+  socket.on('display', ()=>{
+    socket.emit('display',playerIndex);
+  });
+
 
 });
