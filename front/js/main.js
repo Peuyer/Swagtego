@@ -88,10 +88,10 @@ const socket = io();
         }
         if(enemyReady) {
             if(currentPlayer === 'user') {
-              turnDisplay.innerHTML = 'Your Go';
+              turnDisplay.innerHTML = 'A ton tour !';
             }
             if(currentPlayer === 'enemy') {
-              turnDisplay.innerHTML = "Enemy's Go";
+              turnDisplay.innerHTML = "Au tour de l'ennemi !";
             }
         }
 

@@ -29,6 +29,6 @@ function resetMenu(){
 }
 function init(){
     initialScreen.style.display = 'none';
-    gameScreen.style.display = 'block';
+    gameScreen.style.display = 'flex';
     DisplayBoard(board);
 }

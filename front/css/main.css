@@ -8,39 +8,60 @@ body{
 	color:white;
 	background:grey;
 }
+#gameScreen{
+	display:flex;
+	flex-flow:row wrap;
+	justify-content: center;
+}
+#hud div{
+	padding:2px;
+}
+#hud{
+	margin : 20px auto auto 20px;
+	width:50vh;
+	height:auto;
+	border-radius: 20px;
+	background-color:rgb(216, 224, 240);
+	padding:20px;
+}
+#game{
+	flex-grow:4;
+}
+
+#whose-go{
+	padding-top:10px;
+}
+
+
+
 /*GAME*/
 table {
 	z-index : 1;
 	border-collapse: collapse;
 	margin:auto;
+	width:max-content;
 }
 td {	
 	display: table-cell;
 	border : solid 1px black;
-	width: 70px;
-	height:70px;
+	width: 60px;
+	height:60px;
 }
 
 .grass{
 	background-color:#55a630;
 	color: black;
-	width: 50px;
-	height: 50px;
 	vertical-align: center;
 }
 .pawnBlue{
 	background-color:#00296b;
 	color: black;
-	width: 50px;
-	height: 50px;
 	vertical-align: center;
 	text-align: center;
 }
 .pawnRed{
 	background-color:#9d0208;
-	color: black;
-	width: 50px;
-	height: 50px;
+	color: black;;
 	vertical-align: center;
 	text-align: center;
 }
@@ -48,24 +69,18 @@ td {
 .pawnBlueRecto{
 	background-color:#00296b;
 	color: tansparent;
-	width: 50px;
-	height: 50px;
 	vertical-align: center;
 	text-align: center;
 }
 .pawnRedRecto{
 	background-color:#9d0208;
 	color: tansparent;
-	width: 50px;
-	height: 50px;
 	vertical-align: center;
 	text-align: center;
 }
 .lake{
 	background-color:#a8e0ff;
 	color: black;
-	width: 50px;
-	height: 50px;
 	vertical-align: center;
 }
 
@@ -75,7 +90,9 @@ td {
   display: inline-block;
   width: 1rem;
   height: 1rem;
+  border-radius:1rem;
   background: red;
+  margin:auto 0.5rem auto auto;
 }
 
 span.green {
