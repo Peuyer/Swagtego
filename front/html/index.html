@@ -1,49 +1,78 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Morpion - Tests unitaires</title>
+    <title>Swagtego</title>
+    
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+    <link rel="stylesheet" type="text/css" href="../css/main.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <link rel="stylesheet" type="text/css" href="../css/morpion.css" />
     <script type="text/javascript" src="../js/functions.js"></script>
     <script type="text/javascript" src="../js/board.js"></script>
     <script type="text/javascript" src="../js/pawn.js"></script>
 
+  <style>
+    #gameScreen{
+      display:none;
+    }
+  </style>
+
   </head>
+
+
   <body> 
-    
-    <div class="player p1">
-      Player 1
-      <div class="connected">Connected <span></span></div>
-      <div class="ready">Ready <span></span></div>
-    </div>
-    <div class="player p2">
-      Player 2
-      <div class="connected">Connected <span></span></div>
-      <div class="ready">Ready <span></span></div>
-    </div>
-    <div class="hidden-info">
-      <button id="start">Start Game</button>
-      <h3 id="whose-go">Your Go</h3>
-      <h3 id="info"></h3>
-    </div>
-
-    <div class="Random-Composition">
-      <button id="random">Generate a random composition</button>
+    <section class="vh-100">
+    <div id="initialScreen" class="h-100">
+      <div class="d-flex flex-column align-items-center justify-content-center h-100">
+          <h1>SWAGTEGO</h1>
+          <h5>Entrez votre pseudo pour rejoindre le jeu</h3>
+          <div class="form-group">
+            <input type="text" placeholder="Pseudo" id="usernameInput"/>
+          </div>
+          <button type="submit" class="btn btn-success" id="joinGame">
+            Rejoindre
+          </button>
+      </div>
     </div>
 
 
-  	<ul id="pseudo"></ul>
-  	<table id="table" style="margin-top : 50px;">
-  		
-  	</table>
+    <div id="gameScreen" class="h-100">
+      <div class="player p1">
+        <span class="plaer1">Player 1</span>
+        <div class="connected">Connected <span></span></div>
+        <div class="ready">Ready <span></span></div>
+      </div>
 
-	
-	
+      <div class="player p2">
+        <span class="plaer2">Player 2</span>
+        <div class="connected">Connected <span></span></div>
+        <div class="ready">Ready <span></span></div>
+      </div>
+
+      <div class="hidden-info">
+        <button id="start" class="btn btn-success">Start Game</button>
+        <h3 id="whose-go">Your Go</h3>
+        <h3 id="info"></h3>
+      </div>
+
+
+      <div class="Random-Composition">
+        <button id="random" class="btn btn-success">Generate a random composition</button>
+      </div>
+
+
+      <ul id="pseudo"></ul>
+      <table id="table" style="margin-top : 50px;">
+        
+      </table> 
+	</div>
+  </section>
   </body>
+
   <script src="../js/main.js"></script>
   <script type="text/javascript" src="../js/affichage.js"></script>
-
-
+  <script src="../js/login.js"></script>
 </html>

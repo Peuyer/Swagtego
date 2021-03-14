@@ -63,4 +63,4 @@ function DisplayBoard(board){
     let element = document.getElementById('table');
     element.innerHTML = html;
 }
-DisplayBoard(board);
+//DisplayBoard(board);

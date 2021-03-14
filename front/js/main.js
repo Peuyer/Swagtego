@@ -15,23 +15,27 @@ let allPawnsPlaced = false
 const socket = io();
 
  // Get your player number
- socket.on('player-number', num => {
-    if (num === -1) {
-      infoDisplay.innerHTML = "Sorry, the server is full"
-    } else {
-      playerNum = parseInt(num)
-      if(playerNum === 1) currentPlayer = "enemy"
+    socket.on('player-number', num => {
+        if (num === -1) {
+            infoDisplay.innerHTML = "Sorry, the server is full";
+            startButton.style.display = 'none';
+            turnDisplay.style.display = 'none';
+            randomButton.style.display = 'none';
+        } 
+        else {
+        playerNum = parseInt(num)
+        if(playerNum === 1) currentPlayer = "enemy"
 
-      console.log(playerNum)
+        console.log(playerNum)
 
-      // Get other player status
-      socket.emit('check-players')
-    }
-  });
+        // Get other player status
+        socket.emit('check-players')
+        }
+    });
 
     // Another player has connected or disconnected
     socket.on('player-connection', num => {
-        console.log(`Player number ${num} has connected or disconnected`);
+        console.log(`Player ${num} has connected or disconnected`);
         playerConnectedOrDisconnected(num);
     });
 
@@ -105,17 +109,6 @@ const socket = io();
         document.querySelector(`${player} .connected span`).classList.toggle('green');
         if(parseInt(num) === playerNum) document.querySelector(player).style.fontWeight = 'bold';
       }
-    
-
-
-
-
-
-
-
-
-
-
 
 
 /*

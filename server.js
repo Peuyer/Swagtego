@@ -40,6 +40,7 @@ io.on('connection', (socket) => {
     //console.log("Un nouveau joueur s'est connecté")
     // Find an available player number
     let playerIndex = -1;
+    
     for (const i in connections) {
         if (connections[i] === null) {
             playerIndex = i;
@@ -61,11 +62,11 @@ io.on('connection', (socket) => {
 
     // Handle Disconnect
     socket.on('disconnect', () => {
-    console.log(`Player ${playerIndex} disconnected`);
-    connections[playerIndex] = null;
-    //Tell everyone what player numbe just disconnected
-    socket.broadcast.emit('player-connection', playerIndex);
-  });
+      console.log(`Player ${playerIndex} disconnected`);
+      connections[playerIndex] = null;
+      //Tell everyone what player numbe just disconnected
+      socket.broadcast.emit('player-connection', playerIndex);
+    });
     // On Ready
     socket.on('player-ready', () => {
       socket.broadcast.emit('enemy-ready', playerIndex);
