@@ -2,14 +2,16 @@ const infoDisplay = document.querySelector('#info')
 const startButton = document.querySelector('#start')
 const turnDisplay = document.querySelector('#whose-go')
 const randomButton = document.querySelector('#random')
+
+
 let currentPlayer = 'user'
 let gameMode = ""
 let playerNum = 0
 let ready = false
 let enemyReady = false
-let allPawnsPlaced = false
-
-
+let allPawnsPlaced = false 
+let board = new Board();
+let view = new View(board);
 
 // Avertis socket io de l'arrivée dans le chat d'un user
 const socket = io();
@@ -30,7 +32,10 @@ const socket = io();
 
         // Get other player status
         socket.emit('check-players')
+        view.initBoard(board);
+
         }
+        
     });
 
     // Another player has connected or disconnected
@@ -39,12 +44,19 @@ const socket = io();
         playerConnectedOrDisconnected(num);
     });
 
+    socket.on('player-disconnection', num => {
+        console.log(`Player ${num} has connected or disconnected`);
+        playerConnectedOrDisconnected(num);
+        playerReady(num);
+    });
+
     // On enemy ready
     socket.on('enemy-ready', num => {
         enemyReady = true;
         playerReady(num);
         if (ready) playGameMulti(socket);
     });
+    
 
     // Check player status
     socket.on('check-players', players => {
@@ -55,17 +67,16 @@ const socket = io();
             if(i !== playerReady) enemyReady = true;
         }
         });
-    });
 
-    socket.on('display',num=> {
-        DisplayBoard(board);
     });
+    
+
 
 
     // Ready button click
     startButton.addEventListener('click', () => {
         if(board.isCompleted(playerNum)) playGameMulti(socket);
-        else infoDisplay.innerHTML = "Please place all pawns";
+        else infoDisplay.innerHTML = "Placez tous les pions s'il vous plait";
     });
 
     // Random button click
@@ -73,7 +84,7 @@ const socket = io();
         if(board.isCompleted(playerNum)) return;
         else {
             board.randomComposition(playerNum);
-            socket.emit('display');
+            
         }
     });
 

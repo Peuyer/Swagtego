@@ -22,6 +22,12 @@ const fs = require('fs');
 const mysql = require('mysql');
 
 
+
+/**** Import project libs ****/
+
+const Board = require('./back/models/board');
+let board = new Board();
+
 /****** Code ******/
 
 //Set static folder
@@ -51,21 +57,21 @@ io.on('connection', (socket) => {
     socket.emit('player-number', playerIndex);
     
     console.log(`Player ${playerIndex} has connected`);
-    
+   ;
     // Ignore player 3
     if (playerIndex === -1) return;
 
     connections[playerIndex] = false;
-
     // Tell eveyone what player number just connected
     socket.broadcast.emit('player-connection', playerIndex);
+
 
     // Handle Disconnect
     socket.on('disconnect', () => {
       console.log(`Player ${playerIndex} disconnected`);
       connections[playerIndex] = null;
       //Tell everyone what player numbe just disconnected
-      socket.broadcast.emit('player-connection', playerIndex);
+      socket.broadcast.emit('player-disconnection', playerIndex);
     });
     // On Ready
     socket.on('player-ready', () => {
@@ -80,11 +86,10 @@ io.on('connection', (socket) => {
       connections[i] === null ? players.push({connected: false, ready: false}) : players.push({connected: true, ready: connections[i]});
     }
     socket.emit('check-players', players);
+
   });
 
-  socket.on('display', ()=>{
-    socket.emit('display',playerIndex);
-  });
+
 
 
 });

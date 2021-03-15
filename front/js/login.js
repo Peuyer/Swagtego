@@ -17,10 +17,16 @@ const userNameInput = document.getElementById('usernameInput')
 joinGameBtn.addEventListener('click', joinGame);
 
 function joinGame(){
-    init();
     const username = userNameInput.value;
-    console.log(username);
-    socket.emit('username',username);  
+    if(username){
+        init();
+        console.log(username);
+        socket.emit('username',username);
+    }
+    else {
+        window.alert('Veuillez entrer un pseudo');
+        return;
+    }
 }
 
 function resetMenu(){
@@ -30,5 +36,5 @@ function resetMenu(){
 function init(){
     initialScreen.style.display = 'none';
     gameScreen.style.display = 'flex';
-    DisplayBoard(board);
+
 }
