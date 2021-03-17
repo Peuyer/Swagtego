@@ -32,7 +32,7 @@ const socket = io();
 
         // Get other player status
         socket.emit('check-players')
-        view.initBoard(board);
+        
 
         }
         
@@ -84,6 +84,7 @@ const socket = io();
         if(board.isCompleted(playerNum)) return;
         else {
             board.randomComposition(playerNum);
+            view.DisplayBoard(playerNum);
             
         }
     });
