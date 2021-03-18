@@ -33,7 +33,6 @@ const socket = io();
         // Get other player status
         socket.emit('check-players')
         }
-  
     });
 
 
@@ -45,14 +44,16 @@ const socket = io();
         afficheBoard(playerNum);
     });
 
-    // Another player has connected or disconnected
+    // Another player has connected 
     socket.on('player-connection', num => {
-        console.log(`Player ${num} has connected or disconnected`);
+        console.log(`Player ${num} has connected.`);
         playerConnectedOrDisconnected(num);
+        playerReady(num);
     });
-
+    
+    // Another player has disconnected 
     socket.on('player-disconnection', num => {
-        console.log(`Player ${num} has connected or disconnected`);
+        console.log(`Player ${num} has disconnected.`);
         playerConnectedOrDisconnected(num);
         playerReady(num);
     });
@@ -76,6 +77,13 @@ const socket = io();
         });
 
     });
+
+    //Display player usernames
+    socket.on("username-display",usernames=>{
+        document.getElementById("player1").innerHTML = usernames[0];
+        document.getElementById("player2").innerHTML = usernames[1];
+    });
+
     
 
 
@@ -84,7 +92,10 @@ const socket = io();
     startButton.addEventListener('click', () => {
         socket.emit('is-completed',playerNum);
         socket.on('completed',(complete)=>{
-            if(complete) playGameMulti(socket);
+            if(complete){
+                infoDisplay.innerHTML = "";
+                playGameMulti(socket);
+            } 
             else infoDisplay.innerHTML = "Placez tous les pions s'il vous plait";
         });
     });
@@ -137,21 +148,3 @@ const socket = io();
         document.querySelector(`${player} .connected span`).classList.toggle('green');
         if(parseInt(num) === playerNum) document.querySelector(player).style.fontWeight = 'bold';
       }
-
-
-/*
-socket.emit('login', '');
-
-// Affichage d'un message
-socket.on('new-message', msg => {
-    let item = document.createElement('p');
-    item.textContent = msg;
-    pseudo.appendChild(item);
-});
-
-socket.on('gamestate', handleGameState);
-
-function handleGameState(gameState){
-    gamestate = JSON.parse(gameState);
-    requestAnimationFrame(()=> paintGame(gameState));
-}*/

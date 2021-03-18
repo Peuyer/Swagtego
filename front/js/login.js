@@ -1,14 +1,3 @@
-/*const { Socket } = require("socket.io");
-
-let form = document.getElementById('loginForm');
-let input = document.getElementById('username');
-
-// Envoi du login via le module de connexion
-form.addEventListener('submit', event => {
-    event.preventDefault();
-    logger.sendLogin(input.value);
-
-});*/
 const gameScreen = document.getElementById('gameScreen')
 const initialScreen = document.getElementById('initialScreen')
 const joinGameBtn = document.getElementById('joinGame')
@@ -21,11 +10,10 @@ function joinGame(){
     if(username){
         init();
         console.log(username);
-        socket.emit('username',username);
+        socket.emit('username',username,playerNum);
     }
     else {
         window.alert('Veuillez entrer un pseudo');
-        return;
     }
 }
 

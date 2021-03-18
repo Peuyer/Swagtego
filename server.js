@@ -28,7 +28,10 @@ const mysql = require('mysql');
 const Board = require('./back/models/board');
 const Pawn = require('./back/models/pawn');
 let board = new Board();
-let pawn = new Pawn();
+const usernames = [];
+usernames[0] = "Joueur 2";
+usernames[1] = "Joueur 2";
+
 
 /****** Code ******/
 
@@ -73,7 +76,10 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
       console.log(`Player ${playerIndex} disconnected`);
       connections[playerIndex] = null;
-      //Tell everyone what player numbe just disconnected
+      usernames[playerIndex] = undefined;
+      //Tell everyone what player number just disconnected
+      board.clearPlayer(playerIndex);
+      socket.emit('view-updated',board);
       socket.broadcast.emit('player-disconnection', playerIndex);
     });
     // On Ready
@@ -108,6 +114,15 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('view-updated',board);
   });
   
+
+  //display username
+  socket.on('username',(username,playerIndex)=>{
+    usernames[playerIndex] = username;
+    console.log("Joueur",playerIndex," : ",usernames[playerIndex]);
+    socket.emit("username-display",usernames);
+    socket.broadcast.emit("username-display",usernames);
+
+  });
 
 
 });
