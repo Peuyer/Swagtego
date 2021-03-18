@@ -41,6 +41,15 @@ class View{
 		}
 		let element = document.getElementById('table');
 		element.innerHTML = html;
+		this.initPawns();
+	}
+
+	initPawns(){
+		let html='';
+		for (let i = 0; i<12; i++){
+			html+= '<li id="pawn-item" draggable="true" data='+i.toString()+'>'+i.toString()+'</li>';
+		}
+		document.getElementById('pawn-container').innerHTML = html;
 	}
 	
 	boardLoad(){

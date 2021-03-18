@@ -78,17 +78,6 @@ class Board extends Pawn{
         return board;
     }
 
-    clearPlayer(playerIndex){
-        for (let x = 0 ; x<10; x++){
-            for (let y = 0 ; y < 10 ; y++){
-                if(this.board[x][y] != null && this.board[x][y]!= 'b' && this.board[x][y].player == playerIndex){
-                    console.log("clearing...");
-                    this.board[x][y] = undefined;
-                }
-            }
-        }
-    }
-
     //place un pion à la coordonée x,y
     placingPawns(playerId,x,y,pawn)
     {

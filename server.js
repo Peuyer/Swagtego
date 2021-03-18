@@ -78,8 +78,6 @@ io.on('connection', (socket) => {
       connections[playerIndex] = null;
       usernames[playerIndex] = undefined;
       //Tell everyone what player number just disconnected
-      board.clearPlayer(playerIndex);
-      socket.emit('view-updated',board);
       socket.broadcast.emit('player-disconnection', playerIndex);
     });
     // On Ready
