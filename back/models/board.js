@@ -19,6 +19,11 @@ class Board{
         this.currentPlayer = Math.random < 0.5;
         this.board = this.createBoard();   
     }
+    rangeRand(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 
     affichage(){
         let aff='';
@@ -102,8 +107,8 @@ class Board{
             nbPawn = max[i] - count[i];
             for (let j = 0; j<nbPawn ;j++){
                 do{
-                randx = rangeRand(0,9);
-                randy = rangeRand(!playerId?0:6,!playerId?3:9);
+                randx = this.rangeRand(0,9);
+                randy = this.rangeRand(!playerId?0:6,!playerId?3:9);
                 }
                 while(this.board[randy][randx] != null)
                 this.board[randy][randx] = new Pawn(randx,randy,i*10+playerId,playerId);

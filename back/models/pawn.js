@@ -7,3 +7,5 @@ class Pawn{
         this.isReturned = false;
     }
 }
+
+module.exports = Pawn;
