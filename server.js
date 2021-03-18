@@ -94,20 +94,18 @@ io.on('connection', (socket) => {
 
   //Chek if player is ready
   socket.on('is-completed',(playerNum)=>{
-    console.log("is completed ?");
     socket.emit('completed',board.isCompleted(playerNum));
   });
 
   //Generate a random composition
   socket.on('generate-comp',(playerNum)=>{
-    console.log("generazte comp");
     board.randomComposition(playerNum);
   });
 
   //Update view
   socket.on('update-view',()=>{
-    console.log("update view");
     socket.emit('view-updated',board);
+    socket.broadcast.emit('view-updated',board);
   });
   
 

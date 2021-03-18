@@ -8,17 +8,13 @@ class View{
 	}
 	
 	DisplayBoard(playerIndex){
-		console.log("display");
 		for(let x=0; x<10; x++){
 			for(let y=0; y<10; y++){
-				console.log(this.game.board[x][y]);
 				if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player == playerIndex){
-					console.log("affichage allié");
 					this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
 					this.grid[x][y].innerHTML = ((this.game.board[x][y].pawn-playerIndex)/10).toString();
 				}
-				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player == playerIndex){
-					console.log("affichage ennemi");
+				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player != playerIndex){
 					this.grid[x][y].className = playerIndex ? "pawnBlue":"pawnRed"
 					this.grid[x][y].innerHTML = "";
 				}

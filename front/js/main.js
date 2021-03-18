@@ -38,13 +38,11 @@ const socket = io();
 
 
     socket.on('init-view',(board)=>{
-        console.log("view created");
         view[0] = new View(board);
     });
     socket.on('view-updated',(board)=>{
         view[0].setGame(board);
-        console.log("view updated");
-        
+        afficheBoard(playerNum);
     });
 
     // Another player has connected or disconnected
@@ -95,18 +93,18 @@ const socket = io();
     randomButton.addEventListener('click', () => {
         socket.emit('is-completed',playerNum);
         socket.on('completed',(complete)=>{
-            console.log("completed ?");
             if(complete) return;
             else {
-                console.log("else");
                 socket.emit('generate-comp',playerNum);
                 socket.emit('update-view');
-                console.log(view[0].getGame());
-                view[0].DisplayBoard(playerNum);
+                afficheBoard(playerNum);         
             }
         });
     });
 
+    function afficheBoard(playerIndex){
+        view[0].DisplayBoard(playerIndex);
+    }
     // Game Logic for MultiPlayer
     function playGameMulti(socket) {
         
