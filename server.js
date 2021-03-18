@@ -26,7 +26,9 @@ const mysql = require('mysql');
 /**** Import project libs ****/
 
 const Board = require('./back/models/board');
+const Pawn = require('./back/models/pawn');
 let board = new Board();
+let pawn = new Pawn();
 
 /****** Code ******/
 
@@ -43,7 +45,6 @@ http.listen(4200, ()=>{
 const connections = [null, null];
 
 io.on('connection', (socket) => {
-    //console.log("Un nouveau joueur s'est connecté")
     // Find an available player number
     let playerIndex = -1;
     
@@ -65,6 +66,8 @@ io.on('connection', (socket) => {
     // Tell eveyone what player number just connected
     socket.broadcast.emit('player-connection', playerIndex);
 
+    // Sends the board to init the view
+    socket.emit('init-view',board);
 
     // Handle Disconnect
     socket.on('disconnect', () => {
@@ -89,7 +92,24 @@ io.on('connection', (socket) => {
 
   });
 
+  //Chek if player is ready
+  socket.on('is-completed',(playerNum)=>{
+    console.log("is completed ?");
+    socket.emit('completed',board.isCompleted(playerNum));
+  });
 
+  //Generate a random composition
+  socket.on('generate-comp',(playerNum)=>{
+    console.log("generazte comp");
+    board.randomComposition(playerNum);
+  });
+
+  //Update view
+  socket.on('update-view',()=>{
+    console.log("update view");
+    socket.emit('view-updated',board);
+  });
+  
 
 
 });

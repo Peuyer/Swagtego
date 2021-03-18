@@ -10,8 +10,8 @@ let playerNum = 0
 let ready = false
 let enemyReady = false
 let allPawnsPlaced = false 
-let board = new Board();
-let view = new View(board);
+
+let view = [];
 
 // Avertis socket io de l'arrivée dans le chat d'un user
 const socket = io();
@@ -32,9 +32,18 @@ const socket = io();
 
         // Get other player status
         socket.emit('check-players')
-        
-
         }
+  
+    });
+
+
+    socket.on('init-view',(board)=>{
+        console.log("view created");
+        view[0] = new View(board);
+    });
+    socket.on('view-updated',(board)=>{
+        view[0].setGame(board);
+        console.log("view updated");
         
     });
 
@@ -75,18 +84,27 @@ const socket = io();
 
     // Ready button click
     startButton.addEventListener('click', () => {
-        if(board.isCompleted(playerNum)) playGameMulti(socket);
-        else infoDisplay.innerHTML = "Placez tous les pions s'il vous plait";
+        socket.emit('is-completed',playerNum);
+        socket.on('completed',(complete)=>{
+            if(complete) playGameMulti(socket);
+            else infoDisplay.innerHTML = "Placez tous les pions s'il vous plait";
+        });
     });
 
     // Random button click
     randomButton.addEventListener('click', () => {
-        if(board.isCompleted(playerNum)) return;
-        else {
-            board.randomComposition(playerNum);
-            view.DisplayBoard(playerNum);
-            
-        }
+        socket.emit('is-completed',playerNum);
+        socket.on('completed',(complete)=>{
+            console.log("completed ?");
+            if(complete) return;
+            else {
+                console.log("else");
+                socket.emit('generate-comp',playerNum);
+                socket.emit('update-view');
+                console.log(view[0].getGame());
+                view[0].DisplayBoard(playerNum);
+            }
+        });
     });
 
     // Game Logic for MultiPlayer

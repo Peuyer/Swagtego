@@ -12,10 +12,22 @@ max[9] = 1;
 max[10] = 1;
 max[11] = 6;
 
+class Pawn{
+    constructor(x,y,pawn,player){
+        this.x = x;
+        this.y = y;
+        this.pawn = pawn;
+        this.player = player;
+        this.isReturned = false;
+    }
+}
 
-class Board{
+module.exports = Pawn;
+
+class Board extends Pawn{
 
     constructor(){
+        super();
         this.currentPlayer = Math.random < 0.5;
         this.board = this.createBoard();   
     }
