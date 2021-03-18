@@ -61,7 +61,7 @@ io.on('connection', (socket) => {
     socket.emit('player-number', playerIndex);
     
     console.log(`Player ${playerIndex} has connected`);
-   ;
+   
     // Ignore player 3
     if (playerIndex === -1) return;
 
@@ -77,8 +77,28 @@ io.on('connection', (socket) => {
       console.log(`Player ${playerIndex} disconnected`);
       connections[playerIndex] = null;
       usernames[playerIndex] = undefined;
+      socket.broadcast.emit("username-display",usernames);
+
+      socket.emit('init-view',board);
       //Tell everyone what player number just disconnected
       socket.broadcast.emit('player-disconnection', playerIndex);
+      socket.emit('player-disconnection', playerIndex);
+      board = new Board();
+      socket.broadcast.emit('init-view',board);
+      if(playerIndex == 0){
+        playerIndex = 1;
+      }
+      else playerIndex = 0;
+      socket.emit('player-number', playerIndex);
+      console.log(`Player ${playerIndex} has connected`);
+      for (const i in connections) {
+        if (connections[i] === null) {
+            playerIndex = i;
+            break;
+        }
+    }
+      //socket.broadcast.emit('clear-board',board);
+
     });
     // On Ready
     socket.on('player-ready', () => {
@@ -93,7 +113,6 @@ io.on('connection', (socket) => {
       connections[i] === null ? players.push({connected: false, ready: false}) : players.push({connected: true, ready: connections[i]});
     }
     socket.emit('check-players', players);
-
   });
 
   //Chek if player is ready

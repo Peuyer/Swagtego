@@ -9,8 +9,6 @@ let gameMode = ""
 let playerNum = 0
 let ready = false
 let enemyReady = false
-let allPawnsPlaced = false 
-
 let view = [];
 
 // Avertis socket io de l'arrivée dans le chat d'un user
@@ -44,11 +42,13 @@ const socket = io();
         afficheBoard(playerNum);
     });
 
+
+////////////////////////////////////////////////////////////////////    
     // Another player has connected 
     socket.on('player-connection', num => {
         console.log(`Player ${num} has connected.`);
         playerConnectedOrDisconnected(num);
-        playerReady(num);
+        //playerReady(num);
     });
     
     // Another player has disconnected 
@@ -56,6 +56,18 @@ const socket = io();
         console.log(`Player ${num} has disconnected.`);
         playerConnectedOrDisconnected(num);
         playerReady(num);
+        turnDisplay.innerHTML = 'Placement des pions';
+        ready = false;
+        enemyReady = false;
+        if(num == 0){
+            playerReady(1);
+            //playerConnectedOrDisconnected(1);
+        }
+        else{
+            playerReady(0);
+            //playerConnectedOrDisconnected(1);
+        }
+        
     });
 
     // On enemy ready
@@ -69,15 +81,19 @@ const socket = io();
     // Check player status
     socket.on('check-players', players => {
         players.forEach((p, i) => {
-        if(p.connected) playerConnectedOrDisconnected(i);
+        if(p.connected) {
+            playerConnectedOrDisconnected(i);
+        }
         if(p.ready) {
-            playerReady(i);
-            if(i !== playerReady) enemyReady = true;
+            //playerReady(i);
+            if(i !== playerReady){
+                enemyReady = true;
+            }
         }
         });
 
     });
-
+////////////////////////////////////////////////////////
     //Display player usernames
     socket.on("username-display",usernames=>{
         document.getElementById("player1").innerHTML = usernames[0];
@@ -93,7 +109,7 @@ const socket = io();
         socket.emit('is-completed',playerNum);
         socket.on('completed',(complete)=>{
             if(complete){
-                infoDisplay.innerHTML = "";
+                //infoDisplay.innerHTML = "";
                 playGameMulti(socket);
             } 
             else infoDisplay.innerHTML = "Placez tous les pions s'il vous plait";
@@ -141,7 +157,6 @@ const socket = io();
         let player = `.p${parseInt(num) + 1}`
         document.querySelector(`${player} .ready span`).classList.toggle('green')
     }
-
 
     function playerConnectedOrDisconnected(num) {
         let player = `.p${parseInt(num) + 1}`
