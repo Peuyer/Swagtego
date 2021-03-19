@@ -33,7 +33,7 @@ class View{
 					html+= '<td class="lake" >';
 				}
 				else if (board.board[x][y] == null){
-						html += '<td class="grass" data=',index,'>';
+						html += '<td class="grass" ondragover="onDragOver(event);" ondrop="onDrop(event);" data=',index,'>';
 				}
 				html += '</td>';
 			}
@@ -47,7 +47,7 @@ class View{
 	initPawns(){
 		let html='';
 		for (let i = 0; i<12; i++){
-			html+= '<li id="pawn-item" draggable="true" data='+i.toString()+'>'+i.toString()+'</li>';
+			html+= '<li id="pawn-item" draggable="true" ondragstart="onDragStart(event);" data='+i.toString()+'>'+i.toString()+'</li>';
 		}
 		document.getElementById('pawn-container').innerHTML = html;
 	}
@@ -69,4 +69,10 @@ class View{
 	getGame(){
 		return this.game;
 	}
+
+
+
+
+
+
 }
