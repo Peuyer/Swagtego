@@ -10,6 +10,8 @@ let playerNum = 0
 let ready = false
 let enemyReady = false
 let view = [];
+let count = [];
+let max= [];
 
 // Warns socket io that a user connected
 const socket = io();
@@ -42,8 +44,18 @@ const socket = io();
         afficheBoard(playerNum);
     });
 
+    socket.on('pawn-count',(counter)=>{
+        count = counter;
+        console.log(count);
+    });
+
+    socket.on('get-max',(maxi)=>{
+        max = maxi;
+    });
+
 
 ////////////////////////////////////////////////////////////////////    
+
     // Another player has connected 
     socket.on('player-connection', num => {
         console.log(`Player ${num} has connected.`);
@@ -93,15 +105,15 @@ const socket = io();
         });
 
     });
+
+
 ////////////////////////////////////////////////////////
+
     //Display player usernames
     socket.on("username-display",usernames=>{
         document.getElementById("player1").innerHTML = usernames[0];
         document.getElementById("player2").innerHTML = usernames[1];
     });
-
-    
-
 
 
     // Ready button click
@@ -120,22 +132,29 @@ const socket = io();
     randomButton.addEventListener('click', () => {
         socket.emit('is-completed',playerNum);
         socket.on('completed',(complete)=>{
-            if(complete) return;
-            else {
-                socket.emit('generate-comp',playerNum);
-                socket.emit('update-view');
-                afficheBoard(playerNum);         
+            if(complete) {
+                console.log("Regénération d'une compo aléatoire");
+                socket.emit('regenerate-comp',playerNum);              
             }
-        });
+            else{
+                console.log("Compo aléatoire"); 
+                socket.emit('generate-comp',playerNum);
+            }
+            socket.emit('update-view');
+            socket.emit('update-count',playerNum);
+            afficheBoard(playerNum);         
+            });
+            return;
     });
 
+
+//////////////////////////////////////////////////////////////////
     function afficheBoard(playerIndex){
         view[0].DisplayBoard(playerIndex);
     }
+
     // Game Logic for MultiPlayer
-    function playGameMulti(socket) {
-        
-        
+    function playGameMulti(socket) {    
         if(!ready) {
             socket.emit('player-ready');
             ready = true;
@@ -149,8 +168,6 @@ const socket = io();
               turnDisplay.innerHTML = "Au tour de l'ennemi !";
             }
         }
-
-
     }
 
     function playerReady(num) {

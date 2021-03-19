@@ -71,6 +71,7 @@ io.on('connection', (socket) => {
 
     // Sends the board to init the view
     socket.emit('init-view',board);
+    socket.emit('pawn-count',board.counter(playerIndex))
 
     // Handle Disconnect
     socket.on('disconnect', () => {
@@ -124,6 +125,10 @@ io.on('connection', (socket) => {
   socket.on('generate-comp',(playerNum)=>{
     board.randomComposition(playerNum);
   });
+  //reGenerate a random composition
+  socket.on('regenerate-comp',(playerNum)=>{
+    board.regenerate(playerNum);
+  });
 
   //Update view
   socket.on('update-view',()=>{
@@ -139,6 +144,14 @@ io.on('connection', (socket) => {
     socket.emit("username-display",usernames);
     socket.broadcast.emit("username-display",usernames);
 
+  });
+
+  //pawn count
+  socket.on('update-count',(playerIndex)=>{
+    socket.emit('pawn-count',board.counter(playerIndex));
+  });
+  socket.on('get-max',()=>{
+    socket.emit('send-max',max);
   });
 
 

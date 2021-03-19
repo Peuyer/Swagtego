@@ -129,6 +129,36 @@ class Board extends Pawn{
         }
         return 1;
     }
+    //clear one side of the board
+    clearSide(playerId){
+        for (let x=0 ; x<10; x++){
+            for (let y=(!playerId?0:6) ; y<(!playerId?4:10); y++){
+                console.log(y," / ",x);
+                this.board[y][x] = undefined;
+            }
+        }
+    }
+    //regénère une composition après en avoir déja créé une
+    regenerate(playerId){
+        this.clearSide(playerId);
+        console.log("cleared")
+        let count = this.pawnCounter(playerId);
+        let nbPawn=0,randx=0,randy=0;
+        for(let i = 0; i<12;i++){
+            nbPawn = max[i] - count[i];
+            for (let j = 0; j<nbPawn ;j++){
+                do{
+                randx = this.rangeRand(0,9);
+                randy = this.rangeRand(!playerId?0:6,!playerId?3:9);
+                }
+                while(this.board[randy][randx] != null)
+                this.board[randy][randx] = null;
+                this.board[randy][randx] = new Pawn(randx,randy,i*10+playerId,playerId);
+                console.log(this.board[randy][randx].pawn," placé en : ",randx," / ",randy);
+            }
+        }
+        return 1;
+    }
 
     //retourne un 'tableau' avec le nombre de chaque pions posé
     pawnCounter(playerId){
