@@ -33,10 +33,10 @@ class View{
 					html+= '<td class="lake" >';
 				}
 				else if (board.board[x][y] == null){
-
-						if(playerIndex == 0 && x<4) html += '<td class="grass" draggable="true" ondragstart="onDragStart(event);" ondragover="onDragOver(event);" ondrop="onDrop(event);" data=',index,'>';
-						else if(playerIndex == 1 && x>5) html += '<td class="grass" draggable="true" ondragstart="onDragStart(event);" ondragover="onDragOver(event);" ondrop="onDrop(event);" data=',index,'>';
-						else html += '<td class="grass" data=',index,'>';
+					if((playerIndex == 0 && x<4) || (playerIndex == 1 && x>5)) {
+						html += '<td class="grass" ondragover="onDragOver(event);" ondrop="onDrop(event);" data-value='+index.toString()+'>';
+					}
+					else html += '<td class="grass" data='+index.toString()+'>';
 				}
 				html += '</td>';
 			}
@@ -50,7 +50,7 @@ class View{
 	initPawns(){
 		let html='';
 		for (let i = 0; i<12; i++){
-			html+= '<li id="pawn-item" draggable="true" ondragstart="onDragStart(event);" data='+i.toString()+'>'+i.toString()+'</li>';
+			html+= '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+i.toString()+'</li>';
 		}
 		document.getElementById('pawn-container').innerHTML = html;
 	}

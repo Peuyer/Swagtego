@@ -29,7 +29,7 @@ const Board = require('./back/models/board');
 const Pawn = require('./back/models/pawn');
 let board = new Board();
 const usernames = [];
-usernames[0] = "Joueur 2";
+usernames[0] = "Joueur 2";    
 usernames[1] = "Joueur 2";
 
 
@@ -96,7 +96,7 @@ io.on('connection', (socket) => {
             playerIndex = i;
             break;
         }
-    }
+      }
       //socket.broadcast.emit('clear-board',board);
 
     });

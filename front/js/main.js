@@ -11,7 +11,7 @@ let ready = false
 let enemyReady = false
 let view = [];
 
-// Avertis socket io de l'arrivée dans le chat d'un user
+// Warns socket io that a user connected
 const socket = io();
 
  // Get your player number

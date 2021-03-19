@@ -10,27 +10,6 @@
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-      	function onDragStart(event){
-		      event
-		        .dataTransfer
-		        .setData('text', event.target.id);
-      	}
-        function onDragOver(event){
-          event.preventDefault();
-        }
-        function onDrop(event){
-          const id = event
-            .dataTransfer
-            .getData('text');
-          const draggableElement = document.getElementById(id);
-          const dropzone = event.target;
-          dropzone.appendChild(draggableElement);
-          event
-            .dataTransfer
-            .clearData();
-        }
-    </script>
   <style>
     #gameScreen{
       display:none;
@@ -102,4 +81,5 @@
   <script src="../js/affichage.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/login.js"></script>
+  <script src="../js/drag.js"></script>
 </html>
