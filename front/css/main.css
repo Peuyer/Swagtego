@@ -69,6 +69,7 @@ table{
 	border-collapse: collapse;
 	margin:auto auto 50px auto;
 	width:max-content;
+	list-style-type: none;
 }
 td {	
 	display: table-cell;

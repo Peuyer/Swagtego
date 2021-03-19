@@ -1,8 +1,8 @@
 //Affiche le plateau et les pions 
 
 class View{
-	constructor(game){
-		this.initBoard(game);
+	constructor(game, playerIndex){
+		this.initBoard(game, playerIndex);
 		this.game = game;
 		this.grid = this.boardLoad();
 	}
@@ -22,7 +22,7 @@ class View{
 		}
 	}
 
-	initBoard(board){
+	initBoard(board,playerIndex){
 		let html = '';
 		let index = 0;
 		for(let x=0; x<10; x++){
@@ -33,7 +33,10 @@ class View{
 					html+= '<td class="lake" >';
 				}
 				else if (board.board[x][y] == null){
-						html += '<td class="grass" ondragover="onDragOver(event);" ondrop="onDrop(event);" data=',index,'>';
+
+						if(playerIndex == 0 && x<4) html += '<td class="grass" draggable="true" ondragstart="onDragStart(event);" ondragover="onDragOver(event);" ondrop="onDrop(event);" data=',index,'>';
+						else if(playerIndex == 1 && x>5) html += '<td class="grass" draggable="true" ondragstart="onDragStart(event);" ondragover="onDragOver(event);" ondrop="onDrop(event);" data=',index,'>';
+						else html += '<td class="grass" data=',index,'>';
 				}
 				html += '</td>';
 			}

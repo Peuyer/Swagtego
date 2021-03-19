@@ -35,7 +35,7 @@ const socket = io();
 
 
     socket.on('init-view',(board)=>{
-        view[0] = new View(board);
+        view[0] = new View(board, playerNum);
     });
     socket.on('view-updated',(board)=>{
         view[0].setGame(board);
