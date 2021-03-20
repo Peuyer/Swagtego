@@ -10,7 +10,11 @@ class View{
 	DisplayBoard(playerIndex){
 		for(let x=0; x<10; x++){
 			for(let y=0; y<10; y++){
-				if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player == playerIndex){
+				if(this.game.board[x][y] == null){
+					this.grid[x][y].className = 'grass';
+					this.grid[x][y].innerHTML ='';
+				}
+				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player == playerIndex){
 					this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
 					this.grid[x][y].innerHTML = ((this.game.board[x][y].pawn-playerIndex)/10).toString();
 				}

@@ -2,6 +2,9 @@ const infoDisplay = document.querySelector('#info')
 const startButton = document.querySelector('#start')
 const turnDisplay = document.querySelector('#whose-go')
 const randomButton = document.querySelector('#random')
+const clearButton = document.querySelector('#clear')
+const pawnContainer = document.querySelector('#pawn-container')
+
 
 
 let currentPlayer = 'user'
@@ -11,7 +14,7 @@ let ready = false
 let enemyReady = false
 let view = [];
 let count = [];
-let max= [];
+const max= [];
 
 // Warns socket io that a user connected
 const socket = io();
@@ -46,7 +49,6 @@ const socket = io();
 
     socket.on('pawn-count',(counter)=>{
         count = counter;
-        console.log(count);
     });
 
     socket.on('get-max',(maxi)=>{
@@ -130,21 +132,20 @@ const socket = io();
 
     // Random button click
     randomButton.addEventListener('click', () => {
-        socket.emit('is-completed',playerNum);
-        socket.on('completed',(complete)=>{
-            if(complete) {
-                console.log("Regénération d'une compo aléatoire");
-                socket.emit('regenerate-comp',playerNum);              
-            }
-            else{
-                console.log("Compo aléatoire"); 
-                socket.emit('generate-comp',playerNum);
-            }
-            socket.emit('update-view');
-            socket.emit('update-count',playerNum);
-            afficheBoard(playerNum);         
-            });
-            return;
+        console.log("(Re)Génération d'une composition complète aléatoire")
+        socket.emit('generate-comp',playerNum);
+        socket.emit('update-count',playerNum);
+        afficheBoard(playerNum);     
+        pawnContainer.style.display = 'none';    
+        return;
+    });
+
+    //clear button click
+    clearButton.addEventListener('click', () => {
+        console.log("Suppression de tous vos pions")
+        socket.emit('clear',playerNum);
+        pawnContainer.style.display = 'flex';    
+        return;
     });
 
 
@@ -168,6 +169,16 @@ const socket = io();
               turnDisplay.innerHTML = "Au tour de l'ennemi !";
             }
         }
+    }
+    function placePawn(id,value){
+        let x=((value-1)%10);
+        let y=Math.ceil(value/10)-1;
+        let data= Array(4);
+        data[0] = playerNum;
+        data[1] = x;
+        data[2] = y;
+        data[3] = id;
+        socket.emit('placing-pawn',data);
     }
 
     function playerReady(num) {

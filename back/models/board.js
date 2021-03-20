@@ -109,10 +109,6 @@ class Board extends Pawn{
     //génère une composition de pions aléatoire pour le joueurs playerId
     //retourne '1' si succès, '0' si erreur.
     randomComposition(playerId){
-        if (this.isCompleted(playerId)){
-            console.log("Composition déja placé");
-            return 1;
-        }
         let count = this.pawnCounter(playerId);
         let nbPawn=0,randx=0,randy=0;
         for(let i = 0; i<12;i++){
@@ -127,21 +123,21 @@ class Board extends Pawn{
                 console.log(this.board[randy][randx].pawn," placé en : ",randx," / ",randy);
             }
         }
+        console.log('Generation completed with success');
         return 1;
     }
     //clear one side of the board
     clearSide(playerId){
         for (let x=0 ; x<10; x++){
             for (let y=(!playerId?0:6) ; y<(!playerId?4:10); y++){
-                console.log(y," / ",x);
-                this.board[y][x] = undefined;
+                this.board[y][x] = null;
             }
         }
+        console.log('Side cleared with success');
     }
     //regénère une composition après en avoir déja créé une
     regenerate(playerId){
         this.clearSide(playerId);
-        console.log("cleared")
         let count = this.pawnCounter(playerId);
         let nbPawn=0,randx=0,randy=0;
         for(let i = 0; i<12;i++){
@@ -157,6 +153,7 @@ class Board extends Pawn{
                 console.log(this.board[randy][randx].pawn," placé en : ",randx," / ",randy);
             }
         }
+        console.log('Regeneration completed with success');
         return 1;
     }
 

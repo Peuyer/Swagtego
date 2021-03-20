@@ -35,6 +35,9 @@ body{
 #whose-go{
 	padding-top:10px;
 }
+#random, #clear{
+	margin-bottom:10px;
+}
 
 
 #pawn-container{
@@ -88,14 +91,14 @@ td {
 	vertical-align: center;
 }
 .pawnBlue{
-	background-color:#00296b;
+	background-color:#205ec2;
 	color: black;
 	vertical-align: center;
 	text-align: center;
-	color:white;
+	color:white;	
 }
 .pawnRed{
-	background-color:#9d0208;
+	background-color:#d63338;
 	color: black;;
 	vertical-align: center;
 	text-align: center;

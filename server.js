@@ -27,6 +27,7 @@ const mysql = require('mysql');
 
 const Board = require('./back/models/board');
 const Pawn = require('./back/models/pawn');
+const { emit } = require('process');
 let board = new Board();
 const usernames = [];
 usernames[0] = "Joueur 2";    
@@ -123,17 +124,26 @@ io.on('connection', (socket) => {
 
   //Generate a random composition
   socket.on('generate-comp',(playerNum)=>{
-    board.randomComposition(playerNum);
+    if(!board.isCompleted(playerNum))board.randomComposition(playerNum);
+    else{board.regenerate(playerNum)}
+    updateView();
   });
-  //reGenerate a random composition
-  socket.on('regenerate-comp',(playerNum)=>{
-    board.regenerate(playerNum);
+
+  //clear one player side
+  socket.on('clear',(playerNum)=>{
+    board.clearSide(playerNum);
+    updateView();
+  });
+
+  //place a pawn
+  socket.on('placing-pawn',data=>{
+    board.placingPawns(data[0],data[1],data[2],data[3]);
+    updateView();
   });
 
   //Update view
   socket.on('update-view',()=>{
-    socket.emit('view-updated',board);
-    socket.broadcast.emit('view-updated',board);
+    updateView();
   });
   
 
@@ -154,5 +164,10 @@ io.on('connection', (socket) => {
     socket.emit('send-max',max);
   });
 
+function updateView(){
+  socket.emit('view-updated',board);
+  socket.broadcast.emit('view-updated',board);
+}
 
 });
+
