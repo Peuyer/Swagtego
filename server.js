@@ -164,6 +164,11 @@ io.on('connection', (socket) => {
     socket.emit('send-max',max);
   });
 
+  socket.on('get-list',(coord)=>{
+    console.log(board.moveList(coord[0],coord[1]));
+    socket.emit('send-list',(board.moveList(coord[0],coord[1])));
+  });
+
 function updateView(){
   socket.emit('view-updated',board);
   socket.broadcast.emit('view-updated',board);

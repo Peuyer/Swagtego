@@ -7,6 +7,7 @@ const pawnContainer = document.querySelector('#pawn-container')
 
 
 
+
 let currentPlayer = 'user'
 let gameMode = ""
 let playerNum = 0
@@ -15,6 +16,7 @@ let enemyReady = false
 let view = [];
 let count = [];
 const max= [];
+var moveList =[];
 
 // Warns socket io that a user connected
 const socket = io();
@@ -54,6 +56,13 @@ const socket = io();
     socket.on('get-max',(maxi)=>{
         max = maxi;
     });
+
+    socket.on('send-list',(list) => {
+        moveList = list;
+        console.log(list);
+    });
+
+
 
 
 ////////////////////////////////////////////////////////////////////    
@@ -191,3 +200,16 @@ const socket = io();
         document.querySelector(`${player} .connected span`).classList.toggle('green');
         if(parseInt(num) === playerNum) document.querySelector(player).style.fontWeight = 'bold';
       }
+
+    function getList(x,y){
+        console.log("pdpd");
+        let coord = new Array(2);
+        let list = [];
+        coord[0]= x;
+        coord[1]= y;
+        socket.emit('get-list',(coord));
+	    return moveList;
+
+
+        
+    }

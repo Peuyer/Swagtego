@@ -1,5 +1,7 @@
 //Affiche le plateau et les pions 
 
+
+
 class View{
 	constructor(game, playerIndex){
 		this.initBoard(game, playerIndex);
@@ -66,7 +68,9 @@ class View{
 		let grid = new Array(10);
 		for(let i=0; i<10; i++){
 			grid[i] = tab[i].getElementsByTagName("td");
+			tab[i].firstElementChild.setAttribute("id","pawn");
 		}
+		this.attachListeners(0);
 		return grid; 
 	}
 
@@ -75,6 +79,56 @@ class View{
 	}
 	getGame(){
 		return this.game;
+	}
+
+
+	attachListeners(pIndex){
+		console.log("mdr");
+
+ 
+		document.querySelectorAll("#pawn").forEach(e=>e.addEventListener('click',event =>{
+			let x = e.cellIndex;
+			let y = e.parentNode.rowIndex
+			console.log( "moveList en "+x ,y);
+			
+			let list = getList(x,y);
+			console.log(list);
+			
+			
+
+			if(list != false){
+
+				if(list['n']!= null){
+					this.classAdder(n,list);
+				}
+				if(list['e']!= null){
+					this.classAdder(e,list);
+				}
+				if(list['s']!= null){
+					this.classAdder(s,list);
+				}
+				if(list['w']!= null){
+					this.classAdder(w,list);
+				}
+			}	
+			})) 
+	
+	}
+
+
+
+	classAdder(dir,list){
+
+		switch(list[dir]['action']){
+			case null :
+				break;
+			case 'move' :
+				this.game.grid[list[dir]['coordx']][list[dir]['coordy']].classList.add("move");
+				break;
+			case 'attack' :
+				this.game.grid[list[dir]['coordx']][list[dir]['coordy']].classList.add("attack");
+				break;
+		}
 	}
 
 
