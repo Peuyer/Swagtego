@@ -124,8 +124,14 @@ io.on('connection', (socket) => {
 
   //Generate a random composition
   socket.on('generate-comp',(playerNum)=>{
-    if(!board.isCompleted(playerNum))board.randomComposition(playerNum);
-    else{board.regenerate(playerNum)}
+    if(!board.isCompleted(playerNum)){
+      console.log('creation...');
+      board.randomComposition(playerNum);
+    }
+    else{
+      console.log('re generation...')
+      board.regenerate(playerNum);
+    }
     updateView();
   });
 
@@ -145,6 +151,13 @@ io.on('connection', (socket) => {
   socket.on('update-view',()=>{
     updateView();
   });
+
+  //get the available move from a pawn in a given coordinate
+  socket.on('get-list',(coord)=>{
+    let list = board.moveList(coord[0],coord[1]);
+    console.log(list);
+    socket.emit('move-list',list);
+  });
   
 
   //display username
@@ -160,19 +173,12 @@ io.on('connection', (socket) => {
   socket.on('update-count',(playerIndex)=>{
     socket.emit('pawn-count',board.counter(playerIndex));
   });
-  socket.on('get-max',()=>{
-    socket.emit('send-max',max);
-  });
 
-  socket.on('get-list',(coord)=>{
-    console.log(board.moveList(coord[0],coord[1]));
-    socket.emit('send-list',(board.moveList(coord[0],coord[1])));
-  });
 
-function updateView(){
-  socket.emit('view-updated',board);
-  socket.broadcast.emit('view-updated',board);
-}
+  function updateView(){
+    socket.emit('view-updated',board);
+    socket.broadcast.emit('view-updated',board);
+    socket.emit('pawn-count',board.counter(playerIndex));
+  }
 
 });
-

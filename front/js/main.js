@@ -6,8 +6,6 @@ const clearButton = document.querySelector('#clear')
 const pawnContainer = document.querySelector('#pawn-container')
 
 
-
-
 let currentPlayer = 'user'
 let gameMode = ""
 let playerNum = 0
@@ -16,7 +14,19 @@ let enemyReady = false
 let view = [];
 let count = [];
 const max= [];
-var moveList =[];
+let moveList =[];
+max[0] = 1;
+max[1] = 1;
+max[2] = 8;
+max[3] = 5;
+max[4] = 4;
+max[5] = 4;
+max[6] = 4;
+max[7] = 3;
+max[8] = 2;
+max[9] = 1;
+max[10] = 1;
+max[11] = 6;
 
 // Warns socket io that a user connected
 const socket = io();
@@ -53,14 +63,11 @@ const socket = io();
         count = counter;
     });
 
-    socket.on('get-max',(maxi)=>{
-        max = maxi;
+    socket.on('move-list',(list)=>{
+        moveList=list;
+        console.log(moveList);
     });
-
-    socket.on('send-list',(list) => {
-        moveList = list;
-        console.log(list);
-    });
+    socket.emit('update-count',playerNum);
 
 
 
@@ -154,6 +161,7 @@ const socket = io();
         console.log("Suppression de tous vos pions")
         socket.emit('clear',playerNum);
         pawnContainer.style.display = 'flex';    
+        view[0].initPawns();
         return;
     });
 
@@ -188,6 +196,12 @@ const socket = io();
         data[2] = y;
         data[3] = id;
         socket.emit('placing-pawn',data);
+        socket.emit('update-count',playerNum);
+        console.log(count[id]+1,"/",max[id]);
+        if (count[id]+1 < max[id]){
+            console.log("add a pawn in the list");
+            view[0].addPawn(id);
+        }
     }
 
     function playerReady(num) {
@@ -202,14 +216,9 @@ const socket = io();
       }
 
     function getList(x,y){
-        console.log("pdpd");
-        let coord = new Array(2);
-        let list = [];
-        coord[0]= x;
-        coord[1]= y;
-        socket.emit('get-list',(coord));
-	    return moveList;
-
-
-        
+        let coord=[];
+        coord[0] = x;
+        coord[1] = y;
+        socket.emit('get-list',coord);
+        return moveList;
     }

@@ -1,5 +1,5 @@
 //Affiche le plateau et les pions 
-
+let counter=[];
 
 
 class View{
@@ -56,9 +56,17 @@ class View{
 	initPawns(){
 		let html='';
 		for (let i = 0; i<12; i++){
-			html+= '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+i.toString()+'</li>';
+			count[i]=0;
+			html+= '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+i.toString()+'<p>'+count[i]+'/'+max[i]+'</p></li>';
 		}
 		document.getElementById('pawn-container').innerHTML = html;
+	}
+	addPawn(i){
+		document.getElementById("pawn"+i.toString()).remove();
+		count[i]++;
+		let html='';
+		html += '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+i.toString()+'<p>'+count[i]+'/'+max[i]+'</p></li>';
+		document.getElementById('pawn-container').innerHTML += html;
 	}
 	
 	boardLoad(){
@@ -91,10 +99,8 @@ class View{
 			let y = e.parentNode.rowIndex
 			console.log( "moveList en "+x ,y);
 			
-			let list = getList(x,y);
-			console.log(list);
-			
-			
+			let list = []
+			list = getList(x,y);	
 
 			if(list != false){
 

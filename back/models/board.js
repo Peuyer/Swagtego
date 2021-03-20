@@ -113,6 +113,7 @@ class Board extends Pawn{
         let nbPawn=0,randx=0,randy=0;
         for(let i = 0; i<12;i++){
             nbPawn = max[i] - count[i];
+            count[i]?console.log("Already ",count[i]," pawn(s) with the value ",i):console.log();
             for (let j = 0; j<nbPawn ;j++){
                 do{
                 randx = this.rangeRand(0,9);
@@ -120,7 +121,7 @@ class Board extends Pawn{
                 }
                 while(this.board[randy][randx] != null)
                 this.board[randy][randx] = new Pawn(randx,randy,i*10+playerId,playerId);
-                console.log(this.board[randy][randx].pawn," placé en : ",randx," / ",randy);
+                console.log(this.board[randy][randx].pawn," : ",j+1," / ",max[i]);
             }
         }
         console.log('Generation completed with success');
@@ -142,6 +143,7 @@ class Board extends Pawn{
         let nbPawn=0,randx=0,randy=0;
         for(let i = 0; i<12;i++){
             nbPawn = max[i] - count[i];
+            console.log("Already ",count[i]," ",i);
             for (let j = 0; j<nbPawn ;j++){
                 do{
                 randx = this.rangeRand(0,9);
@@ -150,7 +152,7 @@ class Board extends Pawn{
                 while(this.board[randy][randx] != null)
                 this.board[randy][randx] = null;
                 this.board[randy][randx] = new Pawn(randx,randy,i*10+playerId,playerId);
-                console.log(this.board[randy][randx].pawn," placé en : ",randx," / ",randy);
+                console.log(this.board[randy][randx].pawn," : ",j+1," / ",max[i]);
             }
         }
         console.log('Regeneration completed with success');
