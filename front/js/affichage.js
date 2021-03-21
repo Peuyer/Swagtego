@@ -75,7 +75,7 @@ class View{
 			grid[i] = tab[i].getElementsByTagName("td");
 			tab[i].firstElementChild.setAttribute("id","pawn");
 		}
-		this.attachListeners(0);
+		this.attachListeners(playerNum);
 		return grid; 
 	}
 
@@ -88,34 +88,49 @@ class View{
 
 
 	attachListeners(pIndex){
+		let pClass = "";
+		pIndex == 0 ? pClass = "pawnBlue" : pClass = "pawnRed";
 		document.querySelectorAll("#pawn").forEach(e=>e.addEventListener('click',event =>{
 			let x = e.cellIndex;
 			let y = e.parentNode.rowIndex
-			console.log( "Déplacement disponible en "+x ,y," : ");
 			
-			let list = []
-			list = getList(x,y);	
-			console.log(list);
-			if(list){
-				console.log("list exists");
-				if(list['n']){
-					this.classAdder(n,list);
-					console.log("available move toward north");
-				}
-				if(list['e']){
-					this.classAdder(e,list);
-					console.log("available move toward east");
-				}
-				if(list['s']){
-					this.classAdder(s,list);
-					console.log("available move toward south");
-				}
-				if(list['w']){
-					this.classAdder(w,list);
-					console.log("available move toward west");
-				}
-			}	
-			})) 
+			
+
+			if (e.classList.contains(pClass)){
+				console.log( "Déplacement disponible en "+x ,y," : ");
+				
+				let list = []
+				list = getList(x,y);	
+				console.log(list['s']);
+				console.log(list);
+				if(list){
+					console.log("list exists");
+					
+					if(list['n']){
+						console.log("available move toward north");
+						this.classAdder('n',list);
+						
+					}
+					if(list['e']){
+						console.log("available move toward east");
+						this.classAdder('e',list);
+						
+					}
+					if(list['s']){
+						console.log("available move toward south");
+						this.classAdder('s',list);
+						
+					}
+					if(list['w']){
+						console.log("available move toward west");
+						this.classAdder('w',list);
+						
+					}
+						
+				}	
+			
+			}
+		})) 
 	
 	}
 
@@ -128,6 +143,7 @@ class View{
 				break;
 			case 'move' :
 				this.game.grid[list[dir]['coordx']][list[dir]['coordy']].classList.add("move");
+				console.log(this.game.grid[list[dir]['coordx']][list[dir]['coordy']].classList)	;
 				break;
 			case 'attack' :
 				this.game.grid[list[dir]['coordx']][list[dir]['coordy']].classList.add("attack");
