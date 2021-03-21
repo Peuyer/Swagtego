@@ -72,6 +72,7 @@ io.on('connection', (socket) => {
 
     // Sends the board to init the view
     socket.emit('init-view',board);
+    socket.emit('view-updated',board);
     socket.emit('pawn-count',board.counter(playerIndex))
 
     // Handle Disconnect
@@ -143,7 +144,7 @@ io.on('connection', (socket) => {
 
   //place a pawn
   socket.on('placing-pawn',data=>{
-    if (board.board[data[1]][data[2]] == null){
+    if (board.board[data[2]][data[1]] == null){
       board.placingPawns(data[0],data[1],data[2],data[3]);
     }
     updateView();

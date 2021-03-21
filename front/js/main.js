@@ -134,7 +134,7 @@ const socket = io();
         socket.emit('is-completed',playerNum);
         socket.on('completed',(complete)=>{
             if(complete){
-                //infoDisplay.innerHTML = "";
+                infoDisplay.innerHTML = "";
                 playGameMulti(socket);
             } 
             else infoDisplay.innerHTML = "Placez tous les pions s'il vous plait";
@@ -185,6 +185,7 @@ const socket = io();
     function placePawn(id,value){
         let x=((value-1)%10);
         let y=Math.ceil(value/10)-1;
+        console.log(x,y);
         let data= Array(4);
         data[0] = playerNum;
         data[1] = x;
@@ -197,7 +198,7 @@ const socket = io();
             if (count[id] < max[id]){
                 view[0].addPawn(id);
             }
-        },400);
+        },500);
     }
 
     function playerReady(num) {
