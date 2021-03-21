@@ -50,7 +50,6 @@ body{
 	flex-flow : row wrap;
 	justify-content: center;
 	padding:0;
-	margin-left:-30px;
 }
 .pawn-item{
 	background:white;
