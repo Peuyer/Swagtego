@@ -43,6 +43,9 @@ class View{
 					}
 					else html += '<td class="grass" data='+index.toString()+'>';
 				}
+				else{
+					html += '<td class="grass" ondragover="onDragOver(event);" ondrop="onDrop(event);" data-value='+index.toString()+'>';
+				}
 				html += '</td>';
 			}
 			html += '</tr>';
