@@ -97,24 +97,28 @@ class View{
 		document.querySelectorAll("#pawn").forEach(e=>e.addEventListener('click',event =>{
 			let x = e.cellIndex;
 			let y = e.parentNode.rowIndex
-			console.log( "moveList en "+x ,y);
+			console.log( "Déplacement disponible en "+x ,y," : ");
 			
 			let list = []
 			list = getList(x,y);	
-
-			if(list != false){
-
-				if(list['n']!= null){
+			console.log(list);
+			if(list){
+				console.log("list exists");
+				if(list['n']){
 					this.classAdder(n,list);
+					console.log("available move toward north");
 				}
-				if(list['e']!= null){
+				if(list['e']){
 					this.classAdder(e,list);
+					console.log("available move toward east");
 				}
-				if(list['s']!= null){
+				if(list['s']){
 					this.classAdder(s,list);
+					console.log("available move toward south");
 				}
-				if(list['w']!= null){
+				if(list['w']){
 					this.classAdder(w,list);
+					console.log("available move toward west");
 				}
 			}	
 			})) 

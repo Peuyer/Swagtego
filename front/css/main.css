@@ -3,6 +3,10 @@ body{
 	font-family: 'Nunito Sans', sans-serif;
 	background : #e0e0e0;
 	text-shadow:  8px 8px 16px #9b9b9b,-8px -8px 16px #ffffff;
+	
+}
+*{
+	list-style-type: none;
 }
 ::selection{
 	color:white;
@@ -13,20 +17,21 @@ body{
 /*HUD*/
 #gameScreen{
 	display:flex;
+	height:100vh;
 	flex-flow:row wrap;
 	justify-content: center;
+	align-items:center;
 }
-#hud div{
-	padding:2px;
-}
+
 #hud{
 	margin : 20px;
 	width:50vh;
 	border-radius: 25px;
 	background-color:rgb(216, 224, 240);
-	padding:20px 20px 20px 30px;
+	padding-left:30px;
 	flex-grow:1;
 	align-items:center;
+	overflow:auto;
 }
 #game{
 	flex-grow:20;
@@ -44,9 +49,8 @@ body{
 	display:flex;
 	flex-flow : row wrap;
 	justify-content: center;
-	margin-left:-40px;
-	margin-top:20px;
-	list-style-type: none;
+	padding:0;
+	margin-left:-30px;
 }
 .pawn-item{
 	background:white;
@@ -73,17 +77,14 @@ li:hover{
 
 /*GAME*/
 table{
-	z-index : 1;
 	border-collapse: collapse;
-	margin:auto auto 50px auto;
-	width:max-content;
-	list-style-type: none;
+	margin:auto;
 }
 td {	
 	display: table-cell;
 	border : solid 1px rgba(0, 0, 0, 0.308);
-	width: 70px;
-	height:70px;
+	width: 60px;
+	height:60px;
 	font-weight:bold;
 	text-shadow:none;
 }
@@ -99,7 +100,8 @@ td {
 	color: black;
 	vertical-align: center;
 	text-align: center;
-	color:white;	
+	color:white;
+	transition-duration:0.5s ;	
 }
 .pawnRed{
 	background-color:#d63338;
@@ -107,6 +109,7 @@ td {
 	vertical-align: center;
 	text-align: center;
 	color:white;
+	transition-duration:0.5s ;	
 }
 
 .lake{

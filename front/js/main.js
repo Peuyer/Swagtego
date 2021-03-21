@@ -14,7 +14,7 @@ let enemyReady = false
 let view = [];
 let count = [];
 const max= [];
-let moveList =[];
+let moveList=Array(4);
 max[0] = 1;
 max[1] = 1;
 max[2] = 8;
@@ -63,12 +63,7 @@ const socket = io();
         count = counter;
     });
 
-    socket.on('move-list',(list)=>{
-        moveList=list;
-        console.log(moveList);
-    });
     socket.emit('update-count',playerNum);
-
 
 
 
@@ -216,9 +211,19 @@ const socket = io();
       }
 
     function getList(x,y){
+        moveList=Array(4);;
         let coord=[];
         coord[0] = x;
         coord[1] = y;
         socket.emit('get-list',coord);
         return moveList;
     }
+
+    socket.on('possible-move', (list)=>{
+        let possibleMove=[];
+        let direc = list.direction;
+        possibleMove['action'] = list.action; 
+        possibleMove['coordx'] = list.x; 
+        possibleMove['coordy'] = list.y; 
+        moveList[direc] = possibleMove;
+    });

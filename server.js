@@ -156,7 +156,10 @@ io.on('connection', (socket) => {
   socket.on('get-list',(coord)=>{
     let list = board.moveList(coord[0],coord[1]);
     console.log(list);
-    socket.emit('move-list',list);
+    sendMove(list,'n');
+    sendMove(list,'s');
+    sendMove(list,'e');
+    sendMove(list,'w');
   });
   
 
@@ -179,6 +182,16 @@ io.on('connection', (socket) => {
     socket.emit('view-updated',board);
     socket.broadcast.emit('view-updated',board);
     socket.emit('pawn-count',board.counter(playerIndex));
+  }
+  function sendMove(list,dir){
+    if(list[dir]){
+      socket.emit('possible-move',{ 
+        direction: dir, 
+        action: list[dir]['action'],
+        x: list[dir]['coordx'],
+        y: list[dir]['coordy']
+      });
+    }
   }
 
 });
