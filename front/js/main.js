@@ -192,11 +192,12 @@ const socket = io();
         data[3] = id;
         socket.emit('placing-pawn',data);
         socket.emit('update-count',playerNum);
-        console.log(count[id]+1,"/",max[id]);
-        if (count[id]+1 < max[id]){
-            console.log("add a pawn in the list");
-            view[0].addPawn(id);
-        }
+        setTimeout(()=>{
+            console.log(count[id],"/",max[id]);
+            if (count[id] < max[id]){
+                view[0].addPawn(id);
+            }
+        },400);
     }
 
     function playerReady(num) {

@@ -28,7 +28,7 @@ body{
 	width:50vh;
 	border-radius: 25px;
 	background-color:rgb(216, 224, 240);
-	padding-left:30px;
+	padding:30px;
 	flex-grow:1;
 	align-items:center;
 	overflow:auto;
@@ -60,17 +60,28 @@ body{
 	text-align:center;
 	font-size:2rem;
 	margin:5px;
-	padding-top:3px;
 	border-radius: 10px;
 	text-shadow:none;
 	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+	transition-duration:0.5s;
 }
 .pawn-item p{
 	font-size:10px;
-	bottom:-0;
+	margin-top:-10px;
 }
 li:hover{
 	cursor:pointer;
+}
+.pawn-item:hover{
+	transition-duration:0.2s;
+	background:#3b3b3b;
+	color:white;
+	transform:scale(1.05);
+}
+.pawn-item:active{
+	background:white;
+	color:black;
+	transition-duration:0.5s;
 }
 
 
@@ -151,4 +162,18 @@ span.green {
   
   ::-webkit-scrollbar-thumb:hover {
 	background-color: #a8bbbf;
+  }
+/*ANIMATION*/
+@keyframes shake {
+	0% { transform: translate(1px, 1px) rotate(0deg); }
+	10% { transform: translate(-1px, -2px) rotate(-1deg); }
+	20% { transform: translate(-3px, 0px) rotate(1deg); }
+	30% { transform: translate(3px, 2px) rotate(0deg); }
+	40% { transform: translate(1px, -1px) rotate(1deg); }
+	50% { transform: translate(-1px, 2px) rotate(-1deg); }
+	60% { transform: translate(-3px, 1px) rotate(0deg); }
+	70% { transform: translate(3px, 1px) rotate(-1deg); }
+	80% { transform: translate(-1px, -1px) rotate(1deg); }
+	90% { transform: translate(1px, 2px) rotate(0deg); }
+	100% { transform: translate(1px, -2px) rotate(-1deg); }
   }

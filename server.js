@@ -143,7 +143,9 @@ io.on('connection', (socket) => {
 
   //place a pawn
   socket.on('placing-pawn',data=>{
-    board.placingPawns(data[0],data[1],data[2],data[3]);
+    if (board.board[data[1]][data[2]] == null){
+      board.placingPawns(data[0],data[1],data[2],data[3]);
+    }
     updateView();
   });
 

@@ -1,5 +1,4 @@
 //Affiche le plateau et les pions 
-let counter=[];
 
 
 class View{
@@ -62,8 +61,6 @@ class View{
 		document.getElementById('pawn-container').innerHTML = html;
 	}
 	addPawn(i){
-		document.getElementById("pawn"+i.toString()).remove();
-		count[i]++;
 		let html='';
 		html += '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+i.toString()+'<p>'+count[i]+'/'+max[i]+'</p></li>';
 		document.getElementById('pawn-container').innerHTML += html;
@@ -91,9 +88,6 @@ class View{
 
 
 	attachListeners(pIndex){
-		console.log("mdr");
-
- 
 		document.querySelectorAll("#pawn").forEach(e=>e.addEventListener('click',event =>{
 			let x = e.cellIndex;
 			let y = e.parentNode.rowIndex
