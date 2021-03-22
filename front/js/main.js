@@ -212,35 +212,22 @@ const socket = io();
         if(parseInt(num) === playerNum) document.querySelector(player).style.fontWeight = 'bold';
       }
 
-    function getList(x,y){
-        moveList=[];
-        let coord=[];
-        coord[0] = x;
-        coord[1] = y;
-        socket.emit('get-list',coord);
-        console.log(moveList);
-        return moveList;
+    function getList(x,y,dir){
+        possibleMove={};
+        let data={};
+        data.x = x;
+        data.y = y;
+        data.dir = dir;
+        socket.emit('get-list',data);
+        console.log(possibleMove);
+        return possibleMove;                  
     }
 
     socket.on('possible-move', (list)=>{
-        let possibleMove={};
         let direc = list.direction;
-        let id=-1.
+        
         possibleMove.dir = direc;
         possibleMove.action = list.action; 
         possibleMove.coordx= list.x; 
         possibleMove.coordy = list.y;
-        switch(direc){
-            default:
-                break;
-            case 'n':
-                id=0;
-            case 's':
-                id=1;
-            case 'e':
-                id=2;
-            case 'w':
-                id=3;
-        }
-        moveList[id] = possibleMove;
     });

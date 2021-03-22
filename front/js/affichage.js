@@ -26,6 +26,7 @@ class View{
 				}
 			}
 		}
+		this.attachListeners(playerNum);
 	}
 
 	initBoard(board,playerIndex){
@@ -78,7 +79,7 @@ class View{
 		for(let i=0; i<10; i++){
 			grid[i] = tab[i].getElementsByTagName("td");
 		}
-		this.attachListeners(playerNum);
+		
 		return grid; 
 	}
 
@@ -101,28 +102,35 @@ class View{
 			if (e.classList.contains(pClass)){
 				console.log( "Liste des déplacement disponible du pion en "+x ,y," : ");
 				
-				let list = getList(x,y);
-				console.log(list);	
-				console.log(list[3]);
-				if(list){
+				let listn = getList(x,y,'n');
+				let lists = getList(x,y,'s');
+				let liste = getList(x,y,'e');
+				let listw = getList(x,y,'w');
+
+				console.log(listn);
+				console.log(lists);
+				console.log(liste);
+				console.log(listw);
+
+				if(listn || lists || liste || listw){
 					console.log("list exists");
 					
-					if(list['n']){
+					if(listn){
 						console.log("available move toward north");
 						this.classAdder('n',list);
 						
 					}
-					if(list['e']){
+					if(liste){
 						console.log("available move toward east");
 						this.classAdder('e',list);
 						
 					}
-					if(list['s']){
+					if(lists){
 						console.log("available move toward south");
 						this.classAdder('s',list);
 						
 					}
-					if(list['w']){
+					if(listw){
 						console.log("available move toward west");
 						this.classAdder('w',list);
 						

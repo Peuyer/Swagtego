@@ -156,13 +156,10 @@ io.on('connection', (socket) => {
   });
 
   //get the available move from a pawn in a given coordinate
-  socket.on('get-list',(coord)=>{
-    let list = board.moveList(coord[0],coord[1]);
-    console.log(list);
-    sendMove(list,'n');
-    sendMove(list,'s');
-    sendMove(list,'e');
-    sendMove(list,'w');
+  socket.on('get-list',(data)=>{
+    console.log(data);
+    let list = board.moveList(data.x,data.y);
+    sendMove(list,data.dir);
   });
   
 
@@ -187,6 +184,7 @@ io.on('connection', (socket) => {
     socket.emit('pawn-count',board.counter(playerIndex));
   }
   function sendMove(list,dir){
+    
     if(list[dir]){
       socket.emit('possible-move',{ 
         direction: dir, 
