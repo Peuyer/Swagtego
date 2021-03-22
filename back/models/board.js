@@ -698,8 +698,12 @@ class Board extends Pawn{
     //a.n : list['n']['coordx (ou coordy)'] renvois la coordonnée du move disponible (case vide si list['n'] == null)
     moveList(x,y){
         let list = new Array(4);
-        if (this.board[y][x] == null || this.board[x][y] == 'b'){
+        if (this.board[y][x] == null || this.board[y][x] == 'b'){
             console.log("Aucune action disponible depuis cette case");
+            return false;
+        }
+        else if(this.board[y][x].pawn == 0+this.board[y][x].player ||this.board[y][x].pawn == 110+this.board[y][x].player){
+            console.log("Les bombes ou drapeaux ne peuvent se déplacer");
             return false;
         }
         let pawn = this.getCaseState(x,y);

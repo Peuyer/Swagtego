@@ -213,19 +213,34 @@ const socket = io();
       }
 
     function getList(x,y){
-        moveList=Array(4);;
+        moveList=[];
         let coord=[];
         coord[0] = x;
         coord[1] = y;
         socket.emit('get-list',coord);
+        console.log(moveList);
         return moveList;
     }
 
     socket.on('possible-move', (list)=>{
-        let possibleMove=[];
+        let possibleMove={};
         let direc = list.direction;
-        possibleMove['action'] = list.action; 
-        possibleMove['coordx'] = list.x; 
-        possibleMove['coordy'] = list.y; 
-        moveList[direc] = possibleMove;
+        let id=-1.
+        possibleMove.dir = direc;
+        possibleMove.action = list.action; 
+        possibleMove.coordx= list.x; 
+        possibleMove.coordy = list.y;
+        switch(direc){
+            default:
+                break;
+            case 'n':
+                id=0;
+            case 's':
+                id=1;
+            case 'e':
+                id=2;
+            case 'w':
+                id=3;
+        }
+        moveList[id] = possibleMove;
     });

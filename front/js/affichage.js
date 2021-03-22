@@ -18,6 +18,7 @@ class View{
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player == playerIndex){
 					this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
 					this.grid[x][y].innerHTML = ((this.game.board[x][y].pawn-playerIndex)/10).toString();
+					this.grid[x][y].id +="pawn";
 				}
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player != playerIndex){
 					this.grid[x][y].className = playerIndex ? "pawnBlue":"pawnRed"
@@ -76,7 +77,6 @@ class View{
 		let grid = new Array(10);
 		for(let i=0; i<10; i++){
 			grid[i] = tab[i].getElementsByTagName("td");
-			tab[i].firstElementChild.setAttribute("id","pawn");
 		}
 		this.attachListeners(playerNum);
 		return grid; 
@@ -96,16 +96,14 @@ class View{
 		document.querySelectorAll("#pawn").forEach(e=>e.addEventListener('click',event =>{
 			let x = e.cellIndex;
 			let y = e.parentNode.rowIndex
-			
-			
+			console.log("youhou");
 
 			if (e.classList.contains(pClass)){
-				console.log( "Déplacement disponible en "+x ,y," : ");
+				console.log( "Liste des déplacement disponible du pion en "+x ,y," : ");
 				
-				let list = []
-				list = getList(x,y);	
-				console.log(list['s']);
-				console.log(list);
+				let list = getList(x,y);
+				console.log(list);	
+				console.log(list[3]);
 				if(list){
 					console.log("list exists");
 					
@@ -142,6 +140,8 @@ class View{
 	classAdder(dir,list){
 
 		switch(list[dir]['action']){
+			default:
+				break;
 			case null :
 				break;
 			case 'move' :
