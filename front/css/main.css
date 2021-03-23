@@ -1,0 +1,189 @@
+body{
+	margin:auto;
+	font-family: 'Nunito Sans', sans-serif;
+	background: rgb(86,204,242);
+	background: linear-gradient(25deg, rgba(86,204,242,1) 0%, #007bff 100%);
+	background-repeat: repeat;
+	color: white;
+	
+}
+*{
+	list-style-type: none;
+}
+::selection{
+	color:white;
+	background:grey;
+}
+
+/*HUD*/
+#gameScreen{
+	display:flex;
+	height:100vh;
+	flex-flow:row wrap;
+	justify-content: center;
+	align-items:center;
+}
+
+#hud{
+	margin : 20px;
+	width:50vh;
+	border-radius: 25px;
+	background-color:#333333;
+	padding:30px;
+	flex-grow:1;
+	align-items:center;
+	overflow:auto;
+}
+#game{
+	flex-grow:20;
+}
+
+#whose-go{
+	padding-top:10px;
+}
+#random, #clear{
+	margin-bottom:10px;
+}
+
+
+#pawn-container{
+	display:flex;
+	flex-flow : row wrap;
+	justify-content: center;
+	padding:0;
+}
+.pawn-item{
+	background:white;
+	width:55px;
+	height:55px;
+	font-weight:bold;
+	text-align:center;
+	font-size:2rem;
+	margin:5px;
+	border-radius: 10px;
+	text-shadow:none;
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+	transition-duration:0.5s;
+}
+.pawn-item p{
+	font-size:10px;
+	margin-top:-10px;
+}
+li:hover{
+	cursor:pointer;
+}
+.pawn-item{
+	background:white;
+	color:black;
+}
+.pawn-item:hover{
+	transition-duration:0.2s;
+	background:black;
+	color:white;
+	transform:scale(1.05);
+}
+.pawn-item:active{
+	background:white;
+	color:black;
+	transition-duration:0.5s;
+}
+
+
+
+/*GAME*/
+table{
+	border-collapse: collapse;
+	margin:auto;
+}
+td {	
+	display: table-cell;
+	border : solid 1px rgba(0, 0, 0, 0.308);
+	width: 60px;
+	height:60px;
+	font-weight:bold;
+	text-shadow:none;
+}
+
+/*CASES*/
+.grass{
+	background-color:#55a630;
+	color: black;
+	vertical-align: center;
+}
+.grassborderedtopleft{
+	background-color:#55a630;
+	color: black;
+	vertical-align: center;
+	border-top-left-radius: 20%;
+}
+.pawnBlue{
+	background-color:#205ec2;
+	color: black;
+	vertical-align: center;
+	text-align: center;
+	color:white;
+	transition-duration:0.5s ;	
+}
+.pawnRed{
+	background-color:#d63338;
+	color: black;;
+	vertical-align: center;
+	text-align: center;
+	color:white;
+	transition-duration:0.5s ;	
+}
+
+.lake{
+	background-color:#a8e0ff;
+	color: black;
+	vertical-align: center;
+}
+
+/*CONNECTION STATUS INDICATOR*/
+.connected span,
+.ready span {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border-radius:1rem;
+  background: red;
+  margin:auto 0.5rem auto auto;
+}
+
+span.green {
+  background: green;
+}
+
+/*SCROLLBAR*/
+::-webkit-scrollbar {
+	width: 20px;
+  }
+  
+  ::-webkit-scrollbar-track {
+	background-color: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+	background-color: #d6dee1;
+	border-radius: 20px;
+	border: 6px solid transparent;
+	background-clip: content-box;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+	background-color: #a8bbbf;
+  }
+/*ANIMATION*/
+@keyframes shake {
+	0% { transform: translate(1px, 1px) rotate(0deg); }
+	10% { transform: translate(-1px, -2px) rotate(-1deg); }
+	20% { transform: translate(-3px, 0px) rotate(1deg); }
+	30% { transform: translate(3px, 2px) rotate(0deg); }
+	40% { transform: translate(1px, -1px) rotate(1deg); }
+	50% { transform: translate(-1px, 2px) rotate(-1deg); }
+	60% { transform: translate(-3px, 1px) rotate(0deg); }
+	70% { transform: translate(3px, 1px) rotate(-1deg); }
+	80% { transform: translate(-1px, -1px) rotate(1deg); }
+	90% { transform: translate(1px, 2px) rotate(0deg); }
+	100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
