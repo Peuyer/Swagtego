@@ -1,6 +1,5 @@
 //Affiche le plateau et les pions 
 
-
 class View{
 	constructor(game, playerIndex){
 		this.initBoard(game, playerIndex);
@@ -90,7 +89,6 @@ class View{
 		return this.game;
 	}
 
-
 	attachListeners(pIndex){
 		let pClass = "";
 		pIndex == 0 ? pClass = "pawnBlue" : pClass = "pawnRed";
@@ -101,70 +99,67 @@ class View{
 
 			if (e.classList.contains(pClass)){
 				console.log( "Liste des déplacement disponible du pion en "+x ,y," : ");
-				
-				let listn = getList(x,y,'n');
-				let lists = getList(x,y,'s');
-				let liste = getList(x,y,'e');
-				let listw = getList(x,y,'w');
 
-				console.log(listn);
-				console.log(lists);
-				console.log(liste);
-				console.log(listw);
+				socket.emit('get-list',{x:x , y:y});
+				let listn = {};
+				let lists = {};
+				let liste = {};
+				let listw = {};
+				socket.on('list-north',(listNorth)=>{
+					listn = listNorth;
+				});
+				socket.on('list-south',(listSouth)=>{
+					lists = listSouth;
+				});
+				socket.on('list-east',(listEast)=>{
+					liste = listEast;
+				});
+				socket.on('list-west',(listWest)=>{
+					listw = listWest;
+				});			
 
-				if(listn || lists || liste || listw){
-					console.log("list exists");
-					
-					if(listn){
-						console.log("available move toward north");
-						this.classAdder('n',list);
-						
+				setTimeout(()=>{
+					if(listn || lists || liste || listw){			
+						if(listn){
+							console.log("available move toward north");
+							this.classAdder(listn);						
+						}
+						if(liste){
+							console.log("available move toward east");
+							this.classAdder(liste);					
+						}
+						if(lists){
+							console.log("available move toward south");
+							this.classAdder(lists);
+						}
+						if(listw){
+							console.log("available move toward west");
+							this.classAdder(listw);		
+						}	
 					}
-					if(liste){
-						console.log("available move toward east");
-						this.classAdder('e',list);
-						
-					}
-					if(lists){
-						console.log("available move toward south");
-						this.classAdder('s',list);
-						
-					}
-					if(listw){
-						console.log("available move toward west");
-						this.classAdder('w',list);
-						
-					}
-						
-				}	
+				},100);	
 			
 			}
 		})) 
-	
 	}
 
 
 
-	classAdder(dir,list){
-
-		switch(list[dir]['action']){
+	classAdder(list){
+		switch(list.action){
 			default:
 				break;
-			case null :
-				break;
 			case 'move' :
-				this.game.grid[list[dir]['coordx']][list[dir]['coordy']].classList.add("move");
-				console.log(this.game.grid[list[dir]['coordx']][list[dir]['coordy']].classList)	;
+				this.grid[list.y][list.x].classList.add("move");
+				this.grid[list.y][list.x].setAttribute("movable","true");
+				this.grid[list.y][list.x].innerHTML = '•' ;
 				break;
 			case 'attack' :
-				this.game.grid[list[dir]['coordx']][list[dir]['coordy']].classList.add("attack");
+				this.grid[list.y][list.x].classList.add("attack");
+				this.grid[list.y][list.x].setAttribute("attackable","true");
+				this.grid[list.y][list.x].innerHTML = 'X' ;
 				break;
 		}
+		
 	}
-
-
-
-
-
-
 }

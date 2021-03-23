@@ -210,24 +210,4 @@ const socket = io();
         let player = `.p${parseInt(num) + 1}`
         document.querySelector(`${player} .connected span`).classList.toggle('green');
         if(parseInt(num) === playerNum) document.querySelector(player).style.fontWeight = 'bold';
-      }
-
-    function getList(x,y,dir){
-        possibleMove={};
-        let data={};
-        data.x = x;
-        data.y = y;
-        data.dir = dir;
-        socket.emit('get-list',data);
-        console.log(possibleMove);
-        return possibleMove;                  
     }
-
-    socket.on('possible-move', (list)=>{
-        let direc = list.direction;
-        
-        possibleMove.dir = direc;
-        possibleMove.action = list.action; 
-        possibleMove.coordx= list.x; 
-        possibleMove.coordy = list.y;
-    });

@@ -696,8 +696,8 @@ class Board extends Pawn{
     //a.n : si list['n'] == null alors pas de déplacement possible vers le nord ('n')
     //a.n : list['n']['action'] renvois l'action possible vers le nord ('none','attack' ou 'move');
     //a.n : list['n']['coordx (ou coordy)'] renvois la coordonnée du move disponible (case vide si list['n'] == null)
-    moveList(x,y){
-        let list = new Array(4);
+    moveList(x,y,dir){
+        let list = {};
         if (this.board[y][x] == null || this.board[y][x] == 'b'){
             console.log("Aucune action disponible depuis cette case");
             return false;
@@ -708,17 +708,11 @@ class Board extends Pawn{
         }
         let pawn = this.getCaseState(x,y);
         if (pawn.pawn != 20 && pawn.pawn != 21){
-            this.nesw(pawn,'n',list);
-            this.nesw(pawn,'s',list);
-            this.nesw(pawn,'w',list);
-            this.nesw(pawn,'e',list);
+            list = this.nesw(pawn,dir,list);
             return list;
         }
         else{
-            this.neswEcl(pawn,'n',list);
-            this.neswEcl(pawn,'s',list);
-            this.neswEcl(pawn,'w',list);
-            this.neswEcl(pawn,'e',list);
+            list = this.neswEcl(pawn,dir,list);
             return list;
         }
     }
@@ -746,29 +740,31 @@ class Board extends Pawn{
         let depY  = y+dy;
 
         if(depX > 9 || depX < 0 || depY > 9 || depY < 0 || this.board[depY][depX] == 'b'){
-            list[dir] = null;
-            return false;
+            list = null;
+            return list;
         }
 
         else if (this.board[depY][depX] == null){
-            list[dir] = new Array(3);
-            list[dir]['action'] = 'move';      //déplacement
-            list[dir]['coordx'] = depX;
-            list[dir]['coordy'] = depY;
-            console.log("Déplacement possible en ",depX," / ",depY);
-            return true;
+            list = {};
+            list.dir = dir;
+            list.action = 'move';      //déplacement
+            list.x = depX;
+            list.y = depY;
+            console.log("Déplacement possible jusque'en ",depX," / ",depY);
+            return list;
         }
         else if(this.board[depY][depX].player == pawn.player){
-            list[dir] = null;
-            return false;
+            list = null;
+            return list;
         }
         else {
-            list[dir] = new Array(3);
-            list[dir]['action'] = 'attack';      //attaque
-            list[dir]['coordx'] = depX;
-            list[dir]['coordy'] = depY;
+            list = {};
+            list.dir = dir;
+            list.action = 'attack';      //attack
+            list.x = depX;
+            list.y = depY;
             console.log("Attaque possible en ",depX," / ",depY);
-            return true;
+            return list;
         }
     }
 
@@ -796,38 +792,40 @@ class Board extends Pawn{
         
 
         if(depX > 9 || depX < 0 || depY > 9 || depY < 0 || this.board[depY][depX] == 'b'){
-            list[dir] = null;
-            return false;
+            list = null;
+            return list;
         }
         else if (this.board[depY][depX] == null){
-            list[dir] = new Array(3);
-            
+            list = {};
+            list.dir = dir;
 
             while( depY< 10 && depX < 10 && depY >= 0 && depX>=0 && this.board[depY][depX] == null){
                 if(depY+dy< 10 && depX+dx < 10 && depY+dy >= 0 && depX+dx>=0 && this.board[depY+dy][depX + dx] != null && this.board[depY+dy][depX + dx] != 'b' && pawn.player != this.board[depY+dy][depX+dx].player){
-                    list[dir]['action'] = 'attack';      //déplacement
+                    list.action = 'attack';      //attack
                 }
                 else {
-                    list[dir]['action'] = 'move';      //déplacement
+                    list.action = 'move';      //déplacement
                 }
-                list[dir]['coordx'] = depX;
-                list[dir]['coordy'] = depY;
+                list.x = depX;
+                list.y = depY;
                 depX += dx 
                 depY += dy
             }
             depX -= dx 
             depY -= dy
-            if(list[dir]['action'] == 'move'){
-                            console.log("Déplacement possible en ",depX," / ",depY);
+            if(list.action == 'move'){
+                console.log("Déplacement possible en ",depX," / ",depY);
             }
-            if(list[dir]['action'] == 'attack'){
+            if(list.action == 'attack'){
+                list.x= depX+dx;
+                list.y=depY+dy;
                 console.log("Attaque possible en ",depX+dx," / ",depY+dy);
             }
-            return true;
+            return list;
         }
         else if (this.board[depY][depX].player == pawn.player){
-            list[dir] = null;
-            return false;
+            list = null;
+            return list;
         }
     }
 }

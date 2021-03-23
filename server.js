@@ -155,13 +155,11 @@ io.on('connection', (socket) => {
     updateView();
   });
 
-  //get the available move from a pawn in a given coordinate
-  socket.on('get-list',(data)=>{
-    console.log(data);
-    let list = board.moveList(data.x,data.y);
-    sendMove(list,data.dir);
-  });
-  
+  function updateView(){
+    socket.emit('view-updated',board);
+    socket.broadcast.emit('view-updated',board);
+    socket.emit('pawn-count',board.counter(playerIndex));
+  }
 
   //display username
   socket.on('username',(username,playerIndex)=>{
@@ -178,21 +176,20 @@ io.on('connection', (socket) => {
   });
 
 
-  function updateView(){
-    socket.emit('view-updated',board);
-    socket.broadcast.emit('view-updated',board);
-    socket.emit('pawn-count',board.counter(playerIndex));
-  }
-  function sendMove(list,dir){
-    
-    if(list[dir]){
-      socket.emit('possible-move',{ 
-        direction: dir, 
-        action: list[dir]['action'],
-        x: list[dir]['coordx'],
-        y: list[dir]['coordy']
-      });
-    }
-  }
+
+
+
+  //get the available move from a pawn in a given coordinate
+  socket.on('get-list',(data)=>{
+    let moveNorth = board.moveList(data.x,data.y,'n');
+    let moveSouth = board.moveList(data.x,data.y,'s');
+    let moveEast = board.moveList(data.x,data.y,'e');
+    let moveWest = board.moveList(data.x,data.y,'w');
+    console.log(moveSouth);
+    socket.emit('list-north',moveNorth);
+    socket.emit('list-south',moveSouth);
+    socket.emit('list-east',moveEast);
+    socket.emit('list-west',moveWest);
+  });
 
 });
