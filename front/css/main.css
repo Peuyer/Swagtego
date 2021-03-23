@@ -102,12 +102,10 @@ td {
 /*CASES*/
 .grass{
 	background-color:#55a630;
-	color: black;
 	vertical-align: center;
 }
 .pawnBlue{
 	background-color:#205ec2;
-	color: black;
 	vertical-align: center;
 	text-align: center;
 	color:white;
@@ -115,7 +113,6 @@ td {
 }
 .pawnRed{
 	background-color:#d63338;
-	color: black;;
 	vertical-align: center;
 	text-align: center;
 	color:white;
@@ -132,6 +129,9 @@ td {
 	color:black;
 	text-align:center;
 	font-size:30px;
+}
+#shake{
+	animation:shake infinite alternate;
 }
 
 /*CONNECTION STATUS INDICATOR*/

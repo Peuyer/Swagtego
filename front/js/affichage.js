@@ -17,7 +17,7 @@ class View{
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player == playerIndex){
 					this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
 					this.grid[x][y].innerHTML = ((this.game.board[x][y].pawn-playerIndex)/10).toString();
-					this.grid[x][y].id +="pawn";
+					this.grid[x][y].id ="pawn";
 				}
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player != playerIndex){
 					this.grid[x][y].className = playerIndex ? "pawnBlue":"pawnRed"
@@ -32,7 +32,7 @@ class View{
 		let html = '';
 		let index = 0;
 		for(let x=0; x<10; x++){
-			  html += '<tr>';
+			html += '<tr>';
 			for(let y=0;y<10;y++){
 				index++;
 				if(board.board[x][y] == 'b'){
@@ -93,9 +93,10 @@ class View{
 		let pClass = "";
 		pIndex == 0 ? pClass = "pawnBlue" : pClass = "pawnRed";
 		document.querySelectorAll("#pawn").forEach(e=>e.addEventListener('click',event =>{
+			this.DisplayBoard(playerNum);
 			let x = e.cellIndex;
-			let y = e.parentNode.rowIndex
-			console.log("youhou");
+			let y = e.parentNode.rowIndex;
+			this.grid[y][x].id+=" shake";
 
 			if (e.classList.contains(pClass)){
 				console.log( "Liste des déplacement disponible du pion en "+x ,y," : ");
@@ -160,6 +161,5 @@ class View{
 				this.grid[list.y][list.x].innerHTML = 'X' ;
 				break;
 		}
-		
 	}
 }
