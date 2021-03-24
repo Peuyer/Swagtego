@@ -2,6 +2,7 @@ const gameScreen = document.getElementById('gameScreen')
 const initialScreen = document.getElementById('initialScreen')
 const joinGameBtn = document.getElementById('joinGame')
 const userNameInput = document.getElementById('usernameInput')
+const navbar = document.getElementById('nav')
 
 joinGameBtn.addEventListener('click', joinGame);
 
@@ -24,5 +25,6 @@ function resetMenu(){
 function init(){
     initialScreen.style.display = 'none';
     gameScreen.style.display = 'flex';
+    navbar.style.display='none';
 
 }
