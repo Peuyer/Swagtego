@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Swagtego</title>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+    <link rel="stylesheet" type="text/css" href="../css/main.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+  <style>
+    #gameScreen{
+      display:none;
+    }
+  </style>
+  </head>
+
+
+  <body> 
+    <section class="vh-100">    
+    <div id="initialScreen" class="h-100">
+      <div class="d-flex flex-column align-items-center justify-content-center h-100">
+          <h1>SWAGTEGO</h1>
+          <h5>Entrez votre pseudo pour rejoindre le jeu</h3>
+          <div class="form-group">
+            <input type="text" placeholder="Pseudo" id="usernameInput" class="form-control"/>
+          </div>
+          <button type="submit" class="btn btn-primary" id="joinGame">Rejoindre</button>
+      </div>
+    </div>
+
+
+    <div id="gameScreen">
+      <div id="hud">
+        <h2 style="text-align: center;">SWAGTEGO : </h2>
+        <hr>
+        <div class="player p1">
+          <span id="player1">Joueur 1</span>
+          <div class="connected"><span></span>Connecté </div>
+          <div class="ready"><span></span>Prêt </div>
+        </div>
+
+        <hr>
+        
+        <div class="player p2">
+          <span id="player2">Joueur 2</span>
+          <div class="connected"><span></span>Connecté </div>
+          <div class="ready"><span></span>Prêt </div>
+        </div>
+
+        <hr>
+
+        <div class="hidden-info">
+          <button id="start" class="btn btn-outline-success">Commencer</button>
+          <hr>
+          <h5 id="whose-go">Placement des pions</h3>
+          <h3 id="info"></h3>
+        </div>
+        <div class="Random-Composition">
+          <button id="random" class="btn btn-success">Génerer une composition aléatoire</button>
+          <button id="clear" class="btn btn-danger">Supprimer tous vos pions</button>
+        </div>
+
+        <hr>
+
+        <h5>Pions à placer : </h3>
+        <ul id="pawn-container"></ul>
+      </div>
+
+        
+      <div id="game">
+        <ul id="pseudo"></ul>
+
+        <table id="table" style="margin-top : 50px;"></table>
+        
+      </div>
+	  </div>
+    </section>
+  </body>
+  <script src="../js/affichage.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/login.js"></script>
+  <script src="../js/drag.js"></script>
+</html>

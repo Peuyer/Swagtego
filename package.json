@@ -1,0 +1,32 @@
+{
+  "name": "swagtego",
+  "version": "1.0.0",
+  "description": "Swagtego game",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Uma-Jan/Swagtego.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Uma-Jan/Swagtego/issues"
+  },
+  "homepage": "https://github.com/Uma-Jan/Swagtego#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "express-socket.io-session": "^1.3.5",
+    "express-validator": "^6.10.0",
+    "mysql": "^2.18.1",
+    "socket.io": "^4.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
