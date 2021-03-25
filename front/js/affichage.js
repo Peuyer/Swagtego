@@ -90,9 +90,13 @@ class View{
 	}
 
 	attachListeners(pIndex){
+		let i =0;
 		let pClass = "";
 		pIndex == 0 ? pClass = "pawnBlue" : pClass = "pawnRed";
-		document.querySelectorAll("#pawn").forEach(e=>e.addEventListener('click',event =>{
+		let e;
+		document.querySelectorAll("#pawn").forEach(e=>e.addEventListener('click',deplacements =>{
+			i++;
+			console.log('i',i);
 			this.DisplayBoard(playerNum);
 			let x = e.cellIndex;
 			let y = e.parentNode.rowIndex;
@@ -106,47 +110,52 @@ class View{
 				let lists = {};
 				let liste = {};
 				let listw = {};
+				let src = {
+					x:x,
+					y:y
+				}
 				socket.on('list-north',(listNorth)=>{
 					listn = listNorth;
+					lists = null;
+					listw = null;
+					liste = null;
+					this.verif(listn,lists,liste,listw,src);
 				});
 				socket.on('list-south',(listSouth)=>{
 					lists = listSouth;
+					listn = null;
+					listw = null;
+					liste = null;
+					this.verif(listn,lists,liste,listw,src);
 				});
 				socket.on('list-east',(listEast)=>{
 					liste = listEast;
+					lists = null;
+					listw = null;
+					listn = null;
+					this.verif(listn,lists,liste,listw,src);
 				});
 				socket.on('list-west',(listWest)=>{
 					listw = listWest;
-				});			
-
-				setTimeout(()=>{
-					if(listn || lists || liste || listw){			
-						if(listn){
-							console.log("available move toward north");
-							this.classAdder(listn);						
-						}
-						if(liste){
-							console.log("available move toward east");
-							this.classAdder(liste);					
-						}
-						if(lists){
-							console.log("available move toward south");
-							this.classAdder(lists);
-						}
-						if(listw){
-							console.log("available move toward west");
-							this.classAdder(listw);		
-						}	
-					}
-				},100);	
-			
+					lists = null;
+					listn = null;
+					liste = null;
+					this.verif(listn,lists,liste,listw,src);
+				});	
+		
 			}
-		})) 
+			e.removeEventListener('',deplacements);
+		}));
+
 	}
 
-
-
-	classAdder(list){
+	classAdder(list, source){
+		let coord ={
+			xsrc : source.x,
+			ysrc : source.y,
+			x : list.x,
+			y : list.y
+		}
 		switch(list.action){
 			default:
 				break;
@@ -154,12 +163,40 @@ class View{
 				this.grid[list.y][list.x].classList.add("move");
 				this.grid[list.y][list.x].setAttribute("movable","true");
 				this.grid[list.y][list.x].innerHTML = '•' ;
+
+				this.grid[list.y][list.x].addEventListener('click', ()=>{
+					socket.emit('move',coord);
+				})
 				break;
 			case 'attack' :
 				this.grid[list.y][list.x].classList.add("attack");
 				this.grid[list.y][list.x].setAttribute("attackable","true");
 				this.grid[list.y][list.x].innerHTML = 'X' ;
+				this.grid[list.y][list.x].addEventListener('click', ()=>{
+					socket.emit('move',coord);
+				})
 				break;
+		}
+	}
+
+	verif(listn,lists,liste,listw,src){
+		if(listn || lists || liste || listw){			
+			if(listn){
+				console.log("available move toward north");
+				this.classAdder(listn, src);						
+			}
+			if(liste){
+				console.log("available move toward east");
+				this.classAdder(liste, src);					
+			}
+			if(lists){
+				console.log("available move toward south");
+				this.classAdder(lists, src);
+			}
+			if(listw){
+				console.log("available move toward west");
+				this.classAdder(listw, src);		
+			}	
 		}
 	}
 }

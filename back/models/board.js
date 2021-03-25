@@ -829,6 +829,4 @@ class Board extends Pawn{
         }
     }
 }
-
-
 module.exports = Board;

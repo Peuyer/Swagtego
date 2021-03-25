@@ -65,6 +65,13 @@ const socket = io();
 
     socket.emit('update-count',playerNum);
 
+    socket.on('has-winner', (winner)=>{
+        if(winner != -1){
+            console.log('Le joueur', winner, 'a gagné la partie');
+        }
+        else return
+    });
+
 
 
 ////////////////////////////////////////////////////////////////////    

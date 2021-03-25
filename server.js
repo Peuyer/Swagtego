@@ -156,6 +156,10 @@ io.on('connection', (socket) => {
   });
 
   function updateView(){
+    if(connections[0] == true && connections[1] == true){
+      socket.emit('has-winner',board.hasWinner());
+    }
+    socket.broadcast.emit('has-winner',board.hasWinner());
     socket.emit('view-updated',board);
     socket.broadcast.emit('view-updated',board);
     socket.emit('pawn-count',board.counter(playerIndex));
@@ -179,6 +183,8 @@ io.on('connection', (socket) => {
 
 
 
+
+
   //get the available move from a pawn in a given coordinate
   socket.on('get-list',(data)=>{
     let moveNorth = board.moveList(data.x,data.y,'n');
@@ -192,4 +198,11 @@ io.on('connection', (socket) => {
     socket.emit('list-west',moveWest);
   });
 
+  socket.on('move', (coord)=>{
+    let move = board.move(coord.xsrc, coord.ysrc, coord.x, coord.y);
+    if(move){
+      updateView();
+
+    }
+  })
 });
