@@ -18,11 +18,11 @@ class View{
 					this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
 					this.grid[x][y].innerHTML = ((this.game.board[x][y].pawn-playerIndex)/10).toString();
 					this.grid[x][y].id ="pawn";
-					if(this.grid[x][y].getAttribute('listener') !== 'true'){
-						console.log('test',this.grid[x][y]);
-						this.attachListeners(playerNum,x,y);
-						this.grid[x][y].setAttribute('listener', 'true');
-					}
+					//if(this.grid[x][y].getAttribute('listener') !== 'true'){
+					//	console.log('test',this.grid[x][y]);
+					//	this.attachListeners(playerNum,x,y);
+					//	this.grid[x][y].setAttribute('listener', 'true');
+					//}
 				}
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player != playerIndex){
 					this.grid[x][y].className = playerIndex ? "pawnBlue":"pawnRed"
@@ -93,59 +93,17 @@ class View{
 		return this.game;
 	}
 
-	attachListeners(pIndex,x,y){
-		let i =0;
-		let pClass = "";
-		pIndex == 0 ? pClass = "pawnBlue" : pClass = "pawnRed";
-		if(this.game.board[x][y].player != pIndex)return
-		this.grid[y][x].addEventListener('click', ()=>{
-
-			this.DisplayBoard(pIndex);
-			this.grid[y][x].id+="shake";
-
-			if (this.grid[y][x].classList.contains(pClass)){
-				console.log( "Liste des déplacement disponible du pion en "+x ,y," : ");
-
-				socket.emit('get-list',{x:x , y:y});
-				let listn = {};
-				let lists = {};
-				let liste = {};
-				let listw = {};
-				let src = {
-					x:x,
-					y:y
-				}
-				socket.on('list-north',(listNorth)=>{
-					listn = listNorth;
-					lists = null;
-					listw = null;
-					liste = null;
-					this.verif(listn,lists,liste,listw,src);
-				});
-				socket.on('list-south',(listSouth)=>{
-					lists = listSouth;
-					listn = null;
-					listw = null;
-					liste = null;
-					this.verif(listn,lists,liste,listw,src);
-				});
-				socket.on('list-east',(listEast)=>{
-					liste = listEast;
-					lists = null;
-					listw = null;
-					listn = null;
-					this.verif(listn,lists,liste,listw,src);
-				});
-				socket.on('list-west',(listWest)=>{
-					listw = listWest;
-					lists = null;
-					listn = null;
-					liste = null;
-					this.verif(listn,lists,liste,listw,src);
+	
+	attachListeners(pIndex){
+		let board = this.game.board;
+		let grid = this.grid;
+		for(let i=0; i<10; i++){
+			for(let j=0; j<10;j++){
+				this.grid[j][i].addEventListener('click',function(){
+					clickEvent(i,j,pIndex,board,grid);
 				});
 			}
-		});
-
+		}
 	}
 
 	classAdder(list, source){
@@ -163,39 +121,82 @@ class View{
 				this.grid[list.y][list.x].setAttribute("movable","true");
 				this.grid[list.y][list.x].innerHTML = '•' ;
 
-				this.grid[list.y][list.x].addEventListener('click', ()=>{
-					socket.emit('move',coord);
-				})
+				//this.grid[list.y][list.x].addEventListener('click', ()=>{
+				//	socket.emit('move',coord);
+				//});
 				break;
 			case 'attack' :
 				this.grid[list.y][list.x].classList.add("attack");
 				this.grid[list.y][list.x].setAttribute("attackable","true");
 				this.grid[list.y][list.x].innerHTML = 'X' ;
-				this.grid[list.y][list.x].addEventListener('click', ()=>{
-					socket.emit('move',coord);
-				})
+				//this.grid[list.y][list.x].addEventListener('click', ()=>{
+				//	socket.emit('move',coord);
+				//});
 				break;
 		}
 	}
 
-	verif(listn,lists,liste,listw,src){
-		if(listn || lists || liste || listw){			
-			if(listn){
-				console.log("available move toward north");
-				this.classAdder(listn, src);						
-			}
-			if(liste){
-				console.log("available move toward east");
-				this.classAdder(liste, src);					
-			}
-			if(lists){
-				console.log("available move toward south");
-				this.classAdder(lists, src);
-			}
-			if(listw){
-				console.log("available move toward west");
-				this.classAdder(listw, src);		
-			}	
+
+}
+
+function clickEvent(x,y,pIndex,board,grid){
+
+	if(grid[y][x].getAttribute('attackable') == 'true' || grid[y][x].getAttribute('movable')== 'true'){
+		return
+	}
+	else if(board[y][x] == null || board[y][x] == 'b'){
+		return 
+	}
+	else if(board[y][x].player != pIndex){
+		return
+	}
+	else{
+		removeAllAtribute(grid);
+		socket.emit('get-list',{x:x, y:y});
+		let src = {
+			x:x,
+			y:y
 		}
+		let i=0;
+		socket.on('receive-list', (list)=>{
+			if(i == 0){
+				verif(list.n, list.s,list.e, list.w,src,i);
+				i++;
+			}
+		});
+		
+	}
+}
+function removeAllAtribute(grid){
+	for(let i=0; i<10; i++){
+		for(let j=0; j<10;j++){
+			if(grid[j][i].getAttribute('movable')=='true' || grid[j][i].getAttribute('attackable')=='true'){
+				grid[j][i].innerHTML='';
+			}
+			grid[j][i].removeAttribute('attackable');
+			grid[j][i].removeAttribute('movable');
+			
+		}
+	}
+}
+function verif(listn,lists,liste,listw,src,i){
+	if(i!=0) return;
+	else if(listn || lists || liste || listw){			
+		if(listn){
+			console.log("available move toward north");
+			view[0].classAdder(listn, src);						
+		}
+		if(liste){
+			console.log("available move toward east");
+			view[0].classAdder(liste, src);					
+		}
+		if(lists){
+			console.log("available move toward south");
+			view[0].classAdder(lists, src);
+		}
+		if(listw){
+			console.log("available move toward west");
+			view[0].classAdder(listw, src);		
+		}	
 	}
 }

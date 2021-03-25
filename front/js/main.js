@@ -181,6 +181,7 @@ const socket = io();
             playerReady(playerNum);
         }
         if(enemyReady) {
+            view[0].attachListeners(playerNum);
             if(currentPlayer === 'user') {
               turnDisplay.innerHTML = 'A ton tour !';
             }

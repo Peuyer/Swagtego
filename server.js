@@ -188,15 +188,19 @@ io.on('connection', (socket) => {
 
   //get the available move from a pawn in a given coordinate
   socket.on('get-list',(data)=>{
+
     let moveNorth = board.moveList(data.x,data.y,'n');
     let moveSouth = board.moveList(data.x,data.y,'s');
     let moveEast = board.moveList(data.x,data.y,'e');
     let moveWest = board.moveList(data.x,data.y,'w');
-    console.log(moveSouth);
-    socket.emit('list-north',moveNorth);
-    socket.emit('list-south',moveSouth);
-    socket.emit('list-east',moveEast);
-    socket.emit('list-west',moveWest);
+    
+    let move = {
+      n:moveNorth,
+      s:moveSouth,
+      e:moveEast,
+      w:moveWest
+    }
+    socket.emit('receive-list', move);
   });
 
   socket.on('move', (coord)=>{
