@@ -163,6 +163,7 @@ io.on('connection', (socket) => {
     socket.emit('view-updated',board);
     socket.broadcast.emit('view-updated',board);
     socket.emit('pawn-count',board.counter(playerIndex));
+    board.affichage();
   }
 
   //display username

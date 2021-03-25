@@ -18,6 +18,11 @@ class View{
 					this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
 					this.grid[x][y].innerHTML = ((this.game.board[x][y].pawn-playerIndex)/10).toString();
 					this.grid[x][y].id ="pawn";
+					if(this.grid[x][y].getAttribute('listener') !== 'true'){
+						console.log('test',this.grid[x][y]);
+						this.attachListeners(playerNum,x,y);
+						this.grid[x][y].setAttribute('listener', 'true');
+					}
 				}
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player != playerIndex){
 					this.grid[x][y].className = playerIndex ? "pawnBlue":"pawnRed"
@@ -25,7 +30,6 @@ class View{
 				}
 			}
 		}
-		this.attachListeners(playerNum);
 	}
 
 	initBoard(board,playerIndex){
@@ -89,20 +93,17 @@ class View{
 		return this.game;
 	}
 
-	attachListeners(pIndex){
+	attachListeners(pIndex,x,y){
 		let i =0;
 		let pClass = "";
 		pIndex == 0 ? pClass = "pawnBlue" : pClass = "pawnRed";
-		let e;
-		document.querySelectorAll("#pawn").forEach(e=>e.addEventListener('click',deplacements =>{
-			i++;
-			console.log('i',i);
-			this.DisplayBoard(playerNum);
-			let x = e.cellIndex;
-			let y = e.parentNode.rowIndex;
-			this.grid[y][x].id+=" shake";
+		if(this.game.board[x][y].player != pIndex)return
+		this.grid[y][x].addEventListener('click', ()=>{
 
-			if (e.classList.contains(pClass)){
+			this.DisplayBoard(pIndex);
+			this.grid[y][x].id+="shake";
+
+			if (this.grid[y][x].classList.contains(pClass)){
 				console.log( "Liste des déplacement disponible du pion en "+x ,y," : ");
 
 				socket.emit('get-list',{x:x , y:y});
@@ -141,11 +142,9 @@ class View{
 					listn = null;
 					liste = null;
 					this.verif(listn,lists,liste,listw,src);
-				});	
-		
+				});
 			}
-			e.removeEventListener('',deplacements);
-		}));
+		});
 
 	}
 
