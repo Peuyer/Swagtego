@@ -38,6 +38,7 @@ usernames[1] = "Joueur 2";
 
 //Set static folder
 app.use(express.static((__dirname,"front/html")));
+app.use(express.static((__dirname,"front/images")));
 app.use(express.static((__dirname,"front")));
 
 //Start serveur
@@ -175,20 +176,20 @@ io.on('connection', (socket) => {
 
   });
 
-  //pawn count
+  //update player count
   socket.on('update-count',(playerIndex)=>{
-    socket.emit('pawn-count',board.counter(playerIndex));
+    socket.emit('update-count',board.counter(playerIndex));
   });
-
-
-
-
-
+  //pawn count 
+  socket.on('pawn-count',(data)=>{
+    let info = board.counter(data.id)[data.p];
+    console.log(data.p," : ",info)
+    socket.emit('pawn-counted',info);
+  })
 
 
   //get the available move from a pawn in a given coordinate
   socket.on('get-list',(data)=>{
-
     let moveNorth = board.moveList(data.x,data.y,'n');
     let moveSouth = board.moveList(data.x,data.y,'s');
     let moveEast = board.moveList(data.x,data.y,'e');
@@ -203,11 +204,12 @@ io.on('connection', (socket) => {
     socket.emit('receive-list', move);
   });
 
+  //move pawn from xsrc, ysrc to x, y
   socket.on('move', (coord)=>{
     let move = board.move(coord.xsrc, coord.ysrc, coord.x, coord.y);
     if(move){
       updateView();
-
     }
-  })
+  });
+
 });

@@ -1,4 +1,6 @@
 //Affiche le plateau et les pions 
+const footstep = '<img class="pawnImage" src="footsteps.svg"></img>'
+const fight = '<img class="pawnImage" src="fight.svg"></img>'
 
 class View{
 	constructor(game, playerIndex){
@@ -119,7 +121,7 @@ class View{
 			case 'move' :
 				this.grid[list.y][list.x].classList.add("move");
 				this.grid[list.y][list.x].setAttribute("movable","true");
-				this.grid[list.y][list.x].innerHTML = '•' ;
+				this.grid[list.y][list.x].innerHTML = footstep ;
 
 				//this.grid[list.y][list.x].addEventListener('click', ()=>{
 				//	socket.emit('move',coord);
@@ -128,7 +130,7 @@ class View{
 			case 'attack' :
 				this.grid[list.y][list.x].classList.add("attack");
 				this.grid[list.y][list.x].setAttribute("attackable","true");
-				this.grid[list.y][list.x].innerHTML = 'X' ;
+				this.grid[list.y][list.x].innerHTML = fight ;
 				//this.grid[list.y][list.x].addEventListener('click', ()=>{
 				//	socket.emit('move',coord);
 				//});
