@@ -46,20 +46,25 @@ class Board extends Pawn{
     affichage(){
         let aff='';
         for(let i =0; i< 10; i++){
+            aff='';
             for(let j =0; j< 10; j++){
                 if(this.board[i][j]==null){
-                    aff+=0;
+                    aff+='    ';
                 }
-                else if(this.board[i][j]=='b'){
-                    aff+=3;
+                else if (this.board[i][j] == 'b'){
+                    aff+='b   ';
                 }
                 else{
-                    aff+=1;
+                    aff+=(this.board[i][j].pawn).toString();
+                    if (this.board[i][j].pawn >2 && this.board[i][j].pawn < 92){
+                        aff+='  ';
+                    }
+                    else if (this.board[i][j].pawn <2)aff+='   ';
+                    else{aff+=' '}
                 }
             }
-            aff+= '\n';
+            console.log(aff);
         }
-        return aff;
     }
     //crée la grille de jeu
     createBoard()
