@@ -140,7 +140,6 @@ function clickEvent(x,y,pIndex,board,grid){
 	board = view[0].getGame().board;
 
 	if(currentPlayer != 'user'){
-		turnDisplay.innerHTML = "C'est au tour de l'ennemi";
 		return;
 	}
 	if(grid[y][x].getAttribute('attackable') == 'true' || grid[y][x].getAttribute('movable')== 'true'){

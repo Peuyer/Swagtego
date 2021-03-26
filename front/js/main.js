@@ -70,8 +70,13 @@ socket.on('has-winner', (winner)=>{
 });
 
 socket.on('hasPlayed',(player)=>{
-    if(player==playerNum) currentPlayer='ennemy';
-    else currentPlayer = 'user';
+    if(player==playerNum){
+        currentPlayer='ennemy';
+        turnDisplay.innerHTML = "Au tour de l'ennemi !";
+    }
+    else{
+        currentPlayer = 'user';
+    }
     playGameMulti(socket);
 });
 
