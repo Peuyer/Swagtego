@@ -267,7 +267,6 @@ class Board extends Pawn{
                     
                     switch (this.board[i][j].pawn){
                         default :
-
                         case 110 + playerId :
                             if(bom<6)bom++;
                             else{

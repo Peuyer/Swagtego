@@ -157,10 +157,7 @@ io.on('connection', (socket) => {
   });
 
   function updateView(){
-    if(connections[0] == true && connections[1] == true){
-      socket.emit('has-winner',board.hasWinner());
-    }
-    socket.broadcast.emit('has-winner',board.hasWinner());
+
     socket.emit('view-updated',board);
     socket.broadcast.emit('view-updated',board);
     socket.emit('pawn-count',board.counter(playerIndex));
@@ -208,8 +205,14 @@ io.on('connection', (socket) => {
   socket.on('move', (coord)=>{
     let move = board.move(coord.xsrc, coord.ysrc, coord.x, coord.y);
     if(move){
+      socket.emit('hasPlayed',playerIndex);
+      socket.broadcast.emit('hasPlayed',playerIndex);
       updateView();
     }
+  });
+
+  socket.on('gameStart',()=>{
+    socket.broadcast.emit('gameStarted');
   });
 
 });

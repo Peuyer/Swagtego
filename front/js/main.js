@@ -69,7 +69,11 @@ socket.on('has-winner', (winner)=>{
     else return
 });
 
-
+socket.on('hasPlayed',(player)=>{
+    if(player==playerNum) currentPlayer='ennemy';
+    else currentPlayer = 'user';
+    playGameMulti(socket);
+});
 
 ////////////////////////////////////////////////////////////////////    
 
@@ -102,7 +106,9 @@ socket.on('player-disconnection', num => {
 socket.on('enemy-ready', num => {
     enemyReady = true;
     playerReady(num);
-    if (ready) playGameMulti(socket);
+    if (ready){
+        playGameMulti(socket);
+    }
 });
 
 
@@ -130,6 +136,13 @@ socket.on("username-display",usernames=>{
     document.getElementById("player1").innerHTML = usernames[0];
     document.getElementById("player2").innerHTML = usernames[1];
 });
+socket.on('gameStarted',()=>{
+    enemyReady = true;
+    ready = true; 
+    console.log('ouai je suis LAAAA');
+    view[0].attachListeners(playerNum);
+    playGameMulti(socket);
+});
 
 
 // Ready button click
@@ -141,6 +154,12 @@ startButton.addEventListener('click', () => {
             playGameMulti(socket);
         } 
         else infoDisplay.innerHTML = "Placez tous les pions s'il vous plait";
+
+        if(ready && enemyReady){
+            console.log('ouai je suis LAAAA');
+            view[0].attachListeners(playerNum);
+            socket.emit('gameStart');
+        }
     });
 });
 
@@ -181,9 +200,10 @@ function playGameMulti(socket) {
         playerReady(playerNum);
     }
     if(enemyReady) {   
+        console.log(currentPlayer)
+        
         if(currentPlayer === 'user') {
             turnDisplay.innerHTML = 'A ton tour !';
-            view[0].attachListeners(playerNum);
         }
         if(currentPlayer === 'enemy') {
             turnDisplay.innerHTML = "Au tour de l'ennemi !";

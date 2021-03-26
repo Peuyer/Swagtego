@@ -15,6 +15,7 @@ class View{
 				if(this.game.board[x][y] == null){
 					this.grid[x][y].className = 'grass';
 					this.grid[x][y].innerHTML ='';
+					this.grid[x][y].id = '';
 				}
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player == playerIndex){
 					this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
@@ -123,29 +124,37 @@ class View{
 				this.grid[list.y][list.x].setAttribute("movable","true");
 				this.grid[list.y][list.x].innerHTML = footstep ;
 
-				//this.grid[list.y][list.x].addEventListener('click', ()=>{
-				//	socket.emit('move',coord);
-				//});
+				
 				break;
 			case 'attack' :
 				this.grid[list.y][list.x].classList.add("attack");
 				this.grid[list.y][list.x].setAttribute("attackable","true");
 				this.grid[list.y][list.x].innerHTML = fight ;
-				//this.grid[list.y][list.x].addEventListener('click', ()=>{
-				//	socket.emit('move',coord);
-				//});
+				
 				break;
 		}
 	}
-
-
 }
-
+let src = {};
 function clickEvent(x,y,pIndex,board,grid){
+	board = view[0].getGame().board;
 
+	if(currentPlayer != 'user'){
+		turnDisplay.innerHTML = "C'est au tour de l'ennemi";
+		return;
+	}
 	if(grid[y][x].getAttribute('attackable') == 'true' || grid[y][x].getAttribute('movable')== 'true'){
+		let coord = {
+			xsrc:src.x,
+			ysrc:src.y,
+			x:x,
+			y:y
+		}
+		socket.emit('move',coord);
+		removeAllAtribute(grid);
 		return
 	}
+	
 	else if(board[y][x] == null || board[y][x] == 'b'){
 		return 
 	}
@@ -155,7 +164,7 @@ function clickEvent(x,y,pIndex,board,grid){
 	else{
 		removeAllAtribute(grid);
 		socket.emit('get-list',{x:x, y:y});
-		let src = {
+		src = {
 			x:x,
 			y:y
 		}
@@ -173,15 +182,17 @@ function removeAllAtribute(grid){
 	for(let i=0; i<10; i++){
 		for(let j=0; j<10;j++){
 			if(grid[j][i].getAttribute('movable')=='true' || grid[j][i].getAttribute('attackable')=='true'){
-				grid[j][i].innerHTML='';
+				if(grid[j][i].classList.contains('move') || grid[j][i].classList.contains('attack')){
+					grid[j][i].innerHTML='';
+				}
 			}
 			grid[j][i].removeAttribute('attackable');
 			grid[j][i].removeAttribute('movable');
-			
 		}
 	}
 }
 function verif(listn,lists,liste,listw,src,i){
+	console.log('i une fois',i);
 	if(i!=0) return;
 	else if(listn || lists || liste || listw){			
 		if(listn){
@@ -201,4 +212,5 @@ function verif(listn,lists,liste,listw,src,i){
 			view[0].classAdder(listw, src);		
 		}	
 	}
+	else return ;
 }
