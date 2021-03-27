@@ -187,6 +187,7 @@ io.on('connection', (socket) => {
 
   //get the available move from a pawn in a given coordinate
   socket.on('get-list',(data)=>{
+
     let moveNorth = board.moveList(data.x,data.y,'n');
     let moveSouth = board.moveList(data.x,data.y,'s');
     let moveEast = board.moveList(data.x,data.y,'e');
@@ -205,6 +206,8 @@ io.on('connection', (socket) => {
   socket.on('move', (coord)=>{
     let move = board.move(coord.xsrc, coord.ysrc, coord.x, coord.y);
     if(move){
+      socket.emit('has-winner',board.hasWinner());
+      socket.broadcast.emit('has-winner',board.hasWinner());
       socket.emit('hasPlayed',playerIndex);
       socket.broadcast.emit('hasPlayed',playerIndex);
       updateView();

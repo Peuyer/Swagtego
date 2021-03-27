@@ -716,6 +716,7 @@ class Board extends Pawn{
             return list;
         }
         else{
+            console.log("dir", dir);
             list = this.neswEcl(pawn,dir,list);
             return list;
         }
@@ -773,7 +774,9 @@ class Board extends Pawn{
     }
 
     neswEcl(pawn, dir, list){
+        console.log('ecl', dir);
         let x = pawn.x, y = pawn.y, dx =0, dy=0;
+        
         if (dir == 'n'){
             dx=0;
             dy=-1;
@@ -827,7 +830,14 @@ class Board extends Pawn{
             }
             return list;
         }
-        else if (this.board[depY][depX].player == pawn.player){
+        else if(this.board[depY][depX].player != pawn.player){
+            list.action = 'attack';
+            list.x= depX;
+            list.y=depY;
+            console.log("Attaque possible en ",list.x," / ",list.y);
+            return list;
+        }
+        else{
             list = null;
             return list;
         }

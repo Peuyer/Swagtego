@@ -138,17 +138,17 @@ class View{
 let src = {};
 function clickEvent(x,y,pIndex,board,grid){
 	board = view[0].getGame().board;
-
+	let coord = {
+		xsrc:src.x,
+		ysrc:src.y,
+		x:x,
+		y:y
+	}
 	if(currentPlayer != 'user'){
 		return;
 	}
 	if(grid[y][x].getAttribute('attackable') == 'true' || grid[y][x].getAttribute('movable')== 'true'){
-		let coord = {
-			xsrc:src.x,
-			ysrc:src.y,
-			x:x,
-			y:y
-		}
+
 		socket.emit('move',coord);
 		removeAllAtribute(grid);
 		return
@@ -170,7 +170,8 @@ function clickEvent(x,y,pIndex,board,grid){
 		let i=0;
 		socket.on('receive-list', (list)=>{
 			if(i == 0){
-				verif(list.n, list.s,list.e, list.w,src,i);
+				let pawn = board[y][x].pawn;
+				verif(list.n, list.s,list.e, list.w,src,i,pawn,coord);
 				i++;
 			}
 		});
@@ -190,26 +191,92 @@ function removeAllAtribute(grid){
 		}
 	}
 }
-function verif(listn,lists,liste,listw,src,i){
-	console.log('i une fois',i);
+function verif(listn,lists,liste,listw,src,i, pawn,coord){
 	if(i!=0) return;
 	else if(listn || lists || liste || listw){			
 		if(listn){
 			console.log("available move toward north");
-			view[0].classAdder(listn, src);						
+			view[0].classAdder(listn, src);	
+			if (verifecl(pawn,listn, src,coord) == true) verifecl(pawn,listn, src,coord)
 		}
 		if(liste){
 			console.log("available move toward east");
-			view[0].classAdder(liste, src);					
+			view[0].classAdder(liste, src);
+			if(verifecl(pawn,liste, src,coord) == true) verifecl(pawn,liste, src,coord)
 		}
 		if(lists){
 			console.log("available move toward south");
 			view[0].classAdder(lists, src);
+			if(verifecl(pawn,lists, src,coord) == true) verifecl(pawn,lists, src,coord)
 		}
 		if(listw){
 			console.log("available move toward west");
-			view[0].classAdder(listw, src);		
+			view[0].classAdder(listw, src);
+			if(verifecl(pawn,listw, src,coord) == true) verifecl(pawn,listw, src,coord)
 		}	
 	}
 	else return ;
+}
+
+function verifecl(pawn,list,src,coord){
+	if(pawn == 20 || pawn == 21){
+		let listTransfer = list;
+
+		if(list.dir == 's'){
+			let depart = coord.y+1;
+			let fin = list.y;
+			if(fin-depart == 0) return;
+			else {
+				while(depart != fin){
+					listTransfer.y = depart;
+					listTransfer.action = 'move';
+					view[0].classAdder(listTransfer, src);
+					depart++;
+				}
+			}
+		}
+		if(list.dir == 'n'){
+			let depart = coord.y-1;
+			let fin = list.y;
+			if(fin-depart == 0) return;
+			else {
+				while(depart != fin){
+					listTransfer.y = depart;
+					listTransfer.action = 'move';
+					view[0].classAdder(listTransfer, src);
+					depart--;
+				}
+			}
+		}
+		if(list.dir == 'w'){
+			let depart = coord.x-1;
+			let fin = list.x;
+			if(fin-depart == 0) return;
+			else {
+				while(depart != fin){
+					listTransfer.x = depart;
+					listTransfer.action = 'move';
+					view[0].classAdder(listTransfer, src);
+					depart--;
+				}
+			}
+		}
+		if(list.dir == 'e'){
+			let depart = coord.x+1;
+			let fin = list.x;
+			if(fin-depart == 0) return;
+			else {
+				while(depart != fin){
+					listTransfer.x = depart;
+					listTransfer.action = 'move';
+					view[0].classAdder(listTransfer, src);
+					depart++;
+				}
+			}
+		}
+		return true;
+	}
+	else return false;
+	
+
 }
