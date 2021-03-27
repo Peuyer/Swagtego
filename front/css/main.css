@@ -145,6 +145,26 @@ td {
 	animation-iteration-count: infinite;
 }
 
+/*WIN*/
+#winScreen{
+	width:400px;
+	height:200px;
+	margin:auto;
+	position: absolute;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	padding:10px;
+	border-radius: 20px;
+	background: #ffffff;
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+#restartGame{
+	margin:10px;
+}
+
 /*CONNECTION STATUS INDICATOR*/
 .connected span,
 .ready span {

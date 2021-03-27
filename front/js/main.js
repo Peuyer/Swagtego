@@ -28,6 +28,9 @@ max[9] = 1
 max[10] = 1
 max[11] = 6
 
+let start =0;
+let end = 0;
+
 // Warns socket io that a user connected
 const socket = io();
 
@@ -38,6 +41,10 @@ socket.on('player-number', num => {
         startButton.style.display = 'none';
         turnDisplay.style.display = 'none';
         randomButton.style.display = 'none';
+        buttons.style.display = 'none';
+        pawns.style.display = 'none';
+        pawnContainer.style.display='none';
+    
     } 
     else {
     playerNum = parseInt(num)
@@ -61,10 +68,12 @@ socket.on('view-updated',(board)=>{
 });
 
 
+
 // Receives the id of the winner if there's one
 socket.on('has-winner', (winner)=>{
     if(winner != -1){
         console.log('Le joueur', winner, 'a gagné la partie');
+        displayWin(winner);
     }
     else return
 });
@@ -90,27 +99,48 @@ socket.on('player-connection', num => {
 
 // Another player has disconnected 
 socket.on('player-disconnection', num => {
-    console.log(`Player ${num} has disconnected.`);
+    console.log('player', num,'has disconnected');
     playerConnectedOrDisconnected(num);
-    playerReady(num);
     turnDisplay.innerHTML = 'Placement des pions';
+    
+    let me = num;
+    let him
+    if(num == 0){
+        him = 1;
+    }
+    else him =0;
+
+    if(ready == false && enemyReady == true){
+        console.log("1");
+        playerReady(me);
+    }
+    else if(ready == true && enemyReady == false){
+        console.log("2");
+        playerReady(him);
+    }
+    else if(ready == false && enemyReady == false){
+        console.log("3");
+    }
+    else if(ready == true && enemyReady == true){
+        console.log("4");
+        playerReady(me);
+        playerReady(him);
+    }
+    buttons.style.display = 'block';
+    pawns.style.display = 'block';
+    pawnContainer.style.display='flex';
+
     ready = false;
     enemyReady = false;
-    if(num == 0){
-        playerReady(1);
-        //playerConnectedOrDisconnected(1);
-    }
-    else{
-        playerReady(0);
-        //playerConnectedOrDisconnected(1);
-    }
-    
 });
+
+
 
 // On enemy ready
 socket.on('enemy-ready', num => {
     enemyReady = true;
     playerReady(num);
+    console.log('jsp', ready);
     if (ready){
         playGameMulti(socket);
     }
@@ -122,12 +152,6 @@ socket.on('check-players', players => {
     players.forEach((p, i) => {
     if(p.connected) {
         playerConnectedOrDisconnected(i);
-    }
-    if(p.ready) {
-        //playerReady(i);
-        if(i !== playerReady){
-            enemyReady = true;
-        }
     }
     });
 
@@ -144,9 +168,10 @@ socket.on("username-display",usernames=>{
 socket.on('gameStarted',()=>{
     enemyReady = true;
     ready = true; 
-    console.log('ouai je suis LAAAA');
+    console.log('Début de la partie');
     view[0].attachListeners(playerNum);
     playGameMulti(socket);
+    startTimer();
 });
 
 
@@ -161,9 +186,10 @@ startButton.addEventListener('click', () => {
         else infoDisplay.innerHTML = "Placez tous les pions s'il vous plait";
 
         if(ready && enemyReady){
-            console.log('ouai je suis LAAAA');
+            console.log('Début de la partie');
             view[0].attachListeners(playerNum);
             socket.emit('gameStart');
+            startTimer();
         }
     });
 });
@@ -244,6 +270,7 @@ function placePawn(id,value){
 }
 
 
+
 // Updates the ready status dot colors
 function playerReady(num) {
     let player = `.p${parseInt(num) + 1}`
@@ -254,4 +281,35 @@ function playerConnectedOrDisconnected(num) {
     let player = `.p${parseInt(num) + 1}`
     document.querySelector(`${player} .connected span`).classList.toggle('green');
     if(parseInt(num) === playerNum) document.querySelector(player).style.fontWeight = 'bold';
+}
+
+function startTimer(){
+    start = Date.now();
+    console.log(start);
+}
+function stopTimer(){
+    end = Date.now()-start;
+    console.log(end);
+}
+function toHour(time){
+    string='';
+    let h=0,m=0,s=0;
+    time = Math.floor(time/1000)
+    s=time;
+    while (s > 3600){
+        h++;
+        s-=3600;
+    }
+    while (s > 60){
+        m++;
+        s-=60;
+    }
+    if (h != 0){
+        string += h.toString() + ' heure' + (h>1?'s, ': ', ');
+    }
+    if (m != 0){
+        string += m.toString() + ' minute' + (m>1?'s et ': ' et ');
+    }
+    string += s.toString() + ' secondes';
+    return string;
 }
