@@ -1,8 +1,7 @@
 body{
 	margin:auto;
 	font-family: 'Nunito Sans', sans-serif;
-	background : #7d7777;
-	text-shadow:  8px 8px 16px #9b9b9b,-8px -8px 16px #ffffff;
+
 	
 }
 *{
@@ -81,6 +80,9 @@ li:hover{
 	background:white;
 	color:black;
 	transition-duration:0.5s;
+}
+#Rules{
+	background-color: #EE7055;
 }
 
 

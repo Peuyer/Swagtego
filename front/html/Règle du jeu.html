@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Swagtego</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" type="text/css" href="../css/main.css" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+    #gameScreen{
+      display:none;
+    }
+  </style>
+</head>
+<body>
+	<div id="nav" class="sticky-top">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="index.html">Accueil</a>
+      <a class="navbar-brand" href="Règle du jeu.html">Règle du jeu</a>
+      <a class="navbar-brand" href="Classement.html">Classement</a>
+      <a class="navbar-brand" href="Connexion.html">Se connecter</a>
+     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    </div>
+    <div id="Rules" class="h-100" >
+    	<h1 style="text-align: center;">Règles du jeu</h1>
+    	<h6>Le Stratego se joue à 2 joueurs (un joueur avec les pièces rouges, l'autre avec les pièces bleues) sur un plateau carré de 92 cases (10 cases de côté moins 2 lacs carrés de 4 cases chacun). Chaque joueur possède 30 pièces.</h6>
+    	<h6>Les pièces représentent des unités militaires et ont deux faces. Une face ne peut être vue que par un seul joueur à la fois, l'autre ne voyant que la couleur de la pièce. Les pièces sont placées de telle façon que le joueur ne voit que le rang de ses propres pièces.</h6>
+    	<h6>Au début de la partie chaque joueur dispose ses pièces comme il l'entend sur ses quatre premières rangées. Cette pré-phase du jeu est stratégique et déterminante pour la suite de la partie.</h6>
+    	<h6>Chaque joueur déplace une pièce d'une case par tour : à gauche, à droite, en avant ou en arrière (pas en diagonale). Une attaque se produit quand le joueur déplace sa pièce sur une case déjà occupée par l'adversaire. Chaque joueur montre alors sa pièce à l'adversaire. La pièce la plus forte reste en jeu, l'autre est éliminée ; en cas d'égalité, les deux sont éliminées.</h6>
+    	<h6>Voici les pièces classées de la plus forte à la plus faible (la force entre parenthèses) :</h6>
+    	<ul>
+    		<li><h6>le Maréchal (10), 1 par joueur</h6></li>
+    		<li><h6>le Général (9), 1 par joueur</h6></li>
+    		<li><h6>les Colonels (8), 2 par joueur</h6></li>
+    		<li><h6>les Commandants (7), 3 par joueur</h6></li>
+    		<li><h6>les Capitaines (6), 4 par joueur</h6></li>
+    		<li><h6>les Lieutenants (5), 4 par joueur</h6></li>
+    		<li><h6>les Sergents (4), 4 par joueur</h6></li>
+    		<li><h6>les Démineurs (3), 5 par joueur</h6></li>
+    		<li><h6>les Éclaireurs (2), 8 par joueur</h6></li>
+    		<li><h6>l'Espion (1), 1 par joueur</h6></li>
+    		<li><h6>le Drapeau (0), 1 par joueur</h6></li>
+    	</ul>
+    	<h6>À ces pièces s'ajoutent les Bombes (6 par joueur). Ni les Bombes ni le Drapeau ne se déplacent.</h6>
+    	<h6>Le but du jeu est de capturer le Drapeau de l'adversaire ou d'éliminer assez de pièces adverses afin que l'adversaire ne puisse plus faire de déplacements.</h6>
+    	<h6>Certaines pièces obéissent à des règles spéciales :</h6>
+    	<ul>
+    		<li><h6>Si l'Espion, grade le plus faible, attaque le Maréchal, grade le plus élevé, l'Espion gagne (si le Maréchal attaque en premier, le Maréchal gagne);</h6></li>
+    		<li><h6>Toute pièce attaquant une Bombe est éliminée, sauf le Démineur qui prend alors la place de la Bombe (si une pièce autre qu'un Démineur attaque une Bombe, cette pièce est éliminée, et la Bombe reste en place jusqu'à l'éventuelle attaque d'un Démineur);</h6></li>
+    		<li><h6>L'Éclaireur peut se déplacer d'autant de cases libres qu'il le souhaite, en ligne droite.</h6></li>
+    	</ul>
+    </div>
+
+</body>
+</html>
