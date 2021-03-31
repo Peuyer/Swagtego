@@ -8,10 +8,14 @@
     <link rel="stylesheet" type="text/css" href="../css/main.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script> 
   <style>
     #gameScreen{
+      display:none;
+    }
+    #winScreen{
       display:none;
     }
   </style>
@@ -19,7 +23,8 @@
 
 
   <body> 
-    <section class="vh-100">    
+    <section class="vh-100"> 
+    <!-- Login join screen -->
     <div id="initialScreen" class="h-100">
       <div class="d-flex flex-column align-items-center justify-content-center h-100">
           <h1>SWAGTEGO</h1>
@@ -31,7 +36,20 @@
       </div>
     </div>
 
+    <!-- Modal -->
+    
+    <div id="winScreen">
+        <div class="d-flex flex-column align-items-center justify-content-center h-100">
+          <h3 id="winner"></h3>
+          <h5 id="winnerInfo"></h5>
+          <button type="submit" class="btn btn-dark" id="confettiLauncher">CONFETTI</button>
+          <button type="submit" class="btn btn-primary" id="restartGame">Rejouer</button>
+      </div>
+    
+    <canvas id="my-canvas"></canvas>
+    </div>
 
+    <!-- Game Screen -->
     <div id="gameScreen">
       <div id="hud">
         <h2 style="text-align: center;">SWAGTEGO : </h2>
@@ -63,10 +81,12 @@
           <button id="clear" class="btn btn-danger">Supprimer tous vos pions</button>
         </div>
 
-        <hr>
+        <div id="pawnPlaceholder">
+          <hr>
 
-        <h5>Pions à placer : </h3>
-        <ul id="pawn-container"></ul>
+          <h5>Pions à placer : </h3>
+          <ul id="pawn-container"></ul>
+        </div>
       </div>
 
         
@@ -79,8 +99,13 @@
 	  </div>
     </section>
   </body>
-  <script src="../js/affichage.js"></script>
-  <script src="../js/main.js"></script>
-  <script src="../js/login.js"></script>
-  <script src="../js/drag.js"></script>
+
+
 </html>
+<!-- Includes -->
+<script src="../js/confetti.js"></script>
+<script src="../js/win.js"></script>
+<script src="../js/affichage.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/login.js"></script>
+<script src="../js/drag.js"></script>
