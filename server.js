@@ -38,7 +38,6 @@ usernames[1] = "Joueur 2";
 
 //Set static folder
 app.use(express.static((__dirname,"front/html")));
-app.use(express.static((__dirname,"front/images")));
 app.use(express.static((__dirname,"front")));
 
 //Start serveur
@@ -157,11 +156,9 @@ io.on('connection', (socket) => {
   });
 
   function updateView(){
-
     socket.emit('view-updated',board);
     socket.broadcast.emit('view-updated',board);
     socket.emit('pawn-count',board.counter(playerIndex));
-    board.affichage();
   }
 
   //display username
@@ -173,78 +170,26 @@ io.on('connection', (socket) => {
 
   });
 
-  //update player count
+  //pawn count
   socket.on('update-count',(playerIndex)=>{
-    socket.emit('update-count',board.counter(playerIndex));
+    socket.emit('pawn-count',board.counter(playerIndex));
   });
-  //pawn count 
-  socket.on('pawn-count',(data)=>{
-    let info = board.counter(data.id)[data.p];
-    console.log(data.p," : ",info)
-    socket.emit('pawn-counted',info);
-  })
+
+
+
 
 
   //get the available move from a pawn in a given coordinate
   socket.on('get-list',(data)=>{
-
     let moveNorth = board.moveList(data.x,data.y,'n');
     let moveSouth = board.moveList(data.x,data.y,'s');
     let moveEast = board.moveList(data.x,data.y,'e');
     let moveWest = board.moveList(data.x,data.y,'w');
-    
-    let move = {
-      n:moveNorth,
-      s:moveSouth,
-      e:moveEast,
-      w:moveWest
-    }
-    socket.emit('receive-list', move);
-  });
-
-  //move pawn from xsrc, ysrc to x, y
-  socket.on('move', (coord)=>{
-    let move = board.move(coord.xsrc, coord.ysrc, coord.x, coord.y);
-    if(move){
-      socket.emit('has-winner',board.hasWinner());
-      socket.broadcast.emit('has-winner',board.hasWinner());
-      socket.emit('hasPlayed',playerIndex);
-      socket.broadcast.emit('hasPlayed',playerIndex);
-      updateView();
-    }
-  });
-
-  socket.on('gameStart',()=>{
-    socket.broadcast.emit('gameStarted');
+    console.log(moveSouth);
+    socket.emit('list-north',moveNorth);
+    socket.emit('list-south',moveSouth);
+    socket.emit('list-east',moveEast);
+    socket.emit('list-west',moveWest);
   });
 
 });
-
-
-if (app.get('env')==='production'){
-  app.set('trust proxy',1);
-  session.cookie.secure = true;
-}
-
-
-
-// Initialisation de la connexion à la bdd
-
-const con = mysql.createConnection({
-  host: "localhost",
-  user:"root",
-  password:"",
-  database:"swagtego"
-  });
-
-// Accès à  la bdd
-
-con.connect(err =>{
-  if (err) throw err;
-  else console.log('Connexion effectuée');
-
-  let newUser = " INSERT INTO comptes"
-});
-
-
-

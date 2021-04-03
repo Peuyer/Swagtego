@@ -24,4 +24,5 @@ function resetMenu(){
 function init(){
     initialScreen.style.display = 'none';
     gameScreen.style.display = 'flex';
+
 }
