@@ -1,4 +1,6 @@
 //Affiche le plateau et les pions 
+const footstep = '<img class="pawnImage" src="footsteps.svg"></img>'
+const fight = '<img class="pawnImage" src="fight.svg"></img>'
 
 class View{
 	constructor(game, playerIndex){
@@ -14,11 +16,17 @@ class View{
 					if ((x+y)%2 == 0){this.grid[x][y].className = 'grassdark';}
 					else{this.grid[x][y].className = 'grass';}
 					this.grid[x][y].innerHTML ='';
+					this.grid[x][y].id = '';
 				}
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player == playerIndex){
 					this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
 					this.grid[x][y].innerHTML = ((this.game.board[x][y].pawn-playerIndex)/10).toString();
 					this.grid[x][y].id ="pawn";
+					//if(this.grid[x][y].getAttribute('listener') !== 'true'){
+					//	console.log('test',this.grid[x][y]);
+					//	this.attachListeners(playerNum,x,y);
+					//	this.grid[x][y].setAttribute('listener', 'true');
+					//}
 				}
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player != playerIndex){
 					this.grid[x][y].className = playerIndex ? "pawnBlue":"pawnRed"
@@ -26,7 +34,6 @@ class View{
 				}
 			}
 		}
-		this.attachListeners(playerNum);
 	}
 
 	initBoard(board,playerIndex){
@@ -106,77 +113,187 @@ class View{
 		return this.game;
 	}
 
+	
 	attachListeners(pIndex){
-		let pClass = "";
-		pIndex == 0 ? pClass = "pawnBlue" : pClass = "pawnRed";
-		document.querySelectorAll("#pawn").forEach(e=>e.addEventListener('click',event =>{
-			this.DisplayBoard(playerNum);
-			let x = e.cellIndex;
-			let y = e.parentNode.rowIndex;
-			this.grid[y][x].id+=" shake";
-
-			if (e.classList.contains(pClass)){
-				console.log( "Liste des déplacement disponible du pion en "+x ,y," : ");
-
-				socket.emit('get-list',{x:x , y:y});
-				let listn = {};
-				let lists = {};
-				let liste = {};
-				let listw = {};
-				socket.on('list-north',(listNorth)=>{
-					listn = listNorth;
+		let board = this.game.board;
+		let grid = this.grid;
+		for(let i=0; i<10; i++){
+			for(let j=0; j<10;j++){
+				this.grid[j][i].addEventListener('click',function(){
+					clickEvent(i,j,pIndex,board,grid);
 				});
-				socket.on('list-south',(listSouth)=>{
-					lists = listSouth;
-				});
-				socket.on('list-east',(listEast)=>{
-					liste = listEast;
-				});
-				socket.on('list-west',(listWest)=>{
-					listw = listWest;
-				});			
-
-				setTimeout(()=>{
-					if(listn || lists || liste || listw){			
-						if(listn){
-							console.log("available move toward north");
-							this.classAdder(listn);						
-						}
-						if(liste){
-							console.log("available move toward east");
-							this.classAdder(liste);					
-						}
-						if(lists){
-							console.log("available move toward south");
-							this.classAdder(lists);
-						}
-						if(listw){
-							console.log("available move toward west");
-							this.classAdder(listw);		
-						}	
-					}
-				},100);	
-			
 			}
-		})) 
+		}
 	}
 
-
-
-	classAdder(list){
+	classAdder(list, source){
+		let coord ={
+			xsrc : source.x,
+			ysrc : source.y,
+			x : list.x,
+			y : list.y
+		}
 		switch(list.action){
 			default:
 				break;
 			case 'move' :
 				this.grid[list.y][list.x].classList.add("move");
 				this.grid[list.y][list.x].setAttribute("movable","true");
-				this.grid[list.y][list.x].innerHTML = '•' ;
+				this.grid[list.y][list.x].innerHTML = footstep ;
+
+				
 				break;
 			case 'attack' :
 				this.grid[list.y][list.x].classList.add("attack");
 				this.grid[list.y][list.x].setAttribute("attackable","true");
-				this.grid[list.y][list.x].innerHTML = 'X' ;
+				this.grid[list.y][list.x].innerHTML = fight ;
+				
 				break;
 		}
 	}
+}
+let src = {};
+function clickEvent(x,y,pIndex,board,grid){
+	board = view[0].getGame().board;
+	let coord = {
+		xsrc:src.x,
+		ysrc:src.y,
+		x:x,
+		y:y
+	}
+	if(currentPlayer != 'user'){
+		return;
+	}
+	if(grid[y][x].getAttribute('attackable') == 'true' || grid[y][x].getAttribute('movable')== 'true'){
+
+		socket.emit('move',coord);
+		removeAllAtribute(grid);
+		return
+	}
+	
+	else if(board[y][x] == null || board[y][x] == 'b'){
+		return 
+	}
+	else if(board[y][x].player != pIndex){
+		return
+	}
+	else{
+		removeAllAtribute(grid);
+		socket.emit('get-list',{x:x, y:y});
+		src = {
+			x:x,
+			y:y
+		}
+		let i=0;
+		socket.on('receive-list', (list)=>{
+			if(i == 0){
+				let pawn = board[y][x].pawn;
+				verif(list.n, list.s,list.e, list.w,src,i,pawn,coord);
+				i++;
+			}
+		});
+		
+	}
+}
+function removeAllAtribute(grid){
+	for(let i=0; i<10; i++){
+		for(let j=0; j<10;j++){
+			if(grid[j][i].getAttribute('movable')=='true' || grid[j][i].getAttribute('attackable')=='true'){
+				if(grid[j][i].classList.contains('move') || grid[j][i].classList.contains('attack')){
+					grid[j][i].innerHTML='';
+				}
+			}
+			grid[j][i].removeAttribute('attackable');
+			grid[j][i].removeAttribute('movable');
+		}
+	}
+}
+function verif(listn,lists,liste,listw,src,i, pawn,coord){
+	if(i!=0) return;
+	else if(listn || lists || liste || listw){			
+		if(listn){
+			console.log("available move toward north");
+			view[0].classAdder(listn, src);	
+			if (verifecl(pawn,listn, src,coord) == true) verifecl(pawn,listn, src,coord)
+		}
+		if(liste){
+			console.log("available move toward east");
+			view[0].classAdder(liste, src);
+			if(verifecl(pawn,liste, src,coord) == true) verifecl(pawn,liste, src,coord)
+		}
+		if(lists){
+			console.log("available move toward south");
+			view[0].classAdder(lists, src);
+			if(verifecl(pawn,lists, src,coord) == true) verifecl(pawn,lists, src,coord)
+		}
+		if(listw){
+			console.log("available move toward west");
+			view[0].classAdder(listw, src);
+			if(verifecl(pawn,listw, src,coord) == true) verifecl(pawn,listw, src,coord)
+		}	
+	}
+	else return ;
+}
+
+function verifecl(pawn,list,src,coord){
+	if(pawn == 20 || pawn == 21){
+		let listTransfer = list;
+
+		if(list.dir == 's'){
+			let depart = coord.y+1;
+			let fin = list.y;
+			if(fin-depart == 0) return;
+			else {
+				while(depart != fin){
+					listTransfer.y = depart;
+					listTransfer.action = 'move';
+					view[0].classAdder(listTransfer, src);
+					depart++;
+				}
+			}
+		}
+		if(list.dir == 'n'){
+			let depart = coord.y-1;
+			let fin = list.y;
+			if(fin-depart == 0) return;
+			else {
+				while(depart != fin){
+					listTransfer.y = depart;
+					listTransfer.action = 'move';
+					view[0].classAdder(listTransfer, src);
+					depart--;
+				}
+			}
+		}
+		if(list.dir == 'w'){
+			let depart = coord.x-1;
+			let fin = list.x;
+			if(fin-depart == 0) return;
+			else {
+				while(depart != fin){
+					listTransfer.x = depart;
+					listTransfer.action = 'move';
+					view[0].classAdder(listTransfer, src);
+					depart--;
+				}
+			}
+		}
+		if(list.dir == 'e'){
+			let depart = coord.x+1;
+			let fin = list.x;
+			if(fin-depart == 0) return;
+			else {
+				while(depart != fin){
+					listTransfer.x = depart;
+					listTransfer.action = 'move';
+					view[0].classAdder(listTransfer, src);
+					depart++;
+				}
+			}
+		}
+		return true;
+	}
+	else return false;
+	
+
 }
