@@ -46,20 +46,25 @@ class Board extends Pawn{
     affichage(){
         let aff='';
         for(let i =0; i< 10; i++){
+            aff='';
             for(let j =0; j< 10; j++){
                 if(this.board[i][j]==null){
-                    aff+=0;
+                    aff+='    ';
                 }
-                else if(this.board[i][j]=='b'){
-                    aff+=3;
+                else if (this.board[i][j] == 'b'){
+                    aff+='b   ';
                 }
                 else{
-                    aff+=1;
+                    aff+=(this.board[i][j].pawn).toString();
+                    if (this.board[i][j].pawn >2 && this.board[i][j].pawn < 92){
+                        aff+='  ';
+                    }
+                    else if (this.board[i][j].pawn <2)aff+='   ';
+                    else{aff+=' '}
                 }
             }
-            aff+= '\n';
+            console.log(aff);
         }
-        return aff;
     }
     //crée la grille de jeu
     createBoard()
@@ -262,7 +267,6 @@ class Board extends Pawn{
                     
                     switch (this.board[i][j].pawn){
                         default :
-
                         case 110 + playerId :
                             if(bom<6)bom++;
                             else{
@@ -712,6 +716,7 @@ class Board extends Pawn{
             return list;
         }
         else{
+            console.log("dir", dir);
             list = this.neswEcl(pawn,dir,list);
             return list;
         }
@@ -769,7 +774,9 @@ class Board extends Pawn{
     }
 
     neswEcl(pawn, dir, list){
+        console.log('ecl', dir);
         let x = pawn.x, y = pawn.y, dx =0, dy=0;
+        
         if (dir == 'n'){
             dx=0;
             dy=-1;
@@ -823,12 +830,17 @@ class Board extends Pawn{
             }
             return list;
         }
-        else if (this.board[depY][depX].player == pawn.player){
+        else if(this.board[depY][depX].player != pawn.player){
+            list.action = 'attack';
+            list.x= depX;
+            list.y=depY;
+            console.log("Attaque possible en ",list.x," / ",list.y);
+            return list;
+        }
+        else{
             list = null;
             return list;
         }
     }
 }
-
-
 module.exports = Board;
