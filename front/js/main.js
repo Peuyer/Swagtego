@@ -74,7 +74,6 @@ socket.on('last-move', (coord)=>{
     let x = coord.x;
     let y = coord.y;
     view[0].glow(xsrc,ysrc,x,y);
-    
 });
 
 // Receives the id of the winner if there's one

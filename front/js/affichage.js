@@ -8,6 +8,10 @@ images[4] = '<img class="perso" src="../images/stratego-sergeant.svg">';images[5
 images[6] = '<img class="perso" src="../images/stratego-captain.svg">';images[7] = '<img class="perso" src="../images/stratego-major.svg">';
 images[8] = '<img class="perso" src="../images/stratego-colonel.svg">';images[9] = '<img class="perso" src="../images/stratego-general.svg">';
 images[10] = '<img class="perso" src="../images/stratego-marshal.svg">';images[11] = '<img class="perso" src="../images/stratego-bomb.svg">';
+const nom = new Array(12);
+nom[0]='Drapeau';nom[1]='Espion';nom[2]='Eclaireur';nom[3]='Démineur';nom[4]='Sergent';nom[5]='Lieutenant';
+nom[6]='Capitaine';nom[7]='Commandant';nom[8]='Colonel';nom[9]='Général';nom[10]='Maréchal';nom[11]='Bombe';
+
 
 
 class View{
@@ -29,20 +33,25 @@ class View{
 					this.grid[x][y].id = '';
 				}
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player == playerIndex){
-					this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
-					this.grid[x][y].innerHTML = ((this.game.board[x][y].pawn-playerIndex)/10).toString();
+					//this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
+					let playerClass = !playerIndex ? 'pawnBlue':'pawnRed'
+					this.grid[x][y].innerHTML = "<div class='"+playerClass+"'><img>"+images[(this.game.board[x][y].pawn-playerIndex)/10]+"</img></div>";
 					this.grid[x][y].id ="pawn";
 				}
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player != playerIndex){
-					this.grid[x][y].className = playerIndex ? "pawnBlue":"pawnRed"
-					this.grid[x][y].innerHTML = "";
+					let playerClass = playerIndex ? 'pawnBlue':'pawnRed'
+					this.grid[x][y].innerHTML = "<div class='"+playerClass+"'></div>";
 
 				}
 				if (this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].isReturned == true && this.game.board[x][y].player != playerIndex){
 					let grid = this.grid;
 					let resultat = Math.round(((this.game.board[x][y].pawn-playerIndex)/10).toString());
-					this.grid[x][y].innerHTML = resultat;
+					this.grid[x][y].firstElementChild.innerHTML = "<img>"+images[resultat]+"</img>";
 					setTimeout(function(){returnCard(x,y,grid)},6000);
+				}
+				if (this.game.board[x][y] != 'b'){
+					if ((x+y)%2 == 0){this.grid[x][y].className = 'grassDark';}
+					else{this.grid[x][y].className = 'grass';}
 				}
 
 			}
@@ -81,13 +90,14 @@ class View{
 		let html='';
 		for (let i = 0; i<12; i++){
 			count[i]=0;
-			html+= '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+images[i]+'<p>'+count[i]+'/'+max[i]+'</p></li>';		
+			html+= '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+images[i]+'<p id="amount">'+count[i]+'/'+max[i]+'</p><p id="nom">('+i+')'+nom[i]+'</p></li>';		
 		}
 		document.getElementById('pawn-container').innerHTML = html;
 	}
 	addPawn(i){
 		let html='';
-		html += '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+images[i]+'<p>'+count[i]+'/'+max[i]+'</p></li>';		document.getElementById('pawn-container').innerHTML += html;
+		html += '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+images[i]+'<p id="amount">'+count[i]+'/'+max[i]+'</p><p id="nom">('+i+')'+nom[i]+'</p></li>';		
+		document.getElementById('pawn-container').innerHTML += html;
 	}
 	
 	boardLoad(){
@@ -142,15 +152,13 @@ class View{
 			case 'attack' :
 				this.grid[list.y][list.x].classList.add("attack");
 				this.grid[list.y][list.x].setAttribute("attackable","true");
-				this.grid[list.y][list.x].innerHTML = fight ;
+				this.grid[list.y][list.x].firstElementChild.innerHTML = fight ;
 				
 				break;
 		}
 	}
 
 	glow(xsrc,ysrc,x,y){
-		console.log('je suis llaaaa');
-		this.grid[ysrc][xsrc].id = "glow";
 		this.grid[y][x].id = "glow";
 	}
 }
@@ -204,6 +212,9 @@ function removeAllAtribute(grid){
 				if(grid[j][i].classList.contains('move') || grid[j][i].classList.contains('attack')){
 					grid[j][i].innerHTML='';
 				}
+			}
+			if(grid[j][i].id == 'glow') {
+				grid[j][i].id='';
 			}
 			grid[j][i].removeAttribute('attackable');
 			grid[j][i].removeAttribute('movable');
@@ -299,5 +310,5 @@ function verifecl(pawn,list,src,coord){
 }
 
 function returnCard(x,y,grid){
-	grid[x][y].innerHTML='';
+	grid[x][y].firstElementChild.innerHTML='';
 }

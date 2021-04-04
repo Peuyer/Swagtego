@@ -58,16 +58,23 @@ body{
 	font-weight:bold;
 	text-align:center;
 	font-size:2rem;
-	margin:5px;
+	margin:10px;
 	border-radius: 10px;
 	text-shadow:none;
 	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 	transition-duration:0.5s;
 	color:rgba(0, 0, 0, 0);
 }
-.pawn-item p{	
+#amount{	
 	font-size:20px;
 	margin-top:-47px;
+}
+#nom{	
+	font-size:10px;
+	color:rgb(56, 56, 56);
+}
+li:hover #nom{
+	color:black;
 }
 
 li:hover{
@@ -88,7 +95,7 @@ li:hover{
 }
 
 #glow{
-	box-shadow: 0px 0px 8px 5px white;
+	box-shadow: inset 0px 0px 20px rgba(255, 255, 255, 0.801);
 }
 
 .perso{
@@ -96,6 +103,7 @@ li:hover{
 	text-align:center;
 	pointer-events:none;
 }
+
 
 
 /*GAME*/
@@ -111,7 +119,6 @@ td {
 }
 .pawnImage{
 	width:50%;
-	animation:shake infinite;
 }
 
 /*CASES*/
@@ -123,21 +130,23 @@ td {
 	background-color:#006400;
 	vertical-align: center;
 }
-.pawnBlue{
-	background-color:#205ec2;
+.pawnBlue, .pawnRed{
+	width:60px;
+	height:60px;
+	margin:0;
+	padding:0;
 	vertical-align: center;
 	text-align: center;
 	color:white;
 	transition-duration:0.5s ;	
-	z-index: 10;
+	z-index: 100;
+	border-radius:60px;
+}
+.pawnBlue{
+	background:#205ec2;
 }
 .pawnRed{
-	background-color:#d63338;
-	vertical-align: center;
-	text-align: center;
-	color:white;
-	transition-duration:0.5s ;	
-	z-index: 10;
+	background:#d63338;
 }
 
 .lake{
@@ -148,18 +157,14 @@ td {
 #pawn:hover{
 	cursor:pointer;
 }
-.move, .attackable{
+.move,.attack{
 	color:rgb(70, 70, 70);
 	text-align:center;
 	font-size:30px;
 	cursor:pointer;
 	transition-duration:10s;
 }
-#shake {
-	-webkit-animation:shake;
-	animation:shake;
-	animation-iteration-count: infinite;
-}
+
 
 /*WIN*/
 #winScreen{
@@ -215,18 +220,4 @@ span.green {
   
   ::-webkit-scrollbar-thumb:hover {
 	background-color: #a8bbbf;
-  }
-/*ANIMATION*/
-@keyframes shake {
-	0% { transform: translate(1px, 1px) rotate(0deg); }
-	10% { transform: translate(-1px, -2px) rotate(-1deg); }
-	20% { transform: translate(-3px, 0px) rotate(1deg); }
-	30% { transform: translate(3px, 2px) rotate(0deg); }
-	40% { transform: translate(1px, -1px) rotate(1deg); }
-	50% { transform: translate(-1px, 2px) rotate(-1deg); }
-	60% { transform: translate(-3px, 1px) rotate(0deg); }
-	70% { transform: translate(3px, 1px) rotate(-1deg); }
-	80% { transform: translate(-1px, -1px) rotate(1deg); }
-	90% { transform: translate(1px, 2px) rotate(0deg); }
-	100% { transform: translate(1px, -2px) rotate(-1deg); }
   }
