@@ -123,7 +123,8 @@ td {
 	text-shadow:none;
 }
 .pawnImage{
-	width:50%;
+	width:40px;
+	height:40px;
 }
 
 /*CASES*/
