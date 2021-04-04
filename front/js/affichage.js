@@ -1,6 +1,14 @@
 //Affiche le plateau et les pions 
 const footstep = '<img class="pawnImage" src="footsteps.svg"></img>'
 const fight = '<img class="pawnImage" src="fight.svg"></img>'
+const images = new Array();
+images[0] = '<img class="perso" src="../images/stratego-flag.svg">';images[1] = '<img class="perso" src="../images/stratego-spy.svg">';
+images[2] = '<img class="perso" src="../images/stratego-scout.svg">';images[3] = '<img class="perso" src="../images/stratego-miner.svg">';
+images[4] = '<img class="perso" src="../images/stratego-sergeant.svg">';images[5] = '<img class="perso" src="../images/stratego-lieutenant.svg">';
+images[6] = '<img class="perso" src="../images/stratego-captain.svg">';images[7] = '<img class="perso" src="../images/stratego-major.svg">';
+images[8] = '<img class="perso" src="../images/stratego-colonel.svg">';images[9] = '<img class="perso" src="../images/stratego-general.svg">';
+images[10] = '<img class="perso" src="../images/stratego-marshal.svg">';images[11] = '<img class="perso" src="../images/stratego-bomb.svg">';
+
 
 class View{
 	constructor(game, playerIndex){
@@ -15,7 +23,8 @@ class View{
 		for(let x=0; x<10; x++){
 			for(let y=0; y<10; y++){
 				if(this.game.board[x][y] == null){
-					this.grid[x][y].className = 'grass';
+					if ((x+y)%2 == 0){this.grid[x][y].className = 'grassDark';}
+					else{this.grid[x][y].className = 'grass';}
 					this.grid[x][y].innerHTML ='';
 					this.grid[x][y].id = '';
 				}
@@ -72,14 +81,13 @@ class View{
 		let html='';
 		for (let i = 0; i<12; i++){
 			count[i]=0;
-			html+= '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+i.toString()+'<p>'+count[i]+'/'+max[i]+'</p></li>';
+			html+= '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+images[i]+'<p>'+count[i]+'/'+max[i]+'</p></li>';		
 		}
 		document.getElementById('pawn-container').innerHTML = html;
 	}
 	addPawn(i){
 		let html='';
-		html += '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+i.toString()+'<p>'+count[i]+'/'+max[i]+'</p></li>';
-		document.getElementById('pawn-container').innerHTML += html;
+		html += '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+images[i]+'<p>'+count[i]+'/'+max[i]+'</p></li>';		document.getElementById('pawn-container').innerHTML += html;
 	}
 	
 	boardLoad(){
