@@ -221,31 +221,3 @@ io.on('connection', (socket) => {
 
 });
 
-
-if (app.get('env')==='production'){
-  app.set('trust proxy',1);
-  session.cookie.secure = true;
-}
-
-
-
-// Initialisation de la connexion à la bdd
-
-const con = mysql.createConnection({
-  host: "localhost",
-  user:"root",
-  password:"",
-  database:"swagtego"
-  });
-
-// Accès à  la bdd
-/*
-con.connect(err =>{
-  if (err) throw err;
-  else console.log('Connexion effectuée');
-
-  let newUser = " INSERT INTO comptes"
-});*/
-
-
-
