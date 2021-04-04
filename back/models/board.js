@@ -20,6 +20,8 @@ class Pawn{
         this.player = player;
         this.isReturned = false;
     }
+
+
 }
 
 module.exports = Pawn;
@@ -31,6 +33,7 @@ class Board extends Pawn{
         this.currentPlayer = Math.random < 0.5;
         this.board = this.createBoard();   
     }
+
     rangeRand(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
@@ -384,6 +387,13 @@ class Board extends Pawn{
     //retourne '0' si mouvement impossible, '1' si mouvement effectué
     move(x_avant, y_avant,x,y)
     {
+        for(let x=0; x<10; x++){
+			for(let y=0; y<10; y++){
+                if(this.board[x][y] != null && this.board[x][y]!= 'b'){
+					this.board[x][y].isReturned = false;
+				}
+            }
+        }
         console.log("Move : ",x_avant,"/",y_avant, " vers ",x,"/",y,".");
         if(x>9 || y>9  || x<0 || y<0){
             console.log("Mouvement hors grille de jeu");
@@ -421,6 +431,7 @@ class Board extends Pawn{
                     else if (attack == 3 || attack == 2){
                         this.board[pawn.y][pawn.x] = null;
                         console.log("Echec de l'attaque ou égalité");
+                        this.board[y][x].isReturned = true;
                         return 1;
                     }
                 }
@@ -495,6 +506,7 @@ class Board extends Pawn{
                 }
                 else if (attack == 3 || attack == 2){
                     this.board[pawn.y][pawn.x] = null;
+                    this.board[y][x].isReturned = true;
                     return 1;
                 }
             }
@@ -543,19 +555,20 @@ class Board extends Pawn{
             return false;
         }
         if ((pawn1.pawn == 10 || pawn1.pawn == 11) && (pawn2.pawn == 100 || pawn2.pawn == 101)){
-            console.log("Espion tue maréchal");        
+            console.log("Espion tue maréchal");
+                
         }
         else if ((pawn1.pawn == 30 || pawn1.pawn == 31) && (pawn2.pawn == 110 || pawn2.pawn == 111)){
             console.log("Bombe déminé");
         }
         else if(pawn2.pawn == 0 || pawn2.pawn == 1){
             console.log("Drapeau éliminé");
+   
         }
         else if (pawn2.pawn == 110 || pawn2.pawn == 111){
             console.log("Explosion d'une bombe");
             this.board[pawn2.y][pawn2.x] = pawn2;
-            pawn1.isReturned = true;
-            pawn2.isReturned = true;
+
             return 3;
         }
         else if ((pawn1.pawn-pawn2.pawn) > 2){
@@ -564,22 +577,19 @@ class Board extends Pawn{
         else if ((pawn1.pawn-pawn2.pawn) < -2){
             console.log("Attaque ratée");
             this.board[pawn2.y][pawn2.x] = pawn2;
-            pawn1.isReturned = true;
-            pawn2.isReturned = true;
+
             return 3;
         }
         else{
             console.log("Egalité")
             this.board[pawn2.y][pawn2.x] = null;
             this.board[pawn1.y][pawn1.x] = null;
-            pawn1.isReturned = true;
-            pawn2.isReturned = true;
             return 2;
         }
 
+        console.log('oui');
         this.board[pawn2.y][pawn2.x] = pawn1;
-        pawn1.isReturned = true;
-        pawn2.isReturned = true;
+ 
         return true;
     }
 

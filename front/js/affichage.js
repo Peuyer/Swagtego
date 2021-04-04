@@ -8,8 +8,10 @@ class View{
 		this.game = game;
 		this.grid = this.boardLoad();
 	}
-	
+
+
 	DisplayBoard(playerIndex){
+		
 		for(let x=0; x<10; x++){
 			for(let y=0; y<10; y++){
 				if(this.game.board[x][y] == null){
@@ -21,16 +23,19 @@ class View{
 					this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
 					this.grid[x][y].innerHTML = ((this.game.board[x][y].pawn-playerIndex)/10).toString();
 					this.grid[x][y].id ="pawn";
-					//if(this.grid[x][y].getAttribute('listener') !== 'true'){
-					//	console.log('test',this.grid[x][y]);
-					//	this.attachListeners(playerNum,x,y);
-					//	this.grid[x][y].setAttribute('listener', 'true');
-					//}
 				}
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player != playerIndex){
 					this.grid[x][y].className = playerIndex ? "pawnBlue":"pawnRed"
 					this.grid[x][y].innerHTML = "";
+
 				}
+				if (this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].isReturned == true && this.game.board[x][y].player != playerIndex){
+					let grid = this.grid;
+					let resultat = Math.round(((this.game.board[x][y].pawn-playerIndex)/10).toString());
+					this.grid[x][y].innerHTML = resultat;
+					setTimeout(function(){returnCard(x,y,grid)},6000);
+				}
+
 			}
 		}
 	}
@@ -133,6 +138,12 @@ class View{
 				
 				break;
 		}
+	}
+
+	glow(xsrc,ysrc,x,y){
+		console.log('je suis llaaaa');
+		this.grid[ysrc][xsrc].id = "glow";
+		this.grid[y][x].id = "glow";
 	}
 }
 let src = {};
@@ -277,6 +288,8 @@ function verifecl(pawn,list,src,coord){
 		return true;
 	}
 	else return false;
-	
+}
 
+function returnCard(x,y,grid){
+	grid[x][y].innerHTML='';
 }

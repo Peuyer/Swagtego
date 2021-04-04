@@ -206,6 +206,7 @@ io.on('connection', (socket) => {
   socket.on('move', (coord)=>{
     let move = board.move(coord.xsrc, coord.ysrc, coord.x, coord.y);
     if(move){
+      socket.broadcast.emit('last-move',coord);
       socket.emit('has-winner',board.hasWinner());
       socket.broadcast.emit('has-winner',board.hasWinner());
       socket.emit('hasPlayed',playerIndex);
@@ -216,7 +217,7 @@ io.on('connection', (socket) => {
 
   socket.on('gameStart',()=>{
     socket.broadcast.emit('gameStarted');
-  });  
+  });
 
 });
 
@@ -228,9 +229,23 @@ if (app.get('env')==='production'){
 
 
 
+// Initialisation de la connexion à la bdd
 
+const con = mysql.createConnection({
+  host: "localhost",
+  user:"root",
+  password:"",
+  database:"swagtego"
+  });
 
+// Accès à  la bdd
+/*
+con.connect(err =>{
+  if (err) throw err;
+  else console.log('Connexion effectuée');
 
+  let newUser = " INSERT INTO comptes"
+});*/
 
 
 

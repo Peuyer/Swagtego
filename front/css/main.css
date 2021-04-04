@@ -84,6 +84,10 @@ li:hover{
 	transition-duration:0.5s;
 }
 
+#glow{
+	box-shadow: 0px 0px 8px 5px white;
+}
+
 
 
 /*GAME*/
@@ -115,6 +119,7 @@ td {
 	text-align: center;
 	color:white;
 	transition-duration:0.5s ;	
+	z-index: 10;
 }
 .pawnRed{
 	background-color:#d63338;
@@ -122,6 +127,7 @@ td {
 	text-align: center;
 	color:white;
 	transition-duration:0.5s ;	
+	z-index: 10;
 }
 
 .lake{

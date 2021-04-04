@@ -7,7 +7,6 @@ const pawnContainer = document.querySelector('#pawn-container')
 const buttons = document.querySelector(".Random-Composition")
 const pawns = document.querySelector("#pawnPlaceholder")
 
-
 let currentPlayer = 'user'
 let playerNum = 0
 let ready = false
@@ -68,7 +67,15 @@ socket.on('view-updated',(board)=>{
     afficheBoard(playerNum);
 });
 
-
+socket.on('last-move', (coord)=>{
+    console.log('im here')
+    let xsrc = coord.xsrc
+    let ysrc = coord.ysrc
+    let x = coord.x;
+    let y = coord.y;
+    view[0].glow(xsrc,ysrc,x,y);
+    
+});
 
 // Receives the id of the winner if there's one
 socket.on('has-winner', (winner)=>{
@@ -87,6 +94,7 @@ socket.on('hasPlayed',(player)=>{
     else{
         currentPlayer = 'user';
     }
+
     playGameMulti(socket);
 });
 
@@ -268,8 +276,6 @@ function placePawn(id,value){
             i++;
         }
     });
-
-
 }
 
 
@@ -316,67 +322,3 @@ function toHour(time){
     string += s.toString() + ' secondes';
     return string;
 }
-
-function eloCalc (ratingPlayer,ratingOpponent,gameResult){
-
-    const Kfactor = 20;
-    let Elodiff = ratingPlayer - ratingOpponent;
-    if (Elodiff > 400) Elodiff = 400;
-    let winProb = 1/(1+Math.pow(10,-Elodiff/400));
-    return (Math.round(ratingPlayer + Kfactor*(gameResult - winProb)));
-
-}
-
-function updateRating(usernamePlayer,usernameOpponent,gameResult){
-    
-    let resultNumberPlayer, resultNumberOpponent;
-
-    if (gameResult == 'win'){
-        resultNumberPlayer = 1;
-        resultNumberOpponent = 0;
-
-    }
-    else{
-        resultNumberPlayer = 0;
-        resultNumberOpponent = 1;
-    }
-
-    con.connect(err=> {
-        if (err) throw err;
-        else console.log('connexion éffectuée')
-
-        let sql= 'SELECT `rating` FROM `comptes` WHERE `username` = '+usernamePlayer+'';
- 
-        con.query((sql, ratingPlayer)=>{
-            if (err) throw err;
-            console.log('rating'+usernamePlayer+' = '+ratingPlayer[0]);
-        });
-
-        sql= 'SELECT `rating` FROM `comptes` WHERE `username` = '+usernameOpponent+'';
-        con.query((sql, ratingOpponent)=>{
-            if (err) throw err;
-            console.log('rating'+usernameOpponent+' = '+ratingOpponent[0]);
-        });
-
-        let NewPlayerElo = eloCalc(ratingPlayer[0],ratingOpponent[0],resultNumberPlayer);
-        let NewOpponentElo = eloCalc(ratingOpponent[0],ratingPlayer[0],resultNumberOpponent);
-
-        sql= 'UPDATE `comptes`SET `rating` = '+NewPlayerElo+' WHERE `username` = '+usernamePlayer+'';
-        con.query((sql,UpdatePlayer)=>{
-            if (err) throw err;
-            console.log('UPDATE Player effectuée');
-        });
-
-        sql= 'UPDATE `comptes`SET `rating` = '+NewOpponentElo+' WHERE `username` = '+usernameOpponent+'';
-        con.query((sql, UpdateOpponent)=>{
-            if (err) throw err;
-            console.log('UPDATE Opponent effectuée');
-        });
-
-    });
-
-}
-
-
-
-
