@@ -87,18 +87,15 @@ li:hover{
 	transition-duration:0.5s;
 }
 
-<<<<<<< Updated upstream
 #glow{
 	box-shadow: 0px 0px 8px 5px white;
 }
 
-=======
 .perso{
 	width:42px;
 	text-align:center;
 	pointer-events:none;
 }
->>>>>>> Stashed changes
 
 
 /*GAME*/
