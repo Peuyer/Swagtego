@@ -6,6 +6,7 @@ const clearButton = document.querySelector('#clear')
 const pawnContainer = document.querySelector('#pawn-container')
 const buttons = document.querySelector(".Random-Composition")
 const pawns = document.querySelector("#pawnPlaceholder")
+const table = document.getElementById("table")
 
 let currentPlayer = 'user'
 let playerNum = 0
@@ -89,6 +90,7 @@ socket.on('hasPlayed',(player)=>{
     if(player==playerNum){
         currentPlayer='ennemy';
         turnDisplay.innerHTML = "Au tour de l'ennemi !";
+        table.className ='';
     }
     else{
         currentPlayer = 'user';
@@ -243,9 +245,11 @@ function playGameMulti(socket) {
         
         if(currentPlayer === 'user') {
             turnDisplay.innerHTML = 'A ton tour !';
+            table.className = 'myTurn';
         }
         if(currentPlayer === 'enemy') {
             turnDisplay.innerHTML = "Au tour de l'ennemi !";
+            table.className = '';
         }
     }
 }

@@ -35,7 +35,8 @@ class View{
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player == playerIndex){
 					//this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
 					let playerClass = !playerIndex ? 'pawnBlue':'pawnRed'
-					this.grid[x][y].innerHTML = "<div class='"+playerClass+"'><img>"+images[(this.game.board[x][y].pawn-playerIndex)/10]+"</img></div>";
+					let i = Math.round((this.game.board[x][y].pawn-playerIndex)/10);
+					this.grid[x][y].innerHTML = "<div class='"+playerClass+"'><img>"+images[i]+"</img><h3>"+i+"</h3></div>";
 					this.grid[x][y].id ="pawn";
 				}
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player != playerIndex){
@@ -45,9 +46,9 @@ class View{
 				}
 				if (this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].isReturned == true && this.game.board[x][y].player != playerIndex){
 					let grid = this.grid;
-					let resultat = Math.round(((this.game.board[x][y].pawn-playerIndex)/10).toString());
-					this.grid[x][y].firstElementChild.innerHTML = "<img>"+images[resultat]+"</img>";
-					setTimeout(function(){returnCard(x,y,grid)},6000);
+					let i = Math.round((this.game.board[x][y].pawn-playerIndex)/10);
+					this.grid[x][y].firstElementChild.innerHTML = "<img>"+images[i]+"<h3>"+i+"</h3></img>";
+					setTimeout(function(){returnCard(x,y,grid)},5000);
 				}
 				if (this.game.board[x][y] != 'b'){
 					if ((x+y)%2 == 0){this.grid[x][y].className = 'grassDark';}
@@ -65,17 +66,18 @@ class View{
 			html += '<tr>';
 			for(let y=0;y<10;y++){
 				index++;
+				let herbe = (x+y)%2==0 ? 'grassDark':'grass';
 				if(board.board[x][y] == 'b'){
 					html+= '<td class="lake" >';
 				}
 				else if (board.board[x][y] == null){
 					if((playerIndex == 0 && x<4) || (playerIndex == 1 && x>5)) {
-						html += '<td class="grass" ondragover="onDragOver(event);" ondrop="onDrop(event);" data-value='+index.toString()+'>';
+						html += '<td class="'+herbe+'" ondragover="onDragOver(event);" ondrop="onDrop(event);" data-value='+index.toString()+'>';
 					}
-					else html += '<td class="grass" data='+index.toString()+'>';
+					else html += '<td class="'+herbe+'" data='+index.toString()+'>';
 				}
 				else{
-					html += '<td class="grass" ondragover="onDragOver(event);" ondrop="onDrop(event);" data-value='+index.toString()+'>';
+					html += '<td class="'+herbe+'" ondragover="onDragOver(event);" ondrop="onDrop(event);" data-value='+index.toString()+'>';
 				}
 				html += '</td>';
 			}

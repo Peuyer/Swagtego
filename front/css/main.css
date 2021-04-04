@@ -95,7 +95,7 @@ li:hover{
 }
 
 #glow{
-	box-shadow: inset 0px 0px 20px rgba(255, 255, 255, 0.801);
+	animation: blinkInside 1s linear 4;
 }
 
 .perso{
@@ -107,11 +107,16 @@ li:hover{
 
 
 /*GAME*/
-table{
+table#table{
 	margin:auto;
+	border-radius:15px;
+	overflow:hidden;
+}
+.myTurn{
+	animation: blink 1s linear infinite;
 }
 td {	
-	display: table-cell;
+	/*display: table-cell;*/
 	width: 60px;
 	height:60px;
 	font-weight:bold;
@@ -131,28 +136,35 @@ td {
 	vertical-align: center;
 }
 .pawnBlue, .pawnRed{
-	width:60px;
-	height:60px;
-	margin:0;
+	width:50px;
+	height:50px;
+	margin:auto;
 	padding:0;
 	vertical-align: center;
 	text-align: center;
-	color:white;
+	color:transparent;
 	transition-duration:0.5s ;	
 	z-index: 100;
-	border-radius:60px;
+	border-radius:15px;
+	box-shadow:0 0 7px rgba(0, 0, 0, 0.575);
 }
 .pawnBlue{
-	background:#205ec2;
+	background:#428bff;
 }
 .pawnRed{
-	background:#d63338;
+	background:#ff4b51;
 }
+.pawnBlue h3, .pawnRed h3{
+	margin-top:-50px;
+}
+.pawnBlue:hover, .pawnRed:hover{
+	color:white;
+	transform: scale(0.95);
+}
+
 
 .lake{
 	background-color:#a8e0ff;
-	color: black;
-	vertical-align: center;
 }
 #pawn:hover{
 	cursor:pointer;
@@ -205,19 +217,30 @@ span.green {
 /*SCROLLBAR*/
 ::-webkit-scrollbar {
 	width: 20px;
-  }
+}
   
-  ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
 	background-color: transparent;
-  }
+}
   
-  ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
 	background-color: #d6dee1;
 	border-radius: 20px;
 	border: 6px solid transparent;
 	background-clip: content-box;
-  }
+}
   
-  ::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
 	background-color: #a8bbbf;
-  }
+}
+
+@keyframes blink {
+    0% {  box-shadow: none; }
+    50% { box-shadow: 0 0 0 10px #02a039;}
+    100% { box-shadow:none; }
+}
+@keyframes blinkInside {
+    0% { box-shadow: none;}
+    50% { box-shadow:inset 0px 0px 20px rgba(255, 255, 255, 0.801); }
+    100% { box-shadow:none; }
+}
