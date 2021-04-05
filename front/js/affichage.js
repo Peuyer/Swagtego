@@ -46,13 +46,13 @@ class View{
 					this.grid[x][y].id ="pawn";
 				}
 				else if (!this.started){
-					this.grid[x][y].id = 'grey'
 				}
 				// Pions ennemis
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player != playerIndex){
 					let playerClass = playerIndex ? 'pawnBlue':'pawnRed'
 					this.grid[x][y].innerHTML = "<div class='"+playerClass+"'></div>";
-					this.grid[x][y].id='pawn';
+					if(this.grid[x][y].id == 'grey')this.grid[x][y].id='pawn';
+					
 				}
 				// Pions ennemi après attaque
 				if (this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].isReturned == true && this.game.board[x][y].player != playerIndex){
