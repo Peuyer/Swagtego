@@ -156,6 +156,19 @@ io.on('connection', (socket) => {
     updateView();
   });
 
+
+  socket.on('get-con', ()=>{
+    const con = mysql.createConnection({
+      host: "localhost",
+      user: "root",
+      password = "",
+      database = "swagtego"
+    });
+    socket.emit('con',con);
+  });
+
+  
+
   function updateView(){
 
     socket.emit('view-updated',board);
