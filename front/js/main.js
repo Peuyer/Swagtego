@@ -8,12 +8,7 @@ const buttons = document.querySelector(".Random-Composition")
 const pawns = document.querySelector("#pawnPlaceholder")
 const con = {};
 
-socket.emit('get-con');
-socket.on('con',conn=>{
 
-     con = conn;
-     console.log(con);
-});
 const table = document.getElementById("table")
 
 let currentPlayer = 'user'
@@ -42,6 +37,13 @@ let end = 0;
 
 // Warns socket io that a user connected
 const socket = io();
+
+
+socket.on('con',conn=>{
+
+     con = conn;
+});
+
 
 // Get your player number
 socket.on('player-number', num => {

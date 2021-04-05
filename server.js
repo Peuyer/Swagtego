@@ -157,15 +157,16 @@ io.on('connection', (socket) => {
   });
 
 
-  socket.on('get-con', ()=>{
+socket.on('get-con', ()=>{
     const con = mysql.createConnection({
       host: "localhost",
       user: "root",
-      password = "",
-      database = "swagtego"
+      password : "",
+      database : "swagtego"
     });
     socket.emit('con',con);
   });
+
 
   
 
@@ -173,6 +174,7 @@ io.on('connection', (socket) => {
     socket.emit('view-updated',board);
     socket.broadcast.emit('view-updated',board);
     socket.emit('pawn-count',board.counter(playerIndex));
+    board.affichage();
   }
 
   //display username
