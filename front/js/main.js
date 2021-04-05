@@ -238,7 +238,7 @@ function afficheBoard(playerIndex){
 
 // Game Logic for MultiPlayer
 function playGameMulti(socket) { 
-    turnDisplay.innerHTML="En attente du deuxième joueur...";
+    
     buttons.style.display = 'none';
     pawns.style.display = 'none';
     if(!ready) {
@@ -246,6 +246,7 @@ function playGameMulti(socket) {
         ready = true;
         playerReady(playerNum);
     }
+    if (!enemyReady)turnDisplay.innerHTML="En attente du deuxième joueur...";
     if(enemyReady) {   
         console.log(currentPlayer)
         view[0].start();
