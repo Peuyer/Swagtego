@@ -168,7 +168,13 @@ io.on('connection', (socket) => {
     console.log("Joueur",playerIndex," : ",usernames[playerIndex]);
     socket.emit("username-display",usernames);
     socket.broadcast.emit("username-display",usernames);
-
+  });
+  // Audio
+  socket.on('send-move-audio',(long)=>{
+    socket.broadcast.emit('move-audio',long);
+  });
+  socket.on('send-attack-audio',()=>{
+    socket.broadcast.emit('attack-audio');
   });
 
   //update player count

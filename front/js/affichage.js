@@ -144,27 +144,18 @@ class View{
 	}
 
 	classAdder(list, source){
-		let coord ={
-			xsrc : source.x,
-			ysrc : source.y,
-			x : list.x,
-			y : list.y
-		}
 		switch(list.action){
 			default:
 				break;
 			case 'move' :
 				this.grid[list.y][list.x].classList.add("move");
 				this.grid[list.y][list.x].setAttribute("movable","true");
-				this.grid[list.y][list.x].innerHTML = footstep ;
-
-				
+				this.grid[list.y][list.x].innerHTML = footstep ;		
 				break;
 			case 'attack' :
 				this.grid[list.y][list.x].classList.add("attack");
 				this.grid[list.y][list.x].setAttribute("attackable","true");
-				this.grid[list.y][list.x].firstElementChild.innerHTML = fight ;
-				
+				this.grid[list.y][list.x].firstElementChild.innerHTML = fight ;		
 				break;
 		}
 	}
@@ -182,12 +173,24 @@ function clickEvent(x,y,pIndex,board,grid){
 		x:x,
 		y:y
 	}
+	let length = x-src.x ? x-src.x : y-src.y;
+	length=Math.abs(length);
 	if(currentPlayer != 'user'){
 		return;
 	}
-	if(grid[y][x].getAttribute('attackable') == 'true' || grid[y][x].getAttribute('movable')== 'true'){
-
+	if(grid[y][x].getAttribute('attackable') == 'true'){
 		socket.emit('move',coord);
+		
+		socket.emit('send-attack-audio');
+		attackAudio();
+		removeAllAtribute(grid);
+		return
+	}
+	else if (grid[y][x].getAttribute('movable')== 'true'){
+		socket.emit('move',coord);
+		
+		socket.emit('send-move-audio',length);
+		moveAudio(length);
 		removeAllAtribute(grid);
 		return
 	}

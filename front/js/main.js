@@ -99,6 +99,13 @@ socket.on('hasPlayed',(player)=>{
     playGameMulti(socket);
 });
 
+socket.on('move-audio',(long)=>{
+    moveAudio(long,true);
+});
+socket.on('attack-audio',()=>{
+    attackAudio();
+});
+
 ////////////////////////////////////////////////////////////////////    
 
 // Another player has connected 
@@ -191,6 +198,7 @@ socket.on('gameStarted',()=>{
 
 // Ready button click
 startButton.addEventListener('click', () => {
+    clickAudio()
     socket.emit('is-completed',playerNum);
     socket.on('completed',(complete)=>{
         if(complete){
@@ -212,6 +220,7 @@ startButton.addEventListener('click', () => {
 
 // Random button click
 randomButton.addEventListener('click', () => {
+    clickAudio()
     console.log("(Re)Génération d'une composition complète aléatoire")
     socket.emit('generate-comp',playerNum);
     afficheBoard(playerNum);     
@@ -221,6 +230,7 @@ randomButton.addEventListener('click', () => {
 
 //clear button click
 clearButton.addEventListener('click', () => {
+    clickAudio()
     console.log("Suppression de tous vos pions")
     socket.emit('clear',playerNum);
     pawns.style.display = 'block';    
@@ -263,6 +273,7 @@ function playGameMulti(socket) {
 
 // Places a pawn on the board
 function placePawn(id,value){
+    moveAudio(1);
     let x=((value-1)%10);
     let y=Math.ceil(value/10)-1;
     console.log(x,y);
@@ -286,6 +297,7 @@ function placePawn(id,value){
             i++;
         }
     });
+    
 }
 
 
@@ -332,6 +344,7 @@ function toHour(time){
     string += s.toString() + ' secondes';
     return string;
 }
+
 function eloCalc (ratingPlayer,ratingOpponent,gameResult){
 
     const Kfactor = 20;
