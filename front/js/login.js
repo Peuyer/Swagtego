@@ -6,6 +6,7 @@ const userNameInput = document.getElementById('usernameInput')
 joinGameBtn.addEventListener('click', joinGame);
 
 function joinGame(){
+    clickAudio()
     const username = userNameInput.value;
     if(username){
         init();
