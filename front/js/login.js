@@ -3,6 +3,8 @@ const initialScreen = document.getElementById('initialScreen')
 const joinGameBtn = document.getElementById('joinGame')
 const userNameInput = document.getElementById('usernameInput')
 
+
+
 joinGameBtn.addEventListener('click', joinGame);
 
 function joinGame(){
@@ -12,6 +14,9 @@ function joinGame(){
         init();
         console.log(username);
         socket.emit('username',username,playerNum);
+        socket.emit('bddUsername',username);
+
+       
     }
     else {
         window.alert('Veuillez entrer un pseudo');

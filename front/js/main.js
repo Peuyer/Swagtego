@@ -6,7 +6,7 @@ const clearButton = document.querySelector('#clear')
 const pawnContainer = document.querySelector('#pawn-container')
 const buttons = document.querySelector(".Random-Composition")
 const pawns = document.querySelector("#pawnPlaceholder")
-const con = {};
+
 
 
 const table = document.getElementById("table")
@@ -39,10 +39,7 @@ let end = 0;
 const socket = io();
 
 
-socket.on('con',conn=>{
 
-     con = conn;
-});
 
 
 // Get your player number
@@ -343,7 +340,7 @@ function toHour(time){
 }
 
 function eloCalc (ratingPlayer,ratingOpponent,gameResult){
-
+    
     let Kfactor = 20;
 
     con.connect(err=> {

@@ -23,6 +23,7 @@ function displayWin(winnerId){
     if (playerNum == winnerId){
         confettiBtn.style.display = 'block';
         launchConfetti(); 
+        socket.emit('Elo',winnerId);
         winnerMessage.innerHTML = "Vous avez gagné la partie !";
     }
     else{
