@@ -59,6 +59,7 @@ socket.on('player-number', num => {
 // Initialize the view object to print the board
 socket.on('init-view',(board)=>{
     view[0] = new View(board, playerNum);
+    afficheBoard(playerNum);
 });
 // Receives the updated view
 socket.on('view-updated',(board)=>{

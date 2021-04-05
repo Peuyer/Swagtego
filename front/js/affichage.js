@@ -24,17 +24,20 @@ class View{
 
 
 	DisplayBoard(playerIndex){
-		
 		for(let x=0; x<10; x++){
 			for(let y=0; y<10; y++){
-				
+				// Camp allié
+				if(((playerIndex == 0 && x>3) || (playerIndex == 1 && x<6)) && (!enemyReady || !ready) && this.game.board[x][y] != 'b') {
+					this.grid[x][y].id = 'grey';
+				}
 				// Case vide
 				if(this.game.board[x][y] == null){
 					if ((x+y)%2 == 0){this.grid[x][y].className = 'grassDark';}
 					else{this.grid[x][y].className = 'grass';}
 					this.grid[x][y].innerHTML ='';
-					this.grid[x][y].id = '';
+					if (enemyReady && ready)this.grid[x][y].id = '';
 				}
+				
 				// Pions alliés
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player == playerIndex){
 					let playerClass = !playerIndex ? 'pawnBlue':'pawnRed'
@@ -43,13 +46,13 @@ class View{
 					this.grid[x][y].id ="pawn";
 				}
 				else if (!this.started){
-					this.grid[x][y].style.filter = 'greyscale(90%);'
+					this.grid[x][y].id = 'grey'
 				}
 				// Pions ennemis
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player != playerIndex){
 					let playerClass = playerIndex ? 'pawnBlue':'pawnRed'
 					this.grid[x][y].innerHTML = "<div class='"+playerClass+"'></div>";
-
+					this.grid[x][y].id='pawn';
 				}
 				// Pions ennemi après attaque
 				if (this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].isReturned == true && this.game.board[x][y].player != playerIndex){

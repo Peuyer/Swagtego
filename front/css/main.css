@@ -102,6 +102,9 @@ li:hover{
 #glow{
 	animation: blinkInside 1s linear 4;
 }
+#grey{
+	filter:grayscale(100%)
+}
 
 .perso{
 	width:42px;
@@ -250,3 +253,4 @@ span.green {
     50% { box-shadow:inset 0px 0px 20px rgba(255, 255, 255, 0.801); }
     100% { box-shadow:none; }
 }
+
