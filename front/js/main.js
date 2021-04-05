@@ -14,7 +14,6 @@ socket.on('con',conn=>{
      con = conn;
      console.log(con);
 });
-const table = document.getElementById("table")
 
 let currentPlayer = 'user'
 let playerNum = 0
@@ -59,6 +58,8 @@ socket.on('player-number', num => {
     playerNum = parseInt(num)
     if(playerNum === 1) currentPlayer = "enemy"
 
+    console.log(playerNum)
+
     // Get other player status
     socket.emit('check-players')
     }
@@ -67,7 +68,6 @@ socket.on('player-number', num => {
 // Initialize the view object to print the board
 socket.on('init-view',(board)=>{
     view[0] = new View(board, playerNum);
-    afficheBoard(playerNum);
 });
 // Receives the updated view
 socket.on('view-updated',(board)=>{
@@ -76,11 +76,13 @@ socket.on('view-updated',(board)=>{
 });
 
 socket.on('last-move', (coord)=>{
+    console.log('im here')
     let xsrc = coord.xsrc
     let ysrc = coord.ysrc
     let x = coord.x;
     let y = coord.y;
     view[0].glow(xsrc,ysrc,x,y);
+    
 });
 
 // Receives the id of the winner if there's one
@@ -96,20 +98,12 @@ socket.on('hasPlayed',(player)=>{
     if(player==playerNum){
         currentPlayer='ennemy';
         turnDisplay.innerHTML = "Au tour de l'ennemi !";
-        table.className ='';
     }
     else{
         currentPlayer = 'user';
     }
 
     playGameMulti(socket);
-});
-
-socket.on('move-audio',(long)=>{
-    moveAudio(long,true);
-});
-socket.on('attack-audio',()=>{
-    attackAudio();
 });
 
 ////////////////////////////////////////////////////////////////////    
@@ -134,14 +128,18 @@ socket.on('player-disconnection', num => {
     else him =0;
 
     if(ready == false && enemyReady == true){
+        console.log("1");
         playerReady(me);
     }
     else if(ready == true && enemyReady == false){
+        console.log("2");
         playerReady(him);
     }
     else if(ready == false && enemyReady == false){
+        console.log("3");
     }
     else if(ready == true && enemyReady == true){
+        console.log("4");
         playerReady(me);
         playerReady(him);
     }
@@ -151,7 +149,6 @@ socket.on('player-disconnection', num => {
 
     ready = false;
     enemyReady = false;
-    view[0].stop();
 });
 
 
@@ -160,6 +157,7 @@ socket.on('player-disconnection', num => {
 socket.on('enemy-ready', num => {
     enemyReady = true;
     playerReady(num);
+    console.log('jsp', ready);
     if (ready){
         playGameMulti(socket);
     }
@@ -189,17 +187,13 @@ socket.on('gameStarted',()=>{
     ready = true; 
     console.log('Début de la partie');
     view[0].attachListeners(playerNum);
-    view[0].start();
-    afficheBoard(playerNum);
     playGameMulti(socket);
     startTimer();
-    
 });
 
 
 // Ready button click
 startButton.addEventListener('click', () => {
-    clickAudio()
     socket.emit('is-completed',playerNum);
     socket.on('completed',(complete)=>{
         if(complete){
@@ -211,8 +205,6 @@ startButton.addEventListener('click', () => {
         if(ready && enemyReady){
             console.log('Début de la partie');
             view[0].attachListeners(playerNum);
-            view[0].start();
-            afficheBoard(playerNum);
             socket.emit('gameStart');
             startTimer();
         }
@@ -221,20 +213,19 @@ startButton.addEventListener('click', () => {
 
 // Random button click
 randomButton.addEventListener('click', () => {
-    clickAudio()
     console.log("(Re)Génération d'une composition complète aléatoire")
     socket.emit('generate-comp',playerNum);
+    //socket.emit('update-count',playerNum);
     afficheBoard(playerNum);     
-    pawns.style.display = 'none';    
+    pawnContainer.style.display = 'none';    
     return;
 });
 
 //clear button click
 clearButton.addEventListener('click', () => {
-    clickAudio()
     console.log("Suppression de tous vos pions")
     socket.emit('clear',playerNum);
-    pawns.style.display = 'block';    
+    pawnContainer.style.display = 'flex';    
     view[0].initPawns();
     return;
 });
@@ -248,8 +239,7 @@ function afficheBoard(playerIndex){
 }
 
 // Game Logic for MultiPlayer
-function playGameMulti(socket) { 
-    
+function playGameMulti(socket) {    
     buttons.style.display = 'none';
     pawns.style.display = 'none';
     if(!ready) {
@@ -257,25 +247,23 @@ function playGameMulti(socket) {
         ready = true;
         playerReady(playerNum);
     }
-    if (!enemyReady)turnDisplay.innerHTML="En attente du deuxième joueur...";
     if(enemyReady) {   
-        view[0].start();
+        console.log(currentPlayer)
+        
         if(currentPlayer === 'user') {
             turnDisplay.innerHTML = 'A ton tour !';
-            table.className = 'myTurn';
         }
         if(currentPlayer === 'enemy') {
             turnDisplay.innerHTML = "Au tour de l'ennemi !";
-            table.className = '';
         }
     }
 }
 
 // Places a pawn on the board
 function placePawn(id,value){
-    moveAudio(1);
     let x=((value-1)%10);
     let y=Math.ceil(value/10)-1;
+    console.log(x,y);
     let data= Array(4);
     data[0] = playerNum;
     data[1] = x;
@@ -288,13 +276,14 @@ function placePawn(id,value){
     socket.on('pawn-counted',(counter)=>{
         if(!i){
             count[id] = counter;
+            console.log(counter);
+            console.log(count[id],"/",max[id]);
             if (count[id] < max[id]){
                 view[0].addPawn(id);
             }
             i++;
         }
     });
-    
 }
 
 
@@ -313,9 +302,11 @@ function playerConnectedOrDisconnected(num) {
 
 function startTimer(){
     start = Date.now();
+    console.log(start);
 }
 function stopTimer(){
     end = Date.now()-start;
+    console.log(end);
 }
 function toHour(time){
     string='';
@@ -339,7 +330,6 @@ function toHour(time){
     string += s.toString() + ' secondes';
     return string;
 }
-
 function eloCalc (ratingPlayer,ratingOpponent,gameResult){
 
     let Kfactor = 20;

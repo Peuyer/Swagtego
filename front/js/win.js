@@ -9,7 +9,6 @@ confettiBtn.addEventListener('click', launchConfetti);
 
 
 function restartGame(){
-    clickAudio()
     location.reload(); 
 }
 
@@ -22,7 +21,7 @@ function displayWin(winnerId){
     initialScreen.style.display = 'none';
     if (playerNum == winnerId){
         confettiBtn.style.display = 'block';
-        launchConfetti(); 
+        launchConfetti();
         winnerMessage.innerHTML = "Vous avez gagné la partie !";
     }
     else{
@@ -33,7 +32,6 @@ function displayWin(winnerId){
 }
 
 function launchConfetti(){
-    confettiAudio();
     startConfetti();    
     setTimeout(()=>{
         stopConfetti();
