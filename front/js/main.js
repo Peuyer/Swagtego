@@ -142,6 +142,7 @@ socket.on('player-disconnection', num => {
 
     ready = false;
     enemyReady = false;
+    view[0].stop();
 });
 
 
@@ -180,8 +181,11 @@ socket.on('gameStarted',()=>{
     ready = true; 
     console.log('Début de la partie');
     view[0].attachListeners(playerNum);
+    view[0].start();
+    afficheBoard(playerNum);
     playGameMulti(socket);
     startTimer();
+    
 });
 
 
@@ -198,6 +202,8 @@ startButton.addEventListener('click', () => {
         if(ready && enemyReady){
             console.log('Début de la partie');
             view[0].attachListeners(playerNum);
+            view[0].start();
+            afficheBoard(playerNum);
             socket.emit('gameStart');
             startTimer();
         }
@@ -208,7 +214,6 @@ startButton.addEventListener('click', () => {
 randomButton.addEventListener('click', () => {
     console.log("(Re)Génération d'une composition complète aléatoire")
     socket.emit('generate-comp',playerNum);
-    //socket.emit('update-count',playerNum);
     afficheBoard(playerNum);     
     pawnContainer.style.display = 'none';    
     return;
@@ -242,7 +247,7 @@ function playGameMulti(socket) {
     }
     if(enemyReady) {   
         console.log(currentPlayer)
-        
+        view[0].start();
         if(currentPlayer === 'user') {
             turnDisplay.innerHTML = 'A ton tour !';
             table.className = 'myTurn';

@@ -19,6 +19,7 @@ class View{
 		this.initBoard(game, playerIndex);
 		this.game = game;
 		this.grid = this.boardLoad();
+		this.started = false;
 	}
 
 
@@ -26,35 +27,37 @@ class View{
 		
 		for(let x=0; x<10; x++){
 			for(let y=0; y<10; y++){
+				
+				// Case vide
 				if(this.game.board[x][y] == null){
 					if ((x+y)%2 == 0){this.grid[x][y].className = 'grassDark';}
 					else{this.grid[x][y].className = 'grass';}
 					this.grid[x][y].innerHTML ='';
 					this.grid[x][y].id = '';
 				}
+				// Pions alliés
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player == playerIndex){
-					//this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
 					let playerClass = !playerIndex ? 'pawnBlue':'pawnRed'
 					let i = Math.round((this.game.board[x][y].pawn-playerIndex)/10);
 					this.grid[x][y].innerHTML = "<div class='"+playerClass+"'><img>"+images[i]+"</img><h3>"+i+"</h3></div>";
 					this.grid[x][y].id ="pawn";
 				}
+				else if (!this.started){
+					this.grid[x][y].style.filter = 'greyscale(90%);'
+				}
+				// Pions ennemis
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player != playerIndex){
 					let playerClass = playerIndex ? 'pawnBlue':'pawnRed'
 					this.grid[x][y].innerHTML = "<div class='"+playerClass+"'></div>";
 
 				}
+				// Pions ennemi après attaque
 				if (this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].isReturned == true && this.game.board[x][y].player != playerIndex){
 					let grid = this.grid;
 					let i = Math.round((this.game.board[x][y].pawn-playerIndex)/10);
 					this.grid[x][y].firstElementChild.innerHTML = "<img>"+images[i]+"<h3>"+i+"</h3></img>";
 					setTimeout(function(){returnCard(x,y,grid)},5000);
 				}
-				if (this.game.board[x][y] != 'b'){
-					if ((x+y)%2 == 0){this.grid[x][y].className = 'grassDark';}
-					else{this.grid[x][y].className = 'grass';}
-				}
-
 			}
 		}
 	}
@@ -119,6 +122,12 @@ class View{
 	}
 	getGame(){
 		return this.game;
+	}
+	start(){
+		this.started = true;
+	}
+	stop(){
+		this.started = false;
 	}
 
 	
