@@ -10,34 +10,22 @@ class View{
 	}
 	
 	DisplayBoard(playerIndex){
-		let images = new Array();
-		images[0] = '<img class="perso" src="../images/stratego-flag.svg">';images[1] = '<img class="perso" src="../images/stratego-spy.svg">';
-		images[2] = '<img class="perso" src="../images/stratego-scout.svg">';images[3] = '<img class="perso" src="../images/stratego-miner.svg">';
-		images[4] = '<img class="perso" src="../images/stratego-sergeant.svg">';images[5] = '<img class="perso" src="../images/stratego-lieutenant.svg">';
-		images[6] = '<img class="perso" src="../images/stratego-captain.svg">';images[7] = '<img class="perso" src="../images/stratego-major.svg">';
-		images[8] = '<img class="perso" src="../images/stratego-colonel.svg">';images[9] = '<img class="perso" src="../images/stratego-general.svg">';
-		images[10] = '<img class="perso" src="../images/stratego-marshal.svg">';images[11] = '<img class="perso" src="../images/stratego-bomb.svg">';
-
-		this.grid[0][0].style.borderTopLeftRadius = '20%';
-		this.grid[9][0].style.borderBottomLeftRadius = '20%';
-		this.grid[0][9].style.borderTopRightRadius = '20%';
-		this.grid[9][9].style.borderBottomRightRadius = '20%';
-
 		for(let x=0; x<10; x++){
 			for(let y=0; y<10; y++){
 				if(this.game.board[x][y] == null){
-					if ((x+y)%2 == 0){this.grid[x][y].className = 'grassdark';}
-					else{this.grid[x][y].className = 'grass';}
+					this.grid[x][y].className = 'grass';
 					this.grid[x][y].innerHTML ='';
+					this.grid[x][y].id = '';
 				}
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player == playerIndex){
-					//this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
-					if ((x+y)%2 == 0){this.grid[x][y].className = 'persodark';}
-					else{this.grid[x][y].className = 'persolight';}
-					//this.grid[x][y].innerHTML = ((this.game.board[x][y].pawn-playerIndex)/10).toString();
-					let image = ((this.game.board[x][y].pawn-playerIndex)/10);
-					this.grid[x][y].innerHTML = images[image];
+					this.grid[x][y].className = playerIndex ? "pawnRed":"pawnBlue";
+					this.grid[x][y].innerHTML = ((this.game.board[x][y].pawn-playerIndex)/10).toString();
 					this.grid[x][y].id ="pawn";
+					//if(this.grid[x][y].getAttribute('listener') !== 'true'){
+					//	console.log('test',this.grid[x][y]);
+					//	this.attachListeners(playerNum,x,y);
+					//	this.grid[x][y].setAttribute('listener', 'true');
+					//}
 				}
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player != playerIndex){
 					this.grid[x][y].className = playerIndex ? "pawnBlue":"pawnRed"
@@ -76,34 +64,19 @@ class View{
 	}
 
 	initPawns(){
-		let images = new Array();
-		images[0] = '<img class="perso" src="../images/stratego-flag.svg">';images[1] = '<img class="perso" src="../images/stratego-spy.svg">';
-		images[2] = '<img class="perso" src="../images/stratego-scout.svg">';images[3] = '<img class="perso" src="../images/stratego-miner.svg">';
-		images[4] = '<img class="perso" src="../images/stratego-sergeant.svg">';images[5] = '<img class="perso" src="../images/stratego-lieutenant.svg">';
-		images[6] = '<img class="perso" src="../images/stratego-captain.svg">';images[7] = '<img class="perso" src="../images/stratego-major.svg">';
-		images[8] = '<img class="perso" src="../images/stratego-colonel.svg">';images[9] = '<img class="perso" src="../images/stratego-general.svg">';
-		images[10] = '<img class="perso" src="../images/stratego-marshal.svg">';images[11] = '<img class="perso" src="../images/stratego-bomb.svg">';
-
 		let html='';
 		for (let i = 0; i<12; i++){
 			count[i]=0;
-			html+= '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+images[i]+'<p>'+count[i]+'/'+max[i]+'</p></li>';
+			html+= '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+i.toString()+'<p>'+count[i]+'/'+max[i]+'</p></li>';
 		}
 		document.getElementById('pawn-container').innerHTML = html;
 	}
 	addPawn(i){
-		let images = new Array();
-		images[0] = '<img class="perso" src="../images/stratego-flag.svg">';images[1] = '<img class="perso" src="../images/stratego-spy.svg">';
-		images[2] = '<img class="perso" src="../images/stratego-scout.svg">';images[3] = '<img class="perso" src="../images/stratego-miner.svg">';
-		images[4] = '<img class="perso" src="../images/stratego-sergeant.svg">';images[5] = '<img class="perso" src="../images/stratego-lieutenant.svg">';
-		images[6] = '<img class="perso" src="../images/stratego-captain.svg">';images[7] = '<img class="perso" src="../images/stratego-major.svg">';
-		images[8] = '<img class="perso" src="../images/stratego-colonel.svg">';images[9] = '<img class="perso" src="../images/stratego-general.svg">';
-		images[10] = '<img class="perso" src="../images/stratego-marshal.svg">';images[11] = '<img class="perso" src="../images/stratego-bomb.svg">';
-
 		let html='';
-		html += '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+images[i]+'<p>'+count[i]+'/'+max[i]+'</p></li>';
+		html += '<li class="pawn-item" id="pawn'+i.toString()+'" draggable="true" ondragstart="onDragStart(event);" data-value='+i.toString()+'>'+i.toString()+'<p>'+count[i]+'/'+max[i]+'</p></li>';
 		document.getElementById('pawn-container').innerHTML += html;
-	}	
+	}
+	
 	boardLoad(){
 		let tab = document.getElementById("table");
 		tab = tab.firstElementChild.getElementsByTagName("tr");
