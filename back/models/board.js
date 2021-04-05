@@ -127,7 +127,7 @@ class Board extends Pawn{
         let nbPawn=0,randx=0,randy=0;
         for(let i = 0; i<12;i++){
             nbPawn = max[i] - count[i];
-            count[i]?console.log("Already ",count[i]," pawn(s) with the value ",i):console.log();
+            count[i]?console.log("Déjà ",count[i]," pion(s) avec la valeur ",i):console.log();
             for (let j = 0; j<nbPawn ;j++){
                 do{
                 randx = this.rangeRand(0,9);
@@ -138,7 +138,7 @@ class Board extends Pawn{
                 console.log(this.board[randy][randx].pawn," : ",j+1," / ",max[i]);
             }
         }
-        console.log('Generation completed with success');
+        console.log('Génération terminé');
         return 1;
     }
     //clear one side of the board
@@ -148,7 +148,7 @@ class Board extends Pawn{
                 this.board[y][x] = null;
             }
         }
-        console.log('Side cleared with success');
+        console.log("Supression terminé");
     }
     //regénère une composition après en avoir déja créé une
     regenerate(playerId){
@@ -166,7 +166,7 @@ class Board extends Pawn{
                 this.board[randy][randx] = new Pawn(randx,randy,i*10+playerId,playerId);
             }
         }
-        console.log('Regeneration completed with success');
+        console.log('Regeneration terminé');
         return 1;
     }
 
@@ -419,8 +419,7 @@ class Board extends Pawn{
             let ex = Math.abs(pawn.x - x)
             let ey = Math.abs(pawn.y - y)
 
-            console.log(ex);
-            console.log(ey);
+
             if (ex == 1 || ey == 1){
                 if (this.board[y][x] != null){
                     let attack = this.attack(pawn,this.board[y][x]);
@@ -595,8 +594,6 @@ class Board extends Pawn{
             this.board[pawn1.y][pawn1.x] = null;
             return 2;
         }
-
-        console.log('oui');
         this.board[pawn2.y][pawn2.x] = pawn1;
  
         return true;
@@ -735,7 +732,6 @@ class Board extends Pawn{
             return list;
         }
         else{
-            console.log("dir", dir);
             list = this.neswEcl(pawn,dir,list);
             return list;
         }
@@ -793,7 +789,6 @@ class Board extends Pawn{
     }
 
     neswEcl(pawn, dir, list){
-        console.log('ecl', dir);
         let x = pawn.x, y = pawn.y, dx =0, dy=0;
         
         if (dir == 'n'){

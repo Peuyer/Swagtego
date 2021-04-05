@@ -127,11 +127,11 @@ io.on('connection', (socket) => {
   //Generate a random composition
   socket.on('generate-comp',(playerNum)=>{
     if(!board.isCompleted(playerNum)){
-      console.log('creation...');
+      console.log('Génération...');
       board.randomComposition(playerNum);
     }
     else{
-      console.log('re generation...')
+      console.log('Re génération...')
       board.regenerate(playerNum);
     }
     updateView();
@@ -157,11 +157,9 @@ io.on('connection', (socket) => {
   });
 
   function updateView(){
-
     socket.emit('view-updated',board);
     socket.broadcast.emit('view-updated',board);
     socket.emit('pawn-count',board.counter(playerIndex));
-    board.affichage();
   }
 
   //display username
@@ -180,7 +178,6 @@ io.on('connection', (socket) => {
   //pawn count 
   socket.on('pawn-count',(data)=>{
     let info = board.counter(data.id)[data.p];
-    console.log(data.p," : ",info)
     socket.emit('pawn-counted',info);
   })
 

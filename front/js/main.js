@@ -215,7 +215,7 @@ randomButton.addEventListener('click', () => {
     console.log("(Re)Génération d'une composition complète aléatoire")
     socket.emit('generate-comp',playerNum);
     afficheBoard(playerNum);     
-    pawnContainer.style.display = 'none';    
+    pawns.style.display = 'none';    
     return;
 });
 
@@ -223,7 +223,7 @@ randomButton.addEventListener('click', () => {
 clearButton.addEventListener('click', () => {
     console.log("Suppression de tous vos pions")
     socket.emit('clear',playerNum);
-    pawnContainer.style.display = 'flex';    
+    pawns.style.display = 'block';    
     view[0].initPawns();
     return;
 });
@@ -237,7 +237,8 @@ function afficheBoard(playerIndex){
 }
 
 // Game Logic for MultiPlayer
-function playGameMulti(socket) {    
+function playGameMulti(socket) { 
+    turnDisplay.innerHTML="En attente du deuxième joueur...";
     buttons.style.display = 'none';
     pawns.style.display = 'none';
     if(!ready) {
