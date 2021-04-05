@@ -428,10 +428,14 @@ class Board extends Pawn{
                         console.log("Mouvement Impossible (attaque impossible)");
                         return false;
                     }
-                    else if (attack == 3 || attack == 2){
+                    else if (attack == 3){
                         this.board[pawn.y][pawn.x] = null;
-                        console.log("Echec de l'attaque ou égalité");
                         this.board[y][x].isReturned = true;
+                        return 1;
+                    }
+                    else if(attack == 2){
+                        this.board[pawn.y][pawn.x] = null;
+                        this.board[y][x] = null;
                         return 1;
                     }
                 }
@@ -504,9 +508,14 @@ class Board extends Pawn{
                     console.log("Mouvement Impossible (attaque impossible)");
                     return false;
                 }
-                else if (attack == 3 || attack == 2){
+                else if (attack == 3){
                     this.board[pawn.y][pawn.x] = null;
                     this.board[y][x].isReturned = true;
+                    return 1;
+                }
+                else if(attack == 2){
+                    this.board[pawn.y][pawn.x] = null;
+                    this.board[y][x] = null;
                     return 1;
                 }
             }
