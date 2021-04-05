@@ -9,6 +9,7 @@ confettiBtn.addEventListener('click', launchConfetti);
 
 
 function restartGame(){
+    clickAudio()
     location.reload(); 
 }
 

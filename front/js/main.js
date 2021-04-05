@@ -51,8 +51,6 @@ socket.on('player-number', num => {
     playerNum = parseInt(num)
     if(playerNum === 1) currentPlayer = "enemy"
 
-    console.log(playerNum)
-
     // Get other player status
     socket.emit('check-players')
     }
@@ -69,7 +67,6 @@ socket.on('view-updated',(board)=>{
 });
 
 socket.on('last-move', (coord)=>{
-    console.log('im here')
     let xsrc = coord.xsrc
     let ysrc = coord.ysrc
     let x = coord.x;
@@ -128,18 +125,14 @@ socket.on('player-disconnection', num => {
     else him =0;
 
     if(ready == false && enemyReady == true){
-        console.log("1");
         playerReady(me);
     }
     else if(ready == true && enemyReady == false){
-        console.log("2");
         playerReady(him);
     }
     else if(ready == false && enemyReady == false){
-        console.log("3");
     }
     else if(ready == true && enemyReady == true){
-        console.log("4");
         playerReady(me);
         playerReady(him);
     }
@@ -158,7 +151,6 @@ socket.on('player-disconnection', num => {
 socket.on('enemy-ready', num => {
     enemyReady = true;
     playerReady(num);
-    console.log('jsp', ready);
     if (ready){
         playGameMulti(socket);
     }
@@ -258,7 +250,6 @@ function playGameMulti(socket) {
     }
     if (!enemyReady)turnDisplay.innerHTML="En attente du deuxième joueur...";
     if(enemyReady) {   
-        console.log(currentPlayer)
         view[0].start();
         if(currentPlayer === 'user') {
             turnDisplay.innerHTML = 'A ton tour !';
@@ -276,7 +267,6 @@ function placePawn(id,value){
     moveAudio(1);
     let x=((value-1)%10);
     let y=Math.ceil(value/10)-1;
-    console.log(x,y);
     let data= Array(4);
     data[0] = playerNum;
     data[1] = x;
@@ -289,8 +279,6 @@ function placePawn(id,value){
     socket.on('pawn-counted',(counter)=>{
         if(!i){
             count[id] = counter;
-            console.log(counter);
-            console.log(count[id],"/",max[id]);
             if (count[id] < max[id]){
                 view[0].addPawn(id);
             }
@@ -316,11 +304,9 @@ function playerConnectedOrDisconnected(num) {
 
 function startTimer(){
     start = Date.now();
-    console.log(start);
 }
 function stopTimer(){
     end = Date.now()-start;
-    console.log(end);
 }
 function toHour(time){
     string='';
