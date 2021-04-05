@@ -25,10 +25,10 @@ body{
 
 #hud{
 	margin : 20px;
-	width:50vh;
+	width:75vh;
 	border-radius: 25px;
 	background-color:rgb(216, 224, 240);
-	padding:30px;
+	padding:10px 30px 10px 30px;
 	flex-grow:1;
 	align-items:center;
 	overflow:auto;
@@ -37,8 +37,10 @@ body{
 	flex-grow:20;
 }
 
-#whose-go{
-	padding-top:10px;
+.Random-Composition{
+	display:flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
 }
 #random, #clear{
 	margin-bottom:10px;
@@ -70,8 +72,12 @@ body{
 	margin-top:-47px;
 }
 #nom{	
+	width:60px;
 	font-size:10px;
-	color:rgb(56, 56, 56);
+	text-overflow:ellipsis;
+	overflow:hidden;
+	color:rgb(80, 80, 80);
+	margin-top:-2px;
 }
 li:hover #nom{
 	color:black;
