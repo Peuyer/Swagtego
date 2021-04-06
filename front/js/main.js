@@ -6,6 +6,7 @@ const clearButton = document.querySelector('#clear')
 const pawnContainer = document.querySelector('#pawn-container')
 const buttons = document.querySelector(".Random-Composition")
 const pawns = document.querySelector("#pawnPlaceholder")
+const classementTable = document.getElementById("classement");
 
 
 
@@ -122,6 +123,7 @@ socket.on('attack-audio',()=>{
 socket.on('player-connection', num => {
     console.log(`Player ${num} has connected.`);
     playerConnectedOrDisconnected(num);
+    
 });
 
 // Another player has disconnected 
@@ -357,5 +359,32 @@ function toHour(time){
     string += s.toString() + ' secondes';
     return string;
 }
+
+
+function genererClassement(){
+
+    socket.emit('getClassement');
+    socket.on('classement',(classement)=>{
+    console.log("classement =",classement);
+    let html='<tbody>';
+    for(let i = 0 ; i< 7; i++){
+
+        html += "<tr>";
+        html += '<td><h6>'+classement[i].username+'</h2></td>';
+        html += '<td>'+classement[i].rating+'</td>';
+        html += '<td>'+classement[i].wins+'</td>';
+        html += '<td>'+classement[i].losses+'</td>';
+        html += '<td>'+classement[i].winRate+'</td>';
+        html += "</tr>";
+    }
+    html+='</tbody>';
+    classementTable.innerHTML += html;
+
+    });
+
+   
+}
+
+genererClassement();
 
 

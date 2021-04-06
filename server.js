@@ -176,17 +176,17 @@ io.on('connection', (socket) => {
       database : "swagtego"
     });
 
-    con.connect(err=> {
-      if (err) throw err;
   
       let sql= 'INSERT IGNORE INTO `comptes`(`username`) VALUE ("'+username+'")';
   
       con.query(sql, (err,newAcc)=>{
           if (err) throw err;
+          socket.emit('retourBddUsername',newAcc);
       });
-      con.end();
+
+      
    }); 
-  });
+
 
   
 
@@ -218,7 +218,6 @@ io.on('connection', (socket) => {
     let ratingPlayer = con.query(sql, (err,ratingP)=>{
       if (err) throw err;
       console.log(ratingP);
-      console.log(ratingP[0].rating);
 
 
       elo[playerIndex] = ratingP[0].rating;
@@ -226,6 +225,14 @@ io.on('connection', (socket) => {
       socket.emit("eloPlayer",elo);
       socket.broadcast.emit("eloPlayer",elo);
   });
+});
+
+
+socket.on('getClassement',()=> {
+
+let classement = classementG();
+
+
 });
 
 
@@ -382,6 +389,28 @@ io.on('connection', (socket) => {
               
     });
   }
+
+  function classementG(){
+
+
+    const con = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password : "",
+        database : "swagtego"
+      });
+    
+          let sql= 'SELECT `username`,`rating`,`wins`,`losses`,`winRate` FROM `swagtego`.`comptes` ORDER BY `rating` DESC LIMIT 15';
+    
+            con.query(sql, (err,result)=>{
+            if (err) throw err;
+            console.log(result);
+
+            socket.emit('classement',result);
+
+          });
+
+}
   
 
 });

@@ -112,7 +112,25 @@ li:hover{
 	text-align:center;
 	pointer-events:none;
 }
+#Classement{
+	margin:50px;
+}
+#classement{
+	border: 1px solid black;
+	border-radius:15px;
+	overflow:hidden;
+}
+#classement thead{
+	border:1px solid black;
+}
+#classement td{
+	width:20vh;
+	padding:10px;
+}
+#classement tr:nth-child(even){
+	background:rgb(231, 231, 231);
 
+}
 
 
 /*GAME*/
@@ -124,7 +142,7 @@ table#table{
 .myTurn{
 	animation: blink 1s linear infinite;
 }
-td {	
+#table td {	
 	/*display: table-cell;*/
 	width: 60px;
 	height:60px;

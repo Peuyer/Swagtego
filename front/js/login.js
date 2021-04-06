@@ -15,13 +15,12 @@ function joinGame(){
         console.log(username);
         socket.emit('username',username,playerNum);
         socket.emit('bddUsername',username);
-        socket.emit('getEloPlayer',username,playerNum);
-       
+        socket.on('retourBddUsername',(newAcc)=>{
 
+            socket.emit('getEloPlayer',username,playerNum);
 
-        
+        });
 
-       
     }
     else {
         window.alert('Veuillez entrer un pseudo');
