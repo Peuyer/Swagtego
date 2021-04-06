@@ -2,7 +2,8 @@
 <html>
   <head>
     <title>Swagtego</title>
-    
+    <link rel="icon" href="../images/icon.png">
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     
     <link rel="stylesheet" type="text/css" href="../css/main.css" />
@@ -23,9 +24,9 @@
 
 
   <body> 
-    <section class="vh-100"> 
+    <section>
     <!-- Login join screen -->
-    <div id="initialScreen" class="h-100">
+    <div id="initialScreen">
       <div class="d-flex flex-column align-items-center justify-content-center h-100">
           <h1>SWAGTEGO</h1>
           <h5>Entrez votre pseudo pour rejoindre le jeu</h3>
@@ -33,6 +34,22 @@
             <input type="text" placeholder="Pseudo" id="usernameInput" class="form-control"/>
           </div>
           <button type="submit" class="btn btn-primary" id="joinGame">Rejoindre</button>
+          <div id="Classement">
+            <h2>Classement : </h2>
+            <table id="classement">
+              <thead>
+              <th>Position</th>
+              <th>Pseudo</th>
+              <th>Rating</th>
+              <th>Victoires</th>
+              <th>Défaites</th>
+              
+            </thead>
+              
+            </table>
+    
+    
+        </div>
       </div>
     </div>
 
@@ -42,9 +59,13 @@
         <div class="d-flex flex-column align-items-center justify-content-center h-100">
           <h3 id="winner"></h3>
           <h5 id="winnerInfo"></h5>
+          <h6 id='eloInfo'></h6> 
           <button type="submit" class="btn btn-dark" id="confettiLauncher">CONFETTI</button>
           <button type="submit" class="btn btn-primary" id="restartGame">Rejouer</button>
+          
       </div>
+
+    
     
     <canvas id="my-canvas"></canvas>
     </div>
@@ -93,7 +114,7 @@
       <div id="game">
         <ul id="pseudo"></ul>
 
-        <table id="table" style="margin-top : 50px;"></table>
+        <table id="table"></table>
         
       </div>
 	  </div>
@@ -106,6 +127,7 @@
 <script src="../js/confetti.js"></script>
 <script src="../js/win.js"></script>
 <script src="../js/affichage.js"></script>
+<script src="../js/audio.js"></script>
 <script src="../js/main.js"></script>
-<script src="../js/login.js"></script>
+<script type = 'text/javascript' src="../js/login.js"></script>
 <script src="../js/drag.js"></script>

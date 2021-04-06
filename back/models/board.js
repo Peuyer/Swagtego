@@ -20,6 +20,8 @@ class Pawn{
         this.player = player;
         this.isReturned = false;
     }
+
+
 }
 
 module.exports = Pawn;
@@ -31,6 +33,7 @@ class Board extends Pawn{
         this.currentPlayer = Math.random < 0.5;
         this.board = this.createBoard();   
     }
+
     rangeRand(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
@@ -124,7 +127,7 @@ class Board extends Pawn{
         let nbPawn=0,randx=0,randy=0;
         for(let i = 0; i<12;i++){
             nbPawn = max[i] - count[i];
-            count[i]?console.log("Already ",count[i]," pawn(s) with the value ",i):console.log();
+            count[i]?console.log("Déjà ",count[i]," pion(s) avec la valeur ",i):console.log();
             for (let j = 0; j<nbPawn ;j++){
                 do{
                 randx = this.rangeRand(0,9);
@@ -135,7 +138,7 @@ class Board extends Pawn{
                 console.log(this.board[randy][randx].pawn," : ",j+1," / ",max[i]);
             }
         }
-        console.log('Generation completed with success');
+        console.log('Génération terminé');
         return 1;
     }
     //clear one side of the board
@@ -145,7 +148,7 @@ class Board extends Pawn{
                 this.board[y][x] = null;
             }
         }
-        console.log('Side cleared with success');
+        console.log("Supression terminé");
     }
     //regénère une composition après en avoir déja créé une
     regenerate(playerId){
@@ -163,7 +166,7 @@ class Board extends Pawn{
                 this.board[randy][randx] = new Pawn(randx,randy,i*10+playerId,playerId);
             }
         }
-        console.log('Regeneration completed with success');
+        console.log('Regeneration terminé');
         return 1;
     }
 
@@ -384,6 +387,13 @@ class Board extends Pawn{
     //retourne '0' si mouvement impossible, '1' si mouvement effectué
     move(x_avant, y_avant,x,y)
     {
+        for(let x=0; x<10; x++){
+			for(let y=0; y<10; y++){
+                if(this.board[x][y] != null && this.board[x][y]!= 'b'){
+					this.board[x][y].isReturned = false;
+				}
+            }
+        }
         console.log("Move : ",x_avant,"/",y_avant, " vers ",x,"/",y,".");
         if(x>9 || y>9  || x<0 || y<0){
             console.log("Mouvement hors grille de jeu");
@@ -409,8 +419,7 @@ class Board extends Pawn{
             let ex = Math.abs(pawn.x - x)
             let ey = Math.abs(pawn.y - y)
 
-            console.log(ex);
-            console.log(ey);
+
             if (ex == 1 || ey == 1){
                 if (this.board[y][x] != null){
                     let attack = this.attack(pawn,this.board[y][x]);
@@ -418,9 +427,14 @@ class Board extends Pawn{
                         console.log("Mouvement Impossible (attaque impossible)");
                         return false;
                     }
-                    else if (attack == 3 || attack == 2){
+                    else if (attack == 3){
                         this.board[pawn.y][pawn.x] = null;
-                        console.log("Echec de l'attaque ou égalité");
+                        this.board[y][x].isReturned = true;
+                        return 1;
+                    }
+                    else if(attack == 2){
+                        this.board[pawn.y][pawn.x] = null;
+                        this.board[y][x] = null;
                         return 1;
                     }
                 }
@@ -493,8 +507,14 @@ class Board extends Pawn{
                     console.log("Mouvement Impossible (attaque impossible)");
                     return false;
                 }
-                else if (attack == 3 || attack == 2){
+                else if (attack == 3){
                     this.board[pawn.y][pawn.x] = null;
+                    this.board[y][x].isReturned = true;
+                    return 1;
+                }
+                else if(attack == 2){
+                    this.board[pawn.y][pawn.x] = null;
+                    this.board[y][x] = null;
                     return 1;
                 }
             }
@@ -543,19 +563,20 @@ class Board extends Pawn{
             return false;
         }
         if ((pawn1.pawn == 10 || pawn1.pawn == 11) && (pawn2.pawn == 100 || pawn2.pawn == 101)){
-            console.log("Espion tue maréchal");        
+            console.log("Espion tue maréchal");
+                
         }
         else if ((pawn1.pawn == 30 || pawn1.pawn == 31) && (pawn2.pawn == 110 || pawn2.pawn == 111)){
             console.log("Bombe déminé");
         }
         else if(pawn2.pawn == 0 || pawn2.pawn == 1){
             console.log("Drapeau éliminé");
+   
         }
         else if (pawn2.pawn == 110 || pawn2.pawn == 111){
             console.log("Explosion d'une bombe");
             this.board[pawn2.y][pawn2.x] = pawn2;
-            pawn1.isReturned = true;
-            pawn2.isReturned = true;
+
             return 3;
         }
         else if ((pawn1.pawn-pawn2.pawn) > 2){
@@ -564,22 +585,17 @@ class Board extends Pawn{
         else if ((pawn1.pawn-pawn2.pawn) < -2){
             console.log("Attaque ratée");
             this.board[pawn2.y][pawn2.x] = pawn2;
-            pawn1.isReturned = true;
-            pawn2.isReturned = true;
+
             return 3;
         }
         else{
             console.log("Egalité")
             this.board[pawn2.y][pawn2.x] = null;
             this.board[pawn1.y][pawn1.x] = null;
-            pawn1.isReturned = true;
-            pawn2.isReturned = true;
             return 2;
         }
-
         this.board[pawn2.y][pawn2.x] = pawn1;
-        pawn1.isReturned = true;
-        pawn2.isReturned = true;
+ 
         return true;
     }
 
@@ -716,7 +732,6 @@ class Board extends Pawn{
             return list;
         }
         else{
-            console.log("dir", dir);
             list = this.neswEcl(pawn,dir,list);
             return list;
         }
@@ -774,7 +789,6 @@ class Board extends Pawn{
     }
 
     neswEcl(pawn, dir, list){
-        console.log('ecl', dir);
         let x = pawn.x, y = pawn.y, dx =0, dy=0;
         
         if (dir == 'n'){

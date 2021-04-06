@@ -23,6 +23,7 @@ const mysql = require('mysql');
 
 
 
+
 /**** Import project libs ****/
 
 const Board = require('./back/models/board');
@@ -30,9 +31,19 @@ const Pawn = require('./back/models/pawn');
 const { emit } = require('process');
 let board = new Board();
 const usernames = [];
+
 usernames[0] = "Joueur 2";    
 usernames[1] = "Joueur 2";
 
+let elo = [];
+
+elo[0] = 1500;
+elo[1] = 1500;
+
+let newElo = [];
+
+newElo[0] = elo[0];
+newElo[1] = elo[1];
 
 /****** Code ******/
 
@@ -127,11 +138,11 @@ io.on('connection', (socket) => {
   //Generate a random composition
   socket.on('generate-comp',(playerNum)=>{
     if(!board.isCompleted(playerNum)){
-      console.log('creation...');
+      console.log('Génération...');
       board.randomComposition(playerNum);
     }
     else{
-      console.log('re generation...')
+      console.log('Re génération...')
       board.regenerate(playerNum);
     }
     updateView();
@@ -156,8 +167,78 @@ io.on('connection', (socket) => {
     updateView();
   });
 
-  function updateView(){
+  socket.on('bddUsername',(username)=> {
 
+    const con = mysql.createConnection({
+      host: "localhost",
+      user: "root",
+      password : "",
+      database : "swagtego"
+    });
+
+  
+      let sql= 'INSERT IGNORE INTO `comptes`(`username`) VALUE ("'+username+'")';
+  
+      con.query(sql, (err,newAcc)=>{
+          if (err) throw err;
+          socket.emit('retourBddUsername',newAcc);
+      });
+
+      
+   }); 
+
+
+  
+
+  socket.on('Elo',(winnerId)=>{
+    let usernamePlayer = usernames[winnerId];
+    let loserId;
+    winnerId == 0 ? loserId = 1 :  loserId = 0;
+    let usernameOpponent = usernames[loserId];
+    let newElo = [];
+
+    updateRating(usernamePlayer,usernameOpponent,'win',winnerId,loserId);
+
+      
+    
+
+  });
+
+  socket.on('getEloPlayer',(username,playerIndex)=>{
+    const con = mysql.createConnection({
+      host: "localhost",
+      user: "root",
+      password : "",
+      database : "swagtego"
+    });
+    
+
+    let sql= 'SELECT `rating` FROM `comptes` WHERE `username` = "'+username+'"';
+
+    let ratingPlayer = con.query(sql, (err,ratingP)=>{
+      if (err) throw err;
+
+      elo[playerIndex] = ratingP[0].rating;
+      
+      socket.emit("eloPlayer",elo);
+      socket.broadcast.emit("eloPlayer",elo);
+  });
+});
+
+
+socket.on('getClassement',()=> {
+
+let classement = classementG();
+
+
+});
+
+
+
+
+  
+
+  function updateView(){
     socket.emit('view-updated',board);
     socket.broadcast.emit('view-updated',board);
     socket.emit('pawn-count',board.counter(playerIndex));
@@ -170,7 +251,13 @@ io.on('connection', (socket) => {
     console.log("Joueur",playerIndex," : ",usernames[playerIndex]);
     socket.emit("username-display",usernames);
     socket.broadcast.emit("username-display",usernames);
-
+  });
+  // Audio
+  socket.on('send-move-audio',(long)=>{
+    socket.broadcast.emit('move-audio',long);
+  });
+  socket.on('send-attack-audio',()=>{
+    socket.broadcast.emit('attack-audio');
   });
 
   //update player count
@@ -180,7 +267,6 @@ io.on('connection', (socket) => {
   //pawn count 
   socket.on('pawn-count',(data)=>{
     let info = board.counter(data.id)[data.p];
-    console.log(data.p," : ",info)
     socket.emit('pawn-counted',info);
   })
 
@@ -206,6 +292,7 @@ io.on('connection', (socket) => {
   socket.on('move', (coord)=>{
     let move = board.move(coord.xsrc, coord.ysrc, coord.x, coord.y);
     if(move){
+      socket.broadcast.emit('last-move',coord);
       socket.emit('has-winner',board.hasWinner());
       socket.broadcast.emit('has-winner',board.hasWinner());
       socket.emit('hasPlayed',playerIndex);
@@ -216,8 +303,112 @@ io.on('connection', (socket) => {
 
   socket.on('gameStart',()=>{
     socket.broadcast.emit('gameStarted');
+
   });
 
+
+  function eloCalc (ratingPlayer,ratingOpponent,gameResult,nbGames){
+    
+    let Kfactor = 20;
+    
+          
+            if(nbGames < 10) Kfactor = 100;
+            else if(nbGames < 20) Kfactor = 50;
+  
+            let Elodiff = ratingPlayer - ratingOpponent;
+            if (Elodiff > 400) Elodiff = 400;
+            let winProb = 1/(1+Math.pow(10,-Elodiff/400));
+            return (Math.round(ratingPlayer + Kfactor*(gameResult - winProb)));
+    
+  
+  }
+  
+  
+  function updateRating(usernamePlayer,usernameOpponent,gameResult,winnerId,loserId){
+      
+    let resultNumberPlayer, resultNumberOpponent;
+  
+    if (gameResult == 'win'){
+        resultNumberPlayer = 1;
+        resultNumberOpponent = 0;
+  
+    }
+    else{
+        resultNumberPlayer = 0;
+        resultNumberOpponent = 1;
+    }
+  
+    const con = mysql.createConnection({
+      host: "localhost",
+      user: "root",
+      password : "",
+      database : "swagtego"
+    });
+        console.log(usernamePlayer +" vs " +usernameOpponent);
+  
+        let sql= 'SELECT `rating`,`wins` + `losses`as games FROM `comptes` WHERE `username` = "'+usernamePlayer+'"';
+  
+        let ratingPlayer = con.query(sql, (err,ratingP)=>{
+          if (err) throw err;
+  
+          sql= 'SELECT `rating`,`wins` + `losses` as games FROM `comptes` WHERE `username` = "'+usernameOpponent+'"';
+          let ratingOpponent = con.query(sql, (err,ratingO)=>{
+              if (err) throw err;
+
+  
+              
+    
+            let NewPlayerElo = eloCalc(ratingP[0].rating,ratingO[0].rating,resultNumberPlayer,ratingP[0].games);
+            let NewOpponentElo = eloCalc(ratingO[0].rating,ratingP[0].rating,resultNumberOpponent,ratingO[0].games);
+          
+            
+            sql= 'UPDATE `comptes`SET `rating` = "'+NewPlayerElo+'", `wins` = `wins` + "'+resultNumberPlayer+'" , `losses` = `losses` + "'+resultNumberOpponent+'"  WHERE `username` = "'+usernamePlayer+'"';
+            con.query(sql,(err,UpdatePlayer)=>{
+                if (err) throw err;
+                console.log('UPDATE Player effectuée = '+NewPlayerElo);
+            });
+      
+            sql= 'UPDATE `comptes`SET `rating` = "'+NewOpponentElo+'", `wins` = `wins` + "'+resultNumberOpponent+'" , `losses` = `losses` + "'+resultNumberPlayer+'"  WHERE `username` = "'+usernameOpponent+'"';
+            con.query(sql, (err,UpdateOpponent)=>{
+                if (err) throw err;
+                console.log('UPDATE Opponent effectuée = '+NewOpponentElo);
+            }); 
+  
+            let UpdatedElo = [];
+            UpdatedElo[winnerId] = NewPlayerElo;
+            UpdatedElo[loserId] = NewOpponentElo;
+  
+            console.log("Updated elo = "+UpdatedElo);
+            socket.emit('newElo',UpdatedElo);
+            socket.broadcast.emit('newElo',UpdatedElo);
+      });
+              
+    });
+  }
+
+  function classementG(){
+
+
+    const con = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password : "",
+        database : "swagtego"
+      });
+    
+          let sql= 'SELECT `username`,`rating`,`wins`,`losses` FROM `swagtego`.`comptes` ORDER BY `rating` DESC LIMIT 20';
+    
+            con.query(sql, (err,result)=>{
+            if (err) throw err;
+
+            socket.emit('classement',result);
+
+          });
+
+}
+  
+
 });
+
 
 

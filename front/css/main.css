@@ -3,6 +3,7 @@ body{
 	font-family: 'Nunito Sans', sans-serif;
 	background : #e0e0e0;
 	text-shadow:  8px 8px 16px #9b9b9b,-8px -8px 16px #ffffff;
+	background: linear-gradient(to right, #ece9e6, #ffffff);
 	
 }
 *{
@@ -23,12 +24,18 @@ body{
 	align-items:center;
 }
 
+#initialScreen{
+
+margin-top: 50px;
+
+}
+
 #hud{
 	margin : 20px;
-	width:50vh;
+	width:75vh;
 	border-radius: 25px;
 	background-color:rgb(216, 224, 240);
-	padding:30px;
+	padding:10px 30px 10px 30px;
 	flex-grow:1;
 	align-items:center;
 	overflow:auto;
@@ -37,8 +44,10 @@ body{
 	flex-grow:20;
 }
 
-#whose-go{
-	padding-top:10px;
+.Random-Composition{
+	display:flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
 }
 #random, #clear{
 	margin-bottom:10px;
@@ -53,22 +62,35 @@ body{
 }
 .pawn-item{
 	background:white;
-	width:55px;
-	height:55px;
+	width:50px;
+	height:50px;
 	font-weight:bold;
 	text-align:center;
 	font-size:2rem;
-	margin:5px;
+	margin:10px;
 	border-radius: 10px;
 	text-shadow:none;
 	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 	transition-duration:0.5s;
+	color:rgba(0, 0, 0, 0);
 }
-.pawn-item p{
+#amount{	
+	font-size:20px;
+	margin-top:-47px;
+}
+#nom{	
 	font-size:10px;
-	margin-top:-10px;
+	text-overflow:ellipsis;
+	overflow:hidden;
+	color:rgb(80, 80, 80);
+	margin-top:-5px;
 }
+li:hover #nom{
+	color:black;
+}
+
 li:hover{
+	color:white;
 	cursor:grab;
 }
 
@@ -84,66 +106,112 @@ li:hover{
 	transition-duration:0.5s;
 }
 
+#glow{
+	animation: blinkInside 0.8s linear 10;
+}
+#grey{
+	filter:grayscale(100%)
+}
+
+.perso{
+	width:42px;
+	text-align:center;
+	pointer-events:none;
+}
+#Classement{
+	margin:50px;
+}
+#classement{
+	border: 1px solid black;
+	border-radius:15px;
+	overflow:hidden;
+}
+#classement thead{
+	border:1px solid black;
+}
+#classement td{
+	width:20vh;
+	padding:10px;
+}
+#classement tr:nth-child(even){
+	background:rgb(231, 231, 231);
+
+}
 
 
 /*GAME*/
-table{
-	border-collapse: collapse;
+table#table{
 	margin:auto;
+	border-radius:15px;
+	overflow:hidden;
 }
-td {	
-	display: table-cell;
-	border : solid 1px rgba(0, 0, 0, 0.308);
+.myTurn{
+	animation: blink 1s linear infinite;
+}
+#table td {	
+	/*display: table-cell;*/
 	width: 60px;
 	height:60px;
 	font-weight:bold;
 	text-shadow:none;
 }
 .pawnImage{
-	width:50%;
-	animation:shake infinite;
+	width:40px;
+	height:40px;
 }
 
 /*CASES*/
 .grass{
-	background-color:#55a630;
+	background-color:#228b22;
 	vertical-align: center;
+}
+.grassDark{
+	background-color:#006400;
+	vertical-align: center;
+}
+.pawnBlue, .pawnRed{
+	width:50px;
+	height:50px;
+	margin:auto;
+	padding:0;
+	vertical-align: center;
+	text-align: center;
+	color:transparent;
+	transition-duration:0.5s ;	
+	z-index: 100;
+	border-radius:15px;
+	box-shadow:0 0 7px rgba(0, 0, 0, 0.575);
 }
 .pawnBlue{
-	background-color:#205ec2;
-	vertical-align: center;
-	text-align: center;
-	color:white;
-	transition-duration:0.5s ;	
+	background:#428bff;
 }
 .pawnRed{
-	background-color:#d63338;
-	vertical-align: center;
-	text-align: center;
+	background:#ff4b51;
+}
+.pawnBlue h3, .pawnRed h3{
+	margin-top:-50px;
+}
+.pawnBlue:hover, .pawnRed:hover{
 	color:white;
-	transition-duration:0.5s ;	
+	transform: scale(0.95);
 }
 
+
 .lake{
-	background-color:#a8e0ff;
-	color: black;
-	vertical-align: center;
+	background-color:#61c8ff;
 }
+
 #pawn:hover{
 	cursor:pointer;
 }
-.move, .attackable{
+.move,.attack{
 	color:rgb(70, 70, 70);
 	text-align:center;
 	font-size:30px;
 	cursor:pointer;
 	transition-duration:10s;
 }
-#shake {
-	-webkit-animation:shake;
-	animation:shake;
-	animation-iteration-count: infinite;
-}
+
 
 /*WIN*/
 #winScreen{
@@ -164,7 +232,12 @@ td {
 #restartGame{
 	margin:10px;
 }
-
+.elogreen{
+	color:green;
+}
+.elored{
+	color:red;
+}
 
 /*CONNECTION STATUS INDICATOR*/
 .connected span,
@@ -184,33 +257,31 @@ span.green {
 /*SCROLLBAR*/
 ::-webkit-scrollbar {
 	width: 20px;
-  }
+}
   
-  ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
 	background-color: transparent;
-  }
+}
   
-  ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
 	background-color: #d6dee1;
 	border-radius: 20px;
 	border: 6px solid transparent;
 	background-clip: content-box;
-  }
+}
   
-  ::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
 	background-color: #a8bbbf;
-  }
-/*ANIMATION*/
-@keyframes shake {
-	0% { transform: translate(1px, 1px) rotate(0deg); }
-	10% { transform: translate(-1px, -2px) rotate(-1deg); }
-	20% { transform: translate(-3px, 0px) rotate(1deg); }
-	30% { transform: translate(3px, 2px) rotate(0deg); }
-	40% { transform: translate(1px, -1px) rotate(1deg); }
-	50% { transform: translate(-1px, 2px) rotate(-1deg); }
-	60% { transform: translate(-3px, 1px) rotate(0deg); }
-	70% { transform: translate(3px, 1px) rotate(-1deg); }
-	80% { transform: translate(-1px, -1px) rotate(1deg); }
-	90% { transform: translate(1px, 2px) rotate(0deg); }
-	100% { transform: translate(1px, -2px) rotate(-1deg); }
-  }
+}
+
+@keyframes blink {
+    0% {  box-shadow: none; }
+    50% { box-shadow: 0 0 0 10px #02a039;}
+    100% { box-shadow:none; }
+}
+@keyframes blinkInside {
+    0% { box-shadow: none;}
+    50% { box-shadow:inset 0px 0px 20px rgba(255, 255, 255, 0.801); }
+    100% { box-shadow:none; }
+}
+

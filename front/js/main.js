@@ -6,6 +6,11 @@ const clearButton = document.querySelector('#clear')
 const pawnContainer = document.querySelector('#pawn-container')
 const buttons = document.querySelector(".Random-Composition")
 const pawns = document.querySelector("#pawnPlaceholder")
+const classementTable = document.getElementById("classement");
+
+
+
+const table = document.getElementById("table")
 
 let currentPlayer = 'user'
 let playerNum = 0
@@ -28,11 +33,20 @@ max[9] = 1
 max[10] = 1
 max[11] = 6
 
+
+const elo = []
+elo[0] = 1500;
+elo[1] = 1500; 
+
 let start =0;
 let end = 0;
 
 // Warns socket io that a user connected
 const socket = io();
+
+
+
+
 
 // Get your player number
 socket.on('player-number', num => {
@@ -50,8 +64,6 @@ socket.on('player-number', num => {
     playerNum = parseInt(num)
     if(playerNum === 1) currentPlayer = "enemy"
 
-    console.log(playerNum)
-
     // Get other player status
     socket.emit('check-players')
     }
@@ -60,6 +72,7 @@ socket.on('player-number', num => {
 // Initialize the view object to print the board
 socket.on('init-view',(board)=>{
     view[0] = new View(board, playerNum);
+    afficheBoard(playerNum);
 });
 // Receives the updated view
 socket.on('view-updated',(board)=>{
@@ -67,7 +80,13 @@ socket.on('view-updated',(board)=>{
     afficheBoard(playerNum);
 });
 
-
+socket.on('last-move', (coord)=>{
+    let xsrc = coord.xsrc
+    let ysrc = coord.ysrc
+    let x = coord.x;
+    let y = coord.y;
+    view[0].glow(xsrc,ysrc,x,y);
+});
 
 // Receives the id of the winner if there's one
 socket.on('has-winner', (winner)=>{
@@ -82,11 +101,20 @@ socket.on('hasPlayed',(player)=>{
     if(player==playerNum){
         currentPlayer='ennemy';
         turnDisplay.innerHTML = "Au tour de l'ennemi !";
+        table.className ='';
     }
     else{
         currentPlayer = 'user';
     }
+
     playGameMulti(socket);
+});
+
+socket.on('move-audio',(long)=>{
+    moveAudio(long,true);
+});
+socket.on('attack-audio',()=>{
+    attackAudio();
 });
 
 ////////////////////////////////////////////////////////////////////    
@@ -95,6 +123,7 @@ socket.on('hasPlayed',(player)=>{
 socket.on('player-connection', num => {
     console.log(`Player ${num} has connected.`);
     playerConnectedOrDisconnected(num);
+    
 });
 
 // Another player has disconnected 
@@ -111,18 +140,14 @@ socket.on('player-disconnection', num => {
     else him =0;
 
     if(ready == false && enemyReady == true){
-        console.log("1");
         playerReady(me);
     }
     else if(ready == true && enemyReady == false){
-        console.log("2");
         playerReady(him);
     }
     else if(ready == false && enemyReady == false){
-        console.log("3");
     }
     else if(ready == true && enemyReady == true){
-        console.log("4");
         playerReady(me);
         playerReady(him);
     }
@@ -132,6 +157,7 @@ socket.on('player-disconnection', num => {
 
     ready = false;
     enemyReady = false;
+    view[0].stop();
 });
 
 
@@ -140,7 +166,6 @@ socket.on('player-disconnection', num => {
 socket.on('enemy-ready', num => {
     enemyReady = true;
     playerReady(num);
-    console.log('jsp', ready);
     if (ready){
         playGameMulti(socket);
     }
@@ -164,19 +189,37 @@ socket.on('check-players', players => {
 socket.on("username-display",usernames=>{
     document.getElementById("player1").innerHTML = usernames[0];
     document.getElementById("player2").innerHTML = usernames[1];
+   
+});
+
+
+
+socket.on('eloPlayer',(ratingTab)=>{
+
+    elo[0] = ratingTab[0];
+    elo[1] = ratingTab[1];
+
+
+    document.getElementById("player1").innerHTML += " / "+ elo[0];
+    document.getElementById("player2").innerHTML += " / "+ elo[1];
+
 });
 socket.on('gameStarted',()=>{
     enemyReady = true;
     ready = true; 
     console.log('Début de la partie');
     view[0].attachListeners(playerNum);
+    view[0].start();
+    afficheBoard(playerNum);
     playGameMulti(socket);
     startTimer();
+    
 });
 
 
 // Ready button click
 startButton.addEventListener('click', () => {
+    clickAudio()
     socket.emit('is-completed',playerNum);
     socket.on('completed',(complete)=>{
         if(complete){
@@ -188,6 +231,8 @@ startButton.addEventListener('click', () => {
         if(ready && enemyReady){
             console.log('Début de la partie');
             view[0].attachListeners(playerNum);
+            view[0].start();
+            afficheBoard(playerNum);
             socket.emit('gameStart');
             startTimer();
         }
@@ -196,19 +241,20 @@ startButton.addEventListener('click', () => {
 
 // Random button click
 randomButton.addEventListener('click', () => {
+    clickAudio()
     console.log("(Re)Génération d'une composition complète aléatoire")
     socket.emit('generate-comp',playerNum);
-    //socket.emit('update-count',playerNum);
     afficheBoard(playerNum);     
-    pawnContainer.style.display = 'none';    
+    pawns.style.display = 'none';    
     return;
 });
 
 //clear button click
 clearButton.addEventListener('click', () => {
+    clickAudio()
     console.log("Suppression de tous vos pions")
     socket.emit('clear',playerNum);
-    pawnContainer.style.display = 'flex';    
+    pawns.style.display = 'block';    
     view[0].initPawns();
     return;
 });
@@ -222,7 +268,8 @@ function afficheBoard(playerIndex){
 }
 
 // Game Logic for MultiPlayer
-function playGameMulti(socket) {    
+function playGameMulti(socket) { 
+    
     buttons.style.display = 'none';
     pawns.style.display = 'none';
     if(!ready) {
@@ -230,23 +277,25 @@ function playGameMulti(socket) {
         ready = true;
         playerReady(playerNum);
     }
+    if (!enemyReady)turnDisplay.innerHTML="En attente du deuxième joueur...";
     if(enemyReady) {   
-        console.log(currentPlayer)
-        
+        view[0].start();
         if(currentPlayer === 'user') {
             turnDisplay.innerHTML = 'A ton tour !';
+            table.className = 'myTurn';
         }
         if(currentPlayer === 'enemy') {
             turnDisplay.innerHTML = "Au tour de l'ennemi !";
+            table.className = '';
         }
     }
 }
 
 // Places a pawn on the board
 function placePawn(id,value){
+    moveAudio(1);
     let x=((value-1)%10);
     let y=Math.ceil(value/10)-1;
-    console.log(x,y);
     let data= Array(4);
     data[0] = playerNum;
     data[1] = x;
@@ -259,14 +308,13 @@ function placePawn(id,value){
     socket.on('pawn-counted',(counter)=>{
         if(!i){
             count[id] = counter;
-            console.log(counter);
-            console.log(count[id],"/",max[id]);
             if (count[id] < max[id]){
                 view[0].addPawn(id);
             }
             i++;
         }
     });
+    
 }
 
 
@@ -285,11 +333,9 @@ function playerConnectedOrDisconnected(num) {
 
 function startTimer(){
     start = Date.now();
-    console.log(start);
 }
 function stopTimer(){
     end = Date.now()-start;
-    console.log(end);
 }
 function toHour(time){
     string='';
@@ -313,3 +359,37 @@ function toHour(time){
     string += s.toString() + ' secondes';
     return string;
 }
+
+
+function genererClassement(){
+
+    socket.emit('getClassement');
+    socket.on('classement',(classement)=>{
+    console.log("classement =",classement);
+    let html='<tbody>';
+    let i = 0;
+    let position = i;
+    console.log(classement.length);
+    while(i != classement.length){
+
+        position = i +1;
+        html += "<tr>";
+        html += '<td><h4>'+position+'</h4></td>';
+        html += '<td><h6>'+classement[i].username+'</h2></td>';
+        html += '<td>'+classement[i].rating+'</td>';
+        html += '<td>'+classement[i].wins+'</td>';
+        html += '<td>'+classement[i].losses+'</td>';
+        html += "</tr>";
+        i++;
+    }
+    html+='</tbody>';
+    classementTable.innerHTML += html;
+
+    });
+
+   
+}
+
+genererClassement();
+
+
