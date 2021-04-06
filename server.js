@@ -400,7 +400,7 @@ let classement = classementG();
         database : "swagtego"
       });
     
-          let sql= 'SELECT `username`,`rating`,`wins`,`losses`,`winRate` FROM `swagtego`.`comptes` ORDER BY `rating` DESC LIMIT 15';
+          let sql= 'SELECT `username`,`rating`,`wins`,`losses` FROM `swagtego`.`comptes` ORDER BY `rating` DESC LIMIT 7';
     
             con.query(sql, (err,result)=>{
             if (err) throw err;

@@ -376,7 +376,6 @@ function genererClassement(){
         html += '<td>'+classement[i].rating+'</td>';
         html += '<td>'+classement[i].wins+'</td>';
         html += '<td>'+classement[i].losses+'</td>';
-        html += '<td>'+classement[i].winRate+'</td>';
         html += "</tr>";
         i++;
     }
