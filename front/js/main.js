@@ -32,6 +32,11 @@ max[9] = 1
 max[10] = 1
 max[11] = 6
 
+
+const elo = []
+elo[0] = 1500;
+elo[1] = 1500; 
+
 let start =0;
 let end = 0;
 
@@ -182,6 +187,20 @@ socket.on('check-players', players => {
 socket.on("username-display",usernames=>{
     document.getElementById("player1").innerHTML = usernames[0];
     document.getElementById("player2").innerHTML = usernames[1];
+   
+});
+
+
+
+socket.on('eloPlayer',(ratingTab)=>{
+
+    elo[0] = ratingTab[0];
+    elo[1] = ratingTab[1];
+
+
+    document.getElementById("player1").innerHTML += " / "+ elo[0];
+    document.getElementById("player2").innerHTML += " / "+ elo[1];
+
 });
 socket.on('gameStarted',()=>{
     enemyReady = true;
@@ -339,79 +358,4 @@ function toHour(time){
     return string;
 }
 
-function eloCalc (ratingPlayer,ratingOpponent,gameResult){
-    
-    let Kfactor = 20;
 
-    con.connect(err=> {
-        if (err) throw err;
-        else console.log('connexion éffectuée')
-
-        let sql= 'SELECT `wins` + `losses` FROM `swagtego`.`comptes` WHERE `username`= '+usernamePlayer+'';
- 
-        con.query(sql, (err,WinsAndLossesPlayer)=>{
-            if (err) throw err;
-
-            console.log('Nb of matches = '+WinsAndLossesPlayer[0]);
-
-            if(WinsAndLossesPlayer < 10) Kfactor = 100;
-            else if(WinsAndLossesPlayer < 20) Kfactor = 50;
-
-            let Elodiff = ratingPlayer - ratingOpponent;
-            if (Elodiff > 400) Elodiff = 400;
-            let winProb = 1/(1+Math.pow(10,-Elodiff/400));
-            return (Math.round(ratingPlayer + Kfactor*(gameResult - winProb)));
-            
-        });   
-    });
-}
-
-function updateRating(usernamePlayer,usernameOpponent,gameResult){
-    
-    let resultNumberPlayer, resultNumberOpponent;
-
-    if (gameResult == 'win'){
-        resultNumberPlayer = 1;
-        resultNumberOpponent = 0;
-
-    }
-    else{
-        resultNumberPlayer = 0;
-        resultNumberOpponent = 1;
-    }
-
-    con.connect(err=> {
-        if (err) throw err;
-        else console.log('connexion éffectuée')
-
-        let sql= 'SELECT `rating` FROM `comptes` WHERE `username` = '+usernamePlayer+'';
- 
-        con.query(sql, (err,ratingPlayer) =>{
-            if (err) throw err;
-            console.log('rating'+usernamePlayer+' = '+ratingPlayer[0]);
-        });
-
-        sql= 'SELECT `rating` FROM `comptes` WHERE `username` = '+usernameOpponent+'';
-        con.query(sql, (err,ratingOpponent)=>{
-            if (err) throw err;
-            console.log('rating'+usernameOpponent+' = '+ratingOpponent[0]);
-        });
-
-        let NewPlayerElo = eloCalc(ratingPlayer[0],ratingOpponent[0],resultNumberPlayer);
-        let NewOpponentElo = eloCalc(ratingOpponent[0],ratingPlayer[0],resultNumberOpponent);
-
-        sql= 'UPDATE `comptes`SET `rating` = '+NewPlayerElo+' WHERE `username` = '+usernamePlayer+'';
-        con.query(sql,(err,UpdatePlayer)=>{
-            if (err) throw err;
-            console.log('UPDATE Player effectuée');
-        });
-
-        sql= 'UPDATE `comptes`SET `rating` = '+NewOpponentElo+' WHERE `username` = '+usernameOpponent+'';
-        con.query(sql, (err,UpdateOpponent)=>{
-            if (err) throw err;
-            console.log('UPDATE Opponent effectuée');
-        });
-
-    });
-
-}

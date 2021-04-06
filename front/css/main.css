@@ -3,6 +3,7 @@ body{
 	font-family: 'Nunito Sans', sans-serif;
 	background : #e0e0e0;
 	text-shadow:  8px 8px 16px #9b9b9b,-8px -8px 16px #ffffff;
+	background: linear-gradient(to right, #ece9e6, #ffffff);
 	
 }
 *{
@@ -206,7 +207,12 @@ td {
 #restartGame{
 	margin:10px;
 }
-
+.elogreen{
+	color:green;
+}
+.elored{
+	color:red;
+}
 
 /*CONNECTION STATUS INDICATOR*/
 .connected span,

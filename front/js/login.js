@@ -15,6 +15,11 @@ function joinGame(){
         console.log(username);
         socket.emit('username',username,playerNum);
         socket.emit('bddUsername',username);
+        socket.emit('getEloPlayer',username,playerNum);
+       
+
+
+        
 
        
     }
