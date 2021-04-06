@@ -367,7 +367,9 @@ function genererClassement(){
     socket.on('classement',(classement)=>{
     console.log("classement =",classement);
     let html='<tbody>';
-    for(let i = 0 ; i< 7; i++){
+    let i = 0;
+    console.log(classement.length);
+    while(i != classement.length){
 
         html += "<tr>";
         html += '<td><h6>'+classement[i].username+'</h2></td>';
@@ -376,6 +378,7 @@ function genererClassement(){
         html += '<td>'+classement[i].losses+'</td>';
         html += '<td>'+classement[i].winRate+'</td>';
         html += "</tr>";
+        i++;
     }
     html+='</tbody>';
     classementTable.innerHTML += html;
