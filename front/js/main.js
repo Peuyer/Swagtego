@@ -368,10 +368,13 @@ function genererClassement(){
     console.log("classement =",classement);
     let html='<tbody>';
     let i = 0;
+    let position = i;
     console.log(classement.length);
     while(i != classement.length){
 
+        position = i +1;
         html += "<tr>";
+        html += '<td><h4>'+position+'</h4></td>';
         html += '<td><h6>'+classement[i].username+'</h2></td>';
         html += '<td>'+classement[i].rating+'</td>';
         html += '<td>'+classement[i].wins+'</td>';
