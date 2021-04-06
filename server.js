@@ -217,8 +217,6 @@ io.on('connection', (socket) => {
 
     let ratingPlayer = con.query(sql, (err,ratingP)=>{
       if (err) throw err;
-      console.log(ratingP);
-
 
       elo[playerIndex] = ratingP[0].rating;
       
@@ -352,14 +350,12 @@ let classement = classementG();
   
         let ratingPlayer = con.query(sql, (err,ratingP)=>{
           if (err) throw err;
-          console.log(ratingP);
   
           sql= 'SELECT `rating`,`wins` + `losses` as games FROM `comptes` WHERE `username` = "'+usernameOpponent+'"';
           let ratingOpponent = con.query(sql, (err,ratingO)=>{
               if (err) throw err;
-              console.log(ratingO);
+
   
-              console.log(ratingO[0].rating);
               
     
             let NewPlayerElo = eloCalc(ratingP[0].rating,ratingO[0].rating,resultNumberPlayer,ratingP[0].games);
@@ -400,11 +396,10 @@ let classement = classementG();
         database : "swagtego"
       });
     
-          let sql= 'SELECT `username`,`rating`,`wins`,`losses` FROM `swagtego`.`comptes` ORDER BY `rating` DESC LIMIT 10';
+          let sql= 'SELECT `username`,`rating`,`wins`,`losses` FROM `swagtego`.`comptes` ORDER BY `rating` DESC LIMIT 20';
     
             con.query(sql, (err,result)=>{
             if (err) throw err;
-            console.log(result);
 
             socket.emit('classement',result);
 

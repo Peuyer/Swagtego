@@ -24,6 +24,12 @@ body{
 	align-items:center;
 }
 
+#initialScreen{
+
+margin-top: 50px;
+
+}
+
 #hud{
 	margin : 20px;
 	width:75vh;

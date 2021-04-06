@@ -159,7 +159,10 @@ class View{
 			case 'attack' :
 				this.grid[list.y][list.x].classList.add("attack");
 				this.grid[list.y][list.x].setAttribute("attackable","true");
-				this.grid[list.y][list.x].firstElementChild.innerHTML = fight ;		
+				if (this.game.board[list.y][list.x] != null){
+					this.grid[list.y][list.x].firstElementChild.innerHTML = fight ;	
+				}	
+				else this.grid[list.y][list.x].innerHTML = fight ;	
 				break;
 		}
 	}
@@ -227,8 +230,11 @@ function removeAllAtribute(grid){
 	for(let i=0; i<10; i++){
 		for(let j=0; j<10;j++){
 			if(grid[j][i].getAttribute('movable')=='true' || grid[j][i].getAttribute('attackable')=='true'){
-				if(grid[j][i].classList.contains('move') || grid[j][i].classList.contains('attack')){
+				if(grid[j][i].classList.contains('move')){	
 					grid[j][i].innerHTML='';
+				}
+				else if  (grid[j][i].classList.contains('attack')){
+					grid[j][i].firstElementChild.innerHTML='';
 				}
 			}
 			if(grid[j][i].id == 'glow') {
