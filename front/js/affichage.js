@@ -42,8 +42,9 @@ class View{
 				else if(this.game.board[x][y] != null && this.game.board[x][y]!= 'b' && this.game.board[x][y].player == playerIndex){
 					let playerClass = !playerIndex ? 'pawnBlue':'pawnRed'
 					let i = Math.round((this.game.board[x][y].pawn-playerIndex)/10);
-					this.grid[x][y].innerHTML = "<div class='"+playerClass+"'><img>"+images[i]+"</img><h3>"+i+"</h3></div>";
+					this.grid[x][y].innerHTML = "<div class='"+playerClass+"'><img>"+images[i]+"</img><h3 draggable='false'>"+i+"</h3></div>";
 					this.grid[x][y].id ="pawn";
+					
 				}
 				else if (!this.started){
 				}

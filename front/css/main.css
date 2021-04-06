@@ -101,7 +101,7 @@ li:hover{
 }
 
 #glow{
-	animation: blinkInside 1s linear 4;
+	animation: blinkInside 0.8s linear 10;
 }
 #grey{
 	filter:grayscale(100%)
@@ -176,6 +176,7 @@ td {
 .lake{
 	background-color:#61c8ff;
 }
+
 #pawn:hover{
 	cursor:pointer;
 }
